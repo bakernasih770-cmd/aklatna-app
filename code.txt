@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أكلاتنا - أشهى الأطباق لبااب البيت</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel JS Compiler -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link id="dynamic-font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Tajawal:wght@300;400;500;700;800&family=Almarai:wght@300;400;700;800&family=Readex+Pro:wght@300;400;600;700&family=Changa:wght@400;600;700;800&display=swap">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // WhatsApp Phone Number
+        const WHATSAPP_NUMBER = "+13369448034";
+
+        // Initial Sample Data
+        const INITIAL_CATEGORIES = [
+            { id: "all", name: "الكل", icon: "fa-border-all" },
+            { id: "main", name: "الأطباق الرئيسية", icon: "fa-utensils" },
+            { id: "grills", name: "مشويات", icon: "fa-drumstick-bite" },
+            { id: "appetizers", name: "مقبلات", icon: "fa-bowl-food" },
+            { id: "desserts", name: "حلويات", icon: "fa-ice-cream" },
+            { id: "drinks", name: "مشروبات", icon: "fa-glass-water" }
+        ];
+
+        const INITIAL_PRODUCTS = [
+            {
+                id: 1,
+                name: "منسف أردني باللحم البلدي",
+                category: "main",
+                description: "منسف أردني أصيل مع بلدي مطبوخ بالجميد الكركي الفاخر والأرز المعطر بالمكسرات.",
+                price: 18.5,
+                sizes: [
+                    { name: "فردي", price: 18.5 },
+                    { name: "عائلي (3-4 أشخاص)", price: 45.0 }
+                ],
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 2,
+                name: "مشاوي مشكلة فاخرة",
+                category: "grills",
+                description: "تشكيلة ممتازة من كباب اللحم، الشيش طاووق، وقطع الريش المشوية على الفحم مع الخضار.",
+                price: 22.0,
+                sizes: [
+                    { name: "نصف كيلو", price: 22.0 },
+                    { name: "كيلو كامل", price: 40.0 }
+                ],
+                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 3,
+                name: "حمص باللحمة والصنوبر",
+                category: "appetizers",
+                description: "حمص كريمي محضر طازجاً يومياً يعلوه قطع اللحم البقري المتبل والصنوبر المحمص.",
+                price: 7.5,
+                sizes: [
+                    { name: "وجبة صحن", price: 7.5 }
+                ],
+                image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 4,
+                name: "كنافة نابلسية بالجبنة",
+                category: "desserts",
+                description: "كنافة طازجة ومقرمشة محمصة بالسمن الحيواني ومحشوة بالجبنة النابلسية القاطرة.",
+                price: 6.0,
+                sizes: [
+                    { name: "صحن شخصي", price: 6.0 },
+                    { name: "سدر عائلي", price: 25.0 }
+                ],
+                image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80"
+            }
+        ];
+
+        const AVAILABLE_FONTS = [
+            { id: "Cairo", name: "القاهرة (Cairo)" },
+            { id: "Tajawal", name: "تجوال (Tajawal)" },
+            { id: "Almarai", name: "المراعي (Almarai)" },
+            { id: "Readex Pro", name: "ريدكس برو (Readex Pro)" },
+            { id: "Changa", name: "تشانغا (Changa)" }
+        ];
+
+        function App() {
+            // State
+            const [products, setProducts] = useState(() => {
+                const saved = localStorage.getItem('aklatna_products');
+                return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+            });
+
+            const [categories, setCategories] = useState(() => {
+                const saved = localStorage.getItem('aklatna_categories');
+                return saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
+            });
+
+            const [activeCategory, setActiveCategory] = useState("all");
+            const [searchQuery, setSearchQuery] = useState("");
+            const [cart, setCart] = useState(() => {
+                const saved = localStorage.getItem('aklatna_cart');
+                return saved ? JSON.parse(saved) : [];
+            });
+            const [isCartOpen, setIsCartOpen] = useState(false);
+            const [isAdminOpen, setIsAdminOpen] = useState(false);
+            const [selectedFont, setSelectedFont] = useState("Cairo");
+            
+            // Delivery Details
+            const [deliveryType, setDeliveryType] = useState("pickup"); // 'pickup' or 'delivery'
+            const [deliveryDistance, setDeliveryDistance] = useState(3); // miles
+            const [deliveryAddress, setDeliveryAddress] = useState("");
+            const [customerName, setCustomerName] = useState("");
+
+            // Admin State
+            const [editingProduct, setEditingProduct] = useState(null);
+            const [newProdName, setNewProdName] = useState("");
+            const [newProdCategory, setNewProdCategory] = useState("main");
+            const [newProdDesc, setNewProdDesc] = useState("");
+            const [newProdPrice, setNewProdPrice] = useState("");
+            const [newProdImage, setNewProdImage] = useState("");
+
+            // Save state to localStorage
+            useEffect(() => {
+                localStorage.setItem('aklatna_products', JSON.stringify(products));
+            }, [products]);
+
+            useEffect(() => {
+                localStorage.setItem('aklatna_categories', JSON.stringify(categories));
+            }, [categories]);
+
+            useEffect(() => {
+                localStorage.setItem('aklatna_cart', JSON.stringify(cart));
+            }, [cart]);
+
+            // Change Font
+            useEffect(() => {
+                document.body.style.fontFamily = `'${selectedFont}', sans-serif`;
+            }, [selectedFont]);
+
+            // Calculate Delivery Fee ($1.5 per mile)
+            const deliveryFee = useMemo(() => {
+                return deliveryType === "delivery" ? Math.max(2, deliveryDistance * 1.5) : 0;
+            }, [deliveryType, deliveryDistance]);
+
+            // Filter Products
+            const filteredProducts = useMemo(() => {
+                return products.filter(product => {
+                    const matchesCategory = activeCategory === "all" || product.category === activeCategory;
+                    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
+                    return matchesCategory && matchesSearch;
+                });
+            }, [products, activeCategory, searchQuery]);
+
+            // Cart Operations
+            const addToCart = (product, selectedSize) => {
+                const itemPrice = selectedSize ? selectedSize.price : product.price;
+                const sizeName = selectedSize ? selectedSize.name : "قياسي";
+                const cartItemId = `${product.id}-${sizeName}`;
+
+                setCart(prev => {
+                    const existing = prev.find(item => item.cartItemId === cartItemId);
+                    if (existing) {
+                        return prev.map(item =>
+                            item.cartItemId === cartItemId ? { ...item, quantity: item.quantity + 1 } : item
+                        );
+                    }
+                    return [...prev, {
+                        cartItemId,
+                        id: product.id,
+                        name: product.name,
+                        sizeName,
+                        price: itemPrice,
+                        image: product.image,
+                        quantity: 1
+                    }];
+                });
+                setIsCartOpen(true);
+            };
+
+            const updateCartQuantity = (cartItemId, delta) => {
+                setCart(prev => prev.map(item => {
+                    if (item.cartItemId === cartItemId) {
+                        const newQty = item.quantity + delta;
+                        return newQty > 0 ? { ...item, quantity: newQty } : null;
+                    }
+                    return item;
+                }).filter(Boolean));
+            };
+
+            const cartSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const cartTotal = cartSubtotal + (cart.length > 0 ? deliveryFee : 0);
+
+            // Send WhatsApp Order
+            const sendWhatsAppOrder = () => {
+                if (cart.length === 0) return;
+                if (!customerName) {
+                    alert("يرجى إدخال اسمك لتأكيد الطلب.");
+                    return;
+                }
+
+                let message = `🍽️ *طلب جديد من تطبيق أكلاتنا* 🍽️\n`;
+                message += `👤 *العميل:* ${customerName}\n`;
+                message += `📍 *نوع الطلب:* ${deliveryType === "delivery" ? "توصيل للمنزل" : "استلام من المطعم"}\n`;
+                if (deliveryType === "delivery") {
+                    message += `🏠 *العنوان:* ${deliveryAddress}\n`;
+                    message += `🚗 *المسافة التقديرية:* ${deliveryDistance} ميل\n`;
+                }
+                message += `--------------------------------\n`;
+                message += `🛒 *الأطباق المطلوبة:*\n`;
+
+                cart.forEach((item, index) => {
+                    message += `${index + 1}. ${item.name} (${item.sizeName}) x${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
+                });
+
+                message += `--------------------------------\n`;
+                message += `💰 *المجموع الفرعي:* $${cartSubtotal.toFixed(2)}\n`;
+                if (deliveryType === "delivery") {
+                    message += `🚚 *أجور التوصيل:* $${deliveryFee.toFixed(2)}\n`;
+                }
+                message += `✅ *الإجمالي الكلي:* $${cartTotal.toFixed(2)}\n`;
+
+                const url = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            };
+
+            // Add/Edit Product
+            const handleSaveProduct = (e) => {
+                e.preventDefault();
+                if (!newProdName || !newProdPrice) return;
+
+                if (editingProduct) {
+                    setProducts(prev => prev.map(p => p.id === editingProduct.id ? {
+                        ...p,
+                        name: newProdName,
+                        category: newProdCategory,
+                        description: newProdDesc,
+                        price: parseFloat(newProdPrice),
+                        sizes: [{ name: "قياسي", price: parseFloat(newProdPrice) }],
+                        image: newProdImage || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+                    } : p));
+                } else {
+                    const newProd = {
+                        id: Date.now(),
+                        name: newProdName,
+                        category: newProdCategory,
+                        description: newProdDesc,
+                        price: parseFloat(newProdPrice),
+                        sizes: [{ name: "قياسي", price: parseFloat(newProdPrice) }],
+                        image: newProdImage || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+                    };
+                    setProducts(prev => [newProd, ...prev]);
+                }
+
+                resetForm();
+            };
+
+            const resetForm = () => {
+                setEditingProduct(null);
+                setNewProdName("");
+                setNewProdDesc("");
+                setNewProdPrice("");
+                setNewProdImage("");
+            };
+
+            const startEdit = (product) => {
+                setEditingProduct(product);
+                setNewProdName(product.name);
+                setNewProdCategory(product.category);
+                setNewProdDesc(product.description);
+                setNewProdPrice(product.price);
+                setNewProdImage(product.image);
+            };
+
+            const deleteProduct = (id) => {
+                if (confirm("هل أنت تأكد من حذف هذا الطبق من القائمة؟")) {
+                    setProducts(prev => prev.filter(p => p.id !== id));
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col pb-10">
+                    <!-- Top Bar with Font Picker & Admin Button -->
+                    <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl backdrop-blur-md bg-opacity-90">
+                        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+                            <!-- Logo -->
+                            <div className="flex items-center space-x-3 space-x-reverse">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-amber-500/20">
+                                    <i className="fa-solid fa-utensils"></i>
+                                </div>
+                                <div>
+                                    <h1 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200">أكلاتنا</h1>
+                                    <p className="text-xs text-gray-400">Aklatna App - الطعام البيتي الفاخر</p>
+                                </div>
+                            </div>
+
+                            <!-- Controls: Font Select & Admin & Cart -->
+                            <div className="flex items-center space-x-3 space-x-reverse">
+                                <!-- Font Switcher -->
+                                <div className="flex items-center bg-gray-800 rounded-lg px-2 py-1 border border-gray-700 text-xs">
+                                    <i className="fa-solid fa-font text-amber-400 ml-2"></i>
+                                    <select 
+                                        value={selectedFont} 
+                                        onChange={(e) => setSelectedFont(e.target.value)}
+                                        className="bg-transparent text-gray-200 focus:outline-none cursor-pointer"
+                                    >
+                                        {AVAILABLE_FONTS.map(font => (
+                                            <option key={font.id} value={font.id} className="bg-gray-900 text-gray-200">{font.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <!-- Admin Panel Button -->
+                                <button 
+                                    onClick={() => setIsAdminOpen(true)}
+                                    className="bg-gray-800 hover:bg-gray-700 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all"
+                                >
+                                    <i className="fa-solid fa-sliders"></i>
+                                    <span>لوحة الإدارة</span>
+                                </button>
+
+                                <!-- Cart Toggle -->
+                                <button 
+                                    onClick={() => setIsCartOpen(true)}
+                                    className="relative bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-gray-950 font-bold px-4 py-1.5 rounded-lg text-sm flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all"
+                                >
+                                    <i className="fa-solid fa-cart-shopping"></i>
+                                    <span>السلة</span>
+                                    {cart.length > 0 && (
+                                        <span className="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-extrabold animate-bounce">
+                                            {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                                        </span>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Hero Banner -->
+                    <section className="relative bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 py-12 px-4 border-b border-gray-800">
+                        <div className="max-w-4xl mx-auto text-center space-y-4">
+                            <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-4 py-1 rounded-full text-xs font-semibold inline-block">
+                                🌟 طعم أصيل يجمع العائلة
+                            </span>
+                            <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                                تذوق أشهى الأطباق والمأكولات الطازجة
+                            </h2>
+                            <p className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+                                اطلب الآن مباشرة عبر الواتساب واستمتع بأسرع خدمة توصيل طعام طازج وصحي مباشرة إلى باب منزلك.
+                            </p>
+
+                            <!-- Search Input -->
+                            <div className="pt-4 max-w-xl mx-auto relative">
+                                <i className="fa-solid fa-magnifying-glass absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input 
+                                    type="text"
+                                    placeholder="ابحث عن طبقك المفضل (مثلاً: منسف، كباب، كنافة)..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full bg-gray-800/80 border border-gray-700 rounded-xl py-3 pr-11 pl-4 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition-all shadow-inner"
+                                />
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Main Content -->
+                    <main className="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+                        <!-- Category Filter Pills -->
+                        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+                            {categories.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setActiveCategory(cat.id)}
+                                    className={`px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap flex items-center gap-2 transition-all ${
+                                        activeCategory === cat.id
+                                            ? "bg-amber-500 text-gray-950 shadow-lg shadow-amber-500/25 scale-105"
+                                            : "bg-gray-800/80 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700/50"
+                                    }`}
+                                >
+                                    <i className={`fa-solid ${cat.icon}`}></i>
+                                    <span>{cat.name}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        <!-- Products Grid -->
+                        {filteredProducts.length === 0 ? (
+                            <div className="text-center py-16 bg-gray-900/50 rounded-2xl border border-gray-800">
+                                <i className="fa-solid fa-utensils text-5xl text-gray-600 mb-4"></i>
+                                <h3 className="text-lg font-bold text-gray-300">لا توجد أطباق تطابق بحثك حالياً</h3>
+                                <p className="text-gray-500 text-sm mt-1">جرب البحث بكلمات أخرى أو اختر قسماً آخر.</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {filteredProducts.map(product => (
+                                    <ProductCard 
+                                        key={product.id} 
+                                        product={product} 
+                                        onAddToCart={addToCart} 
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </main>
+
+                    <!-- Cart Drawer -->
+                    {isCartOpen && (
+                        <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm transition-opacity">
+                            <div className="w-full max-w-md bg-gray-900 text-white h-full flex flex-col shadow-2xl border-r border-gray-800">
+                                <!-- Cart Header -->
+                                <div className="p-4 border-b border-gray-800 flex items-center justify-between bg-gray-950">
+                                    <div className="flex items-center gap-2">
+                                        <i className="fa-solid fa-basket-shopping text-amber-500 text-xl"></i>
+                                        <h2 className="text-lg font-bold">سلة الشراء</h2>
+                                    </div>
+                                    <button 
+                                        onClick={() => setIsCartOpen(false)}
+                                        className="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-gray-800"
+                                    >
+                                        <i className="fa-solid fa-xmark text-xl"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Cart Items -->
+                                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                                    {cart.length === 0 ? (
+                                        <div className="text-center py-20 text-gray-500 space-y-3">
+                                            <i className="fa-solid fa-cart-flatbed text-5xl opacity-40"></i>
+                                            <p className="text-base font-semibold">سلة الشراء فارغة حالياً</p>
+                                        </div>
+                                    ) : (
+                                        cart.map(item => (
+                                            <div key={item.cartItemId} className="bg-gray-800/60 p-3 rounded-xl border border-gray-700/60 flex gap-3 items-center">
+                                                <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
+                                                <div className="flex-1 min-w-0">
+                                                    <h4 className="font-bold text-sm text-gray-100 truncate">{item.name}</h4>
+                                                    <p className="text-xs text-amber-400 font-medium">الحجم: {item.sizeName}</p>
+                                                    <p className="text-xs text-gray-400 mt-1">${item.price.toFixed(2)}</p>
+                                                </div>
+                                                <div className="flex items-center gap-2 bg-gray-900 rounded-lg p-1 border border-gray-700">
+                                                    <button 
+                                                        onClick={() => updateCartQuantity(item.cartItemId, -1)}
+                                                        className="w-6 h-6 rounded bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-xs font-bold"
+                                                    >-</button>
+                                                    <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
+                                                    <button 
+                                                        onClick={() => updateCartQuantity(item.cartItemId, 1)}
+                                                        className="w-6 h-6 rounded bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-xs font-bold text-amber-400"
+                                                    >+</button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+
+                                    {/* Order Details Form */}
+                                    {cart.length > 0 && (
+                                        <div className="mt-6 bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-3">
+                                            <h3 className="font-bold text-sm text-amber-400 flex items-center gap-2">
+                                                <i className="fa-solid fa-truck-fast"></i>
+                                                تفاصيل الاستلام والتوصيل
+                                            </h3>
+
+                                            <div>
+                                                <label className="text-xs text-gray-400 block mb-1">الاسم الكريم:</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="أدخل اسمك هنا..."
+                                                    value={customerName}
+                                                    onChange={(e) => setCustomerName(e.target.value)}
+                                                    className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-gray-400 block mb-1">طريقة الاستلام:</label>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    <button 
+                                                        onClick={() => setDeliveryType("pickup")}
+                                                        className={`p-2 rounded-lg text-xs font-bold border transition-all ${
+                                                            deliveryType === "pickup" 
+                                                                ? "bg-amber-500 text-gray-950 border-amber-500" 
+                                                                : "bg-gray-900 text-gray-400 border-gray-800"
+                                                        }`}
+                                                    >
+                                                        استلام من المطعم (مجاناً)
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => setDeliveryType("delivery")}
+                                                        className={`p-2 rounded-lg text-xs font-bold border transition-all ${
+                                                            deliveryType === "delivery" 
+                                                                ? "bg-amber-500 text-gray-950 border-amber-500" 
+                                                                : "bg-gray-900 text-gray-400 border-gray-800"
+                                                        }`}
+                                                    >
+                                                        توصيل للمنزل
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {deliveryType === "delivery" && (
+                                                <>
+                                                    <div>
+                                                        <label className="text-xs text-gray-400 block mb-1">عنوان التوصيل:</label>
+                                                        <input 
+                                                            type="text" 
+                                                            placeholder="الشارع، رقم البناء والفلّة..."
+                                                            value={deliveryAddress}
+                                                            onChange={(e) => setDeliveryAddress(e.target.value)}
+                                                            className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <div className="flex justify-between text-xs text-gray-400 mb-1">
+                                                            <span>مسافة التوصيل (بالأميال):</span>
+                                                            <span className="text-amber-400 font-bold">{deliveryDistance} ميل</span>
+                                                        </div>
+                                                        <input 
+                                                            type="range" 
+                                                            min="1" 
+                                                            max="25" 
+                                                            value={deliveryDistance} 
+                                                            onChange={(e) => setDeliveryDistance(parseInt(e.target.value))}
+                                                            className="w-full accent-amber-500 cursor-pointer"
+                                                        />
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <!-- Cart Footer -->
+                                {cart.length > 0 && (
+                                    <div className="p-4 border-t border-gray-800 bg-gray-950 space-y-3">
+                                        <div className="space-y-1.5 text-xs text-gray-400">
+                                            <div className="flex justify-between">
+                                                <span>المجموع الفرعي:</span>
+                                                <span className="text-white font-bold">${cartSubtotal.toFixed(2)}</span>
+                                            </div>
+                                            {deliveryType === "delivery" && (
+                                                <div className="flex justify-between">
+                                                    <span>أجور التوصيل:</span>
+                                                    <span className="text-amber-400 font-bold">${deliveryFee.toFixed(2)}</span>
+                                                </div>
+                                            )}
+                                            <div className="flex justify-between text-sm text-white font-extrabold pt-2 border-t border-gray-800">
+                                                <span>الإجمالي الكلي:</span>
+                                                <span className="text-amber-400">${cartTotal.toFixed(2)}</span>
+                                            </div>
+                                        </div>
+
+                                        <button 
+                                            onClick={sendWhatsAppOrder}
+                                            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-green-600/25 transition-all text-sm"
+                                        >
+                                            <i className="fa-brands fa-whatsapp text-lg"></i>
+                                            <span>إرسال الطلب عبر الواتساب</span>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    <!-- Admin Panel Modal -->
+                    {isAdminOpen && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+                            <div className="bg-gray-900 border border-gray-800 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden my-8">
+                                <div className="p-4 bg-gray-950 border-b border-gray-800 flex items-center justify-between">
+                                    <h3 className="font-bold text-amber-400 flex items-center gap-2">
+                                        <i className="fa-solid fa-sliders"></i>
+                                        لوحة التحكم وإدارة قائمة الطعام
+                                    </h3>
+                                    <button 
+                                        onClick={() => setIsAdminOpen(false)}
+                                        className="text-gray-400 hover:text-white"
+                                    >
+                                        <i className="fa-solid fa-xmark text-xl"></i>
+                                    </button>
+                                </div>
+
+                                <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+                                    <!-- Add/Edit Product Form -->
+                                    <form onSubmit={handleSaveProduct} className="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-4">
+                                        <h4 className="font-bold text-sm text-white">
+                                            {editingProduct ? "تعديل بيانات الطبق" : "إضافة طبق جديد القائمة"}
+                                        </h4>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="text-xs text-gray-400 block mb-1">اسم الطبق:</label>
+                                                <input 
+                                                    type="text" 
+                                                    required
+                                                    value={newProdName}
+                                                    onChange={(e) => setNewProdName(e.target.value)}
+                                                    className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white"
+                                                    placeholder="مثال: شاورما دجاج"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-gray-400 block mb-1">القسم:</label>
+                                                <select 
+                                                    value={newProdCategory}
+                                                    onChange={(e) => setNewProdCategory(e.target.value)}
+                                                    className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white"
+                                                >
+                                                    {categories.filter(c => c.id !== "all").map(c => (
+                                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-gray-400 block mb-1">السعر ($):</label>
+                                                <input 
+                                                    type="number" 
+                                                    step="0.5"
+                                                    required
+                                                    value={newProdPrice}
+                                                    onChange={(e) => setNewProdPrice(e.target.value)}
+                                                    className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white"
+                                                    placeholder="12.5"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-gray-400 block mb-1">رابط الصورة (URL):</label>
+                                                <input 
+                                                    type="url" 
+                                                    value={newProdImage}
+                                                    onChange={(e) => setNewProdImage(e.target.value)}
+                                                    className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white"
+                                                    placeholder="https://..."
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-xs text-gray-400 block mb-1">وصف الطبق والمكونات:</label>
+                                            <textarea 
+                                                value={newProdDesc}
+                                                onChange={(e) => setNewProdDesc(e.target.value)}
+                                                className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white h-20"
+                                                placeholder="مكونات الطبق وطريقة تحضيره..."
+                                            ></textarea>
+                                        </div>
+
+                                        <div className="flex gap-2">
+                                            <button 
+                                                type="submit"
+                                                className="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-xs"
+                                            >
+                                                {editingProduct ? "حفظ التعديلات" : "إضافة الطبق"}
+                                            </button>
+                                            {editingProduct && (
+                                                <button 
+                                                    type="button"
+                                                    onClick={resetForm}
+                                                    className="bg-gray-800 text-gray-300 px-4 py-2 rounded-lg text-xs"
+                                                >
+                                                    إلغاء
+                                                </button>
+                                            )}
+                                        </div>
+                                    </form>
+
+                                    <!-- Existing Products Management -->
+                                    <div className="space-y-3">
+                                        <h4 className="font-bold text-sm text-gray-300">الأطباق الحالية ({products.length})</h4>
+                                        <div className="divide-y divide-gray-800">
+                                            {products.map(prod => (
+                                                <div key={prod.id} className="py-3 flex items-center justify-between gap-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <img src={prod.image} className="w-12 h-12 rounded-lg object-cover" />
+                                                        <div>
+                                                            <h5 className="font-bold text-xs text-white">{prod.name}</h5>
+                                                            <p className="text-xs text-amber-400">${prod.price}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex gap-2">
+                                                        <button 
+                                                            onClick={() => startEdit(prod)}
+                                                            className="bg-gray-800 text-amber-400 p-2 rounded-lg text-xs"
+                                                        >
+                                                            <i className="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => deleteProduct(prod.id)}
+                                                            className="bg-red-950 text-red-400 p-2 rounded-lg text-xs"
+                                                        >
+                                                            <i className="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Product Card Component
+        function ProductCard({ product, onAddToCart }) {
+            const [selectedSize, setSelectedSize] = useState(
+                product.sizes && product.sizes.length > 0 ? product.sizes[0] : null
+            );
+
+            return (
+                <div className="bg-gray-900 border border-gray-800/80 rounded-2xl overflow-hidden hover:border-amber-500/40 transition-all duration-300 flex flex-col group hover:-translate-y-1 shadow-lg">
+                    <!-- Product Image -->
+                    <div className="relative h-48 overflow-hidden bg-gray-950">
+                        <img 
+                            src={product.image} 
+                            alt={product.name} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-amber-400 border border-amber-500/30">
+                            ${selectedSize ? selectedSize.price.toFixed(2) : product.price.toFixed(2)}
+                        </div>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 className="font-bold text-lg text-white group-hover:text-amber-400 transition-colors">{product.name}</h3>
+                            <p className="text-gray-400 text-xs mt-2 line-clamp-2 leading-relaxed">{product.description}</p>
+                        </div>
+
+                        <!-- Sizes Selector (If available) -->
+                        {product.sizes && product.sizes.length > 1 && (
+                            <div>
+                                <label className="text-[11px] text-gray-500 block mb-1.5 font-semibold">اختر الحجم:</label>
+                                <div className="flex gap-2 flex-wrap">
+                                    {product.sizes.map((size, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setSelectedSize(size)}
+                                            className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                                                selectedSize?.name === size.name 
+                                                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/50" 
+                                                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                                            }`}
+                                        >
+                                            {size.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        <!-- Add to Cart Button -->
+                        <button 
+                            onClick={() => onAddToCart(product, selectedSize)}
+                            className="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10 transition-all active:scale-95"
+                        >
+                            <i className="fa-solid fa-plus"></i>
+                            <span>إضافة إلى السلة</span>
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render App
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
