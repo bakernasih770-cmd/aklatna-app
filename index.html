@@ -75,7 +75,7 @@
 
         function App() {
             const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('aklatna_products_v7');
+                const saved = localStorage.getItem('aklatna_products_v9');
                 return saved ? JSON.parse(saved) : PRODUCTS_DATA;
             });
             const [activeCategory, setActiveCategory] = useState("all");
@@ -95,7 +95,7 @@
             const [newProdImage, setNewProdImage] = useState("");
 
             useEffect(() => {
-                localStorage.setItem('aklatna_products_v7', JSON.stringify(products));
+                localStorage.setItem('aklatna_products_v9', JSON.stringify(products));
             }, [products]);
 
             const deliveryFee = deliveryType === "delivery" ? Math.max(2, deliveryDistance * 1.5) : 0;
@@ -205,9 +205,9 @@
                         </div>
                     </header>
 
-                    <section className="bg-gray-950 py-10 px-4 border-b border-gray-800 text-center">
-                        <h2 className="text-3xl font-extrabold text-white mb-2">مطبخ أكلاتنا للطبخ البيتي العراقي</h2>
-                        <p className="text-gray-400 text-sm max-w-xl mx-auto mb-4">أشهى الأطباق العراقية الطازجة في Greensboro, NC.</p>
+                    <section className="bg-gray-950 py-12 px-4 border-b border-gray-800 text-center">
+                        <h2 className="text-4xl md:text-6xl font-extrabold text-amber-400 mb-3 tracking-wide">أكلاتنا</h2>
+                        <p className="text-lg md:text-xl font-bold text-white mb-6">أطباق عراقية طازجة</p>
                         <input 
                             type="text" 
                             placeholder="ابحث عن طبقك المفضّل..." 
