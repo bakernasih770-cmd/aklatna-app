@@ -75,7 +75,7 @@
 
         function App() {
             const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('aklatna_products_v11');
+                const saved = localStorage.getItem('aklatna_products_v12');
                 return saved ? JSON.parse(saved) : PRODUCTS_DATA;
             });
             const [activeCategory, setActiveCategory] = useState("all");
@@ -95,7 +95,7 @@
             const [newProdImage, setNewProdImage] = useState("");
 
             useEffect(() => {
-                localStorage.setItem('aklatna_products_v11', JSON.stringify(products));
+                localStorage.setItem('aklatna_products_v12', JSON.stringify(products));
             }, [products]);
 
             const deliveryFee = deliveryType === "delivery" ? Math.max(2, deliveryDistance * 1.5) : 0;
@@ -205,18 +205,18 @@
                         </div>
                     </header>
 
-                    {/* قسم العنوان مع صورتك الأصلية بحجمها الكامل والواضح */}
-                    <section className="relative py-20 px-4 border-b border-gray-800 text-center bg-gray-950 bg-cover bg-center" style={{ backgroundImage: `url('PhotoGPT-8035f4a4803c4e32b4f7e8823f056397.png')` }}>
-                        <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]"></div>
+                    {/* خلفية السفرة العراقية برابط مباشر وواضح جداً */}
+                    <section className="relative py-24 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=2000&q=90')` }}>
+                        <div className="absolute inset-0 bg-black/60"></div>
                         <div className="relative z-10 max-w-4xl mx-auto">
-                            <h2 className="text-5xl md:text-7xl font-black text-amber-400 mb-3 tracking-wider drop-shadow-2xl">أكلاتنا</h2>
-                            <p className="text-xl md:text-2xl font-bold text-white mb-6 drop-shadow-lg">أطباق عراقية طازجة</p>
+                            <h2 className="text-6xl md:text-8xl font-black text-amber-400 mb-3 tracking-wider drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">أكلاتنا</h2>
+                            <p className="text-2xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.9)]">أطباق عراقية طازجة</p>
                             <input 
                                 type="text" 
                                 placeholder="ابحث عن طبقك المفضّل..." 
                                 value={searchQuery} 
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full max-w-lg bg-gray-900/95 border border-amber-500/50 rounded-xl py-3 px-4 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
+                                className="w-full max-w-lg bg-gray-900/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl backdrop-blur-sm"
                             />
                         </div>
                     </section>
