@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أكلاتنا - أشهى الأطباق لبااب البيت</title>
+    <title>أكلاتنا - طبخ بيتي عراقي في جرينزبورو</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -27,53 +27,66 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
         const WHATSAPP_NUMBER = "+13369448034";
+        // Hidden origin address for backend distance calculations
+        const HOME_KITCHEN_ORIGIN = "4704 Chaucer Dr, Greensboro, NC 27407";
 
         const INITIAL_CATEGORIES = [
             { id: "all", name: "الكل", icon: "fa-border-all" },
             { id: "main", name: "الأطباق الرئيسية", icon: "fa-utensils" },
-            { id: "grills", name: "مشويات", icon: "fa-drumstick-bite" },
-            { id: "appetizers", name: "مقبلات", icon: "fa-bowl-food" },
-            { id: "desserts", name: "حلويات", icon: "fa-ice-cream" },
-            { id: "drinks", name: "مشروبات", icon: "fa-glass-water" }
+            { id: "grills", name: "المشويات", icon: "fa-drumstick-bite" },
+            { id: "fish", name: "الأسماك", icon: "fa-fish" },
+            { id: "appetizers", name: "المعجنات والمقبلات", icon: "fa-bowl-food" },
+            { id: "bakery", name: "المخبوزات والخبز", icon: "fa-bread-slice" },
+            { id: "sandwiches", name: "السندويتشات", icon: "fa-burger" }
         ];
 
         const INITIAL_PRODUCTS = [
-            {
-                id: 1,
-                name: "منسف أردني باللحم البلدي",
-                category: "main",
-                description: "منسف أردني أصيل مع بلدي مطبوخ بالجميد الكركي الفاخر والأرز المعطر بالمكسرات.",
-                price: 18.5,
-                sizes: [{ name: "فردي", price: 18.5 }, { name: "عائلي (3-4 أشخاص)", price: 45.0 }],
-                image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80"
-            },
-            {
-                id: 2,
-                name: "مشاوي مشكلة فاخرة",
-                category: "grills",
-                description: "تشكيلة ممتازة من كباب اللحم، الشيش طاووق، وقطع الريش المشوية على الفحم مع الخضار.",
-                price: 22.0,
-                sizes: [{ name: "نصف كيلو", price: 22.0 }, { name: "كيلو كامل", price: 40.0 }],
-                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80"
-            },
-            {
-                id: 3,
-                name: "حمص باللحمة والصنوبر",
-                category: "appetizers",
-                description: "حمص كريمي محضر طازجاً يومياً يعلوه قطع اللحم البقري المتبل والصنوبر المحمص.",
-                price: 7.5,
-                sizes: [{ name: "وجبة صحن", price: 7.5 }],
-                image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80"
-            },
-            {
-                id: 4,
-                name: "كنافة نابلسية بالجبنة",
-                category: "desserts",
-                description: "كنافة طازجة ومقرمشة محمصة بالسمن الحيواني ومحشوة بالجبنة النابلسية القاطرة.",
-                price: 6.0,
-                sizes: [{ name: "صحن شخصي", price: 6.0 }, { name: "سدر عائلي", price: 25.0 }],
-                image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80"
-            }
+            // الأطباق الرئيسية
+            { id: 1, name: "الدولمة العرقية (Iraqi Dolma)", category: "main", price: 45, description: "دولمة عراقية مشكلة طازجة ومطبوخة على الأصول.", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" },
+            { id: 2, name: "الباچة (Pacha)", category: "main", price: 60, description: "باچة عراقية ملغومة وطازجة بأسلوب بيتي أصيل.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
+            { id: 3, name: "القوزي العراقي (Iraqi Gouzou)", category: "main", price: 70, description: "قوزي لحم فاخر مطبوخ بطريقة ممتازة.", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" },
+            { id: 4, name: "دجاج مع طبق رز أصفر", category: "main", price: 25, description: "دجاج محمر مع أرز أصفر معطر بالمكسرات والبهارات.", image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
+            { id: 5, name: "دجاج مع طبق رز أحمر", category: "main", price: 25, description: "دجاج شهي مع أرز أحمر مطبوخ بصلصة الطماطم الفاخرة.", image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
+            { id: 6, name: "القيمة مع الرز (Qiymah with Rice)", category: "main", price: 20, description: "قيمة نجفية أصيلة مع الأرز المعطر.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
+            { id: 7, name: "البرياني بالدجاج (Chicken Biryani)", category: "main", price: 28, description: "برياني دجاج مع الشعرية والمكسرات والبهارات الخاصة.", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
+            { id: 8, name: "البرياني باللحم (Meat Biryani)", category: "main", price: 32, description: "برياني لحم فاخر مطبوخ بالبهارات العراقية.", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
+            { id: 9, name: "باقلاء بالدهن (Baghila bil Dihn)", category: "main", price: 18, description: "طبق باقلاء بالدهن الحر والبيض والبطون.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
+
+            // المشويات
+            { id: 10, name: "كباب شوي (Iraqi Kebab)", category: "grills", price: 30, description: "كباب عراقي مشوي على الفحم.", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
+            { id: 11, name: "تكة لحم (Meat Tikka)", category: "grills", price: 35, description: "قطع تكة اللحم البقري/الغنم المشوية الطرية.", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
+            { id: 12, name: "تكة دجاج (Chicken Tikka)", category: "grills", price: 25, description: "شي ش طاووق / تكة دجاج متبلة ومشوية.", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
+
+            // الأسماك
+            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, description: "سمك تيلابيا مشوي على الطريقة العراقية.", image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80" },
+            { id: 14, name: "السمك المقلي مع الرز الأحمر (الزبيدي Butterfish)", category: "fish", price: 32, description: "سمك زبيدي مقلي مقرمش يقدم مع الرز الأحمر.", image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80" },
+
+            // المعجنات والمقبلات
+            { id: 15, name: "كبة حلب (Kibbeh Halab)", category: "appetizers", price: 3, description: "كبة رز مقرمشة محشوة باللحم والمكسرات (للحبة).", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 16, name: "كبة الجريش (Jreesh Kibbeh)", category: "appetizers", price: 3.5, description: "كبة جريش طازجة ومحشوة باللحم المفروم.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 17, name: "بتيتة چاب (Batata Chap)", category: "appetizers", price: 3, description: "بتيتة چاب محشوة باللحم المتبل.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 18, name: "بورڭ اللحم (Meat Borek)", category: "appetizers", price: 2.5, description: "بورڭ مقرمش محشو باللحم.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 19, name: "بورڭ الجبن (Cheese Borek)", category: "appetizers", price: 2.5, description: "بورڭ محشو بالجبنة اللذيذة.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 20, name: "لحم بعجين (Lahm bi Ajin)", category: "appetizers", price: 4, description: "قرص لحم بعجين عراقي طازج.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, description: "فطائر مشوية بالجبن والنعناع.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 22, name: "فطائر الزعتر (Zaatar Pastry)", category: "appetizers", price: 2.5, description: "فطائر زعتر طازجة.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, description: "فطائر محشوة بقطع صدر الدجاج المتبل.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 24, name: "فليفلة (Fleifla)", category: "appetizers", price: 2, description: "مقبلات فليفلة شهية.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+
+            // المخبوزات والخبز
+            { id: 25, name: "صمون عراقي (Iraqi Samoon)", category: "bakery", price: 1, description: "صمون عراقي حجري طازج.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
+            { id: 26, name: "خبز عراقي (Iraqi Tannour Bread)", category: "bakery", price: 1.5, description: "خبز تنور عراقي حار وطازج.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
+            { id: 27, name: "خبز عروك (Khubz Urouq)", category: "bakery", price: 3, description: "خبز عروك عراقي باللحم الخالص والخبز المتبل.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
+            { id: 28, name: "خبز بربري (Barbari Bread)", category: "bakery", price: 2, description: "خبز بربري طازج ومحمص.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
+            { id: 29, name: "لفة خميرة (Khamira Roll)", category: "bakery", price: 2, description: "لفة خميرة طرية وهشة.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
+            { id: 30, name: "كعك السمسم (Sesame Kaak)", category: "bakery", price: 5, description: "كعك مقرمش بالسمسم.", image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
+            { id: 31, name: "الكليچة العراقية (Kleicha)", category: "bakery", price: 12, description: "كليچة عراقية بالتمر والجوز والبهارات العطرية.", image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
+
+            // السندويتشات
+            { id: 32, name: "ساندويچ فلافل (Falafel Sandwich)", category: "sandwiches", price: 8, description: "ساندويچ فلافل بالصمون العراقي مع الطحينة والعمبة.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 33, name: "ساندويچ تكة دجاج (Chicken Tikka Sandwich)", category: "sandwiches", price: 12, description: "ساندويچ تكة دجاج مشوية مع السلطة والصلصة.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 34, name: "ساندويچ تكة لحم (Meat Tikka Sandwich)", category: "sandwiches", price: 14, description: "ساندويچ تكة لحم بقري مشوية بالصمون العراقي.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 35, name: "ساندويچ كباب شوي (Grilled Kebab Sandwich)", category: "sandwiches", price: 11, description: "ساندويچ كباب مشوي على الفحم مع الخضار المشوية.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" }
         ];
 
         const AVAILABLE_FONTS = [
@@ -86,7 +99,7 @@
 
         function App() {
             const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('aklatna_products');
+                const saved = localStorage.getItem('aklatna_products_v2');
                 return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
             });
             const [categories, setCategories] = useState(INITIAL_CATEGORIES);
@@ -109,7 +122,7 @@
             const [newProdImage, setNewProdImage] = useState("");
 
             useEffect(() => {
-                localStorage.setItem('aklatna_products', JSON.stringify(products));
+                localStorage.setItem('aklatna_products_v2', JSON.stringify(products));
             }, [products]);
 
             useEffect(() => {
@@ -129,11 +142,8 @@
                 });
             }, [products, activeCategory, searchQuery]);
 
-            const addToCart = (product, selectedSize) => {
-                const itemPrice = selectedSize ? selectedSize.price : product.price;
-                const sizeName = selectedSize ? selectedSize.name : "قياسي";
-                const cartItemId = `${product.id}-${sizeName}`;
-
+            const addToCart = (product) => {
+                const cartItemId = `${product.id}`;
                 setCart(prev => {
                     const existing = prev.find(item => item.cartItemId === cartItemId);
                     if (existing) {
@@ -141,7 +151,7 @@
                             item.cartItemId === cartItemId ? { ...item, quantity: item.quantity + 1 } : item
                         );
                     }
-                    return [...prev, { cartItemId, id: product.id, name: product.name, sizeName, price: itemPrice, image: product.image, quantity: 1 }];
+                    return [...prev, { cartItemId, id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 }];
                 });
                 setIsCartOpen(true);
             };
@@ -166,9 +176,9 @@
                     return;
                 }
 
-                let message = `🍽️ *طلب جديد من تطبيق أكلاتنا* 🍽️\n`;
+                let message = `🍽️ *طلب جديد من تطبيق أكلاتنا (طبخ بيتي عراقي)* 🍽️\n`;
                 message += `👤 *العميل:* ${customerName}\n`;
-                message += `📍 *نوع الطلب:* ${deliveryType === "delivery" ? "توصيل للمنزل" : "استلام من المطعم"}\n`;
+                message += `📍 *نوع الطلب:* ${deliveryType === "delivery" ? "توصيل للمنزل" : "استلام"}\n`;
                 if (deliveryType === "delivery") {
                     message += `🏠 *العنوان:* ${deliveryAddress}\n`;
                     message += `🚗 *المسافة التقديرية:* ${deliveryDistance} ميل\n`;
@@ -177,7 +187,7 @@
                 message += `🛒 *الأطباق المطلوبة:*\n`;
 
                 cart.forEach((item, index) => {
-                    message += `${index + 1}. ${item.name} (${item.sizeName}) x${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
+                    message += `${index + 1}. ${item.name} x${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
                 });
 
                 message += `--------------------------------\n`;
@@ -202,7 +212,6 @@
                         category: newProdCategory,
                         description: newProdDesc,
                         price: parseFloat(newProdPrice),
-                        sizes: [{ name: "قياسي", price: parseFloat(newProdPrice) }],
                         image: newProdImage || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
                     } : p));
                 } else {
@@ -212,7 +221,6 @@
                         category: newProdCategory,
                         description: newProdDesc,
                         price: parseFloat(newProdPrice),
-                        sizes: [{ name: "قياسي", price: parseFloat(newProdPrice) }],
                         image: newProdImage || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
                     };
                     setProducts(prev => [newProd, ...prev]);
@@ -238,7 +246,7 @@
             };
 
             const deleteProduct = (id) => {
-                if (confirm("هل أنت تأكد من حذف هذا الطبق من القائمة؟")) {
+                if (confirm("هل أنت تأكد من حذف هذا الطبق؟")) {
                     setProducts(prev => prev.filter(p => p.id !== id));
                 }
             };
@@ -253,7 +261,7 @@
                                 </div>
                                 <div>
                                     <h1 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200">أكلاتنا</h1>
-                                    <p className="text-xs text-gray-400">Aklatna App - الطعام البيتي الفاخر</p>
+                                    <p className="text-xs text-gray-400">Aklatna App - طبخ بيتي عراقي في Greensboro, NC</p>
                                 </div>
                             </div>
 
@@ -295,269 +303,23 @@
                         </div>
                     </header>
 
-                    <section className="relative bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 py-12 px-4 border-b border-gray-800">
-                        <div className="max-w-4xl mx-auto text-center space-y-4">
+                    <section className="relative bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 py-10 px-4 border-b border-gray-800">
+                        <div className="max-w-4xl mx-auto text-center space-y-3">
                             <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-4 py-1 rounded-full text-xs font-semibold inline-block">
-                                🌟 طعم أصيل يجمع العائلة
+                                🏠 أكل بيتي عراقي فاخر طازج يومياً
                             </span>
-                            <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight">
-                                تذوق أشهى الأطباق والمأكولات الطازجة
+                            <h2 className="text-2xl md:text-4xl font-extrabold text-white leading-tight">
+                                مطبخ أكلاتنا للطبخ البيتي العراقي الأصيل
                             </h2>
-                            <p className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
-                                اطلب الآن مباشرة عبر الواتساب واستمتع بأسرع خدمة توصيل طعام طازج وصحي مباشرة إلى باب منزلك.
+                            <p className="text-gray-400 text-xs md:text-sm max-w-2xl mx-auto">
+                                نعد لكم أشهى الأطباق والمأكولات العراقية بالطبخ البيتي الفاخر بمدينة Greensboro, NC. اطلب مباشرة عبر الواتساب واستلم طلبك طازجاً.
                             </p>
 
-                            <div className="pt-4 max-w-xl mx-auto relative">
+                            <div className="pt-3 max-w-xl mx-auto relative">
                                 <i className="fa-solid fa-magnifying-glass absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                                 <input 
                                     type="text"
-                                    placeholder="ابحث عن طبقك المفضل..."
+                                    placeholder="ابحث عن طبقك المفضل (دولمة، باچة، كباب، كليچة)..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full bg-gray-800/80 border border-gray-700 rounded-xl py-3 pr-11 pl-4 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition-all shadow-inner"
-                                />
-                            </div>
-                        </div>
-                    </section>
-
-                    <main className="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-                        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8">
-                            {categories.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setActiveCategory(cat.id)}
-                                    className={`px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap flex items-center gap-2 transition-all ${
-                                        activeCategory === cat.id
-                                            ? "bg-amber-500 text-gray-950 shadow-lg shadow-amber-500/25 scale-105"
-                                            : "bg-gray-800/80 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700/50"
-                                    }`}
-                                >
-                                    <i className={`fa-solid ${cat.icon}`}></i>
-                                    <span>{cat.name}</span>
-                                </button>
-                            ))}
-                        </div>
-
-                        {filteredProducts.length === 0 ? (
-                            <div className="text-center py-16 bg-gray-900/50 rounded-2xl border border-gray-800">
-                                <i className="fa-solid fa-utensils text-5xl text-gray-600 mb-4"></i>
-                                <h3 className="text-lg font-bold text-gray-300">لا توجد أطباق تطابق بحثك حالياً</h3>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {filteredProducts.map(product => (
-                                    <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
-                                ))}
-                            </div>
-                        )}
-                    </main>
-
-                    {isCartOpen && (
-                        <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm">
-                            <div className="w-full max-w-md bg-gray-900 text-white h-full flex flex-col shadow-2xl border-r border-gray-800">
-                                <div className="p-4 border-b border-gray-800 flex items-center justify-between bg-gray-950">
-                                    <div className="flex items-center gap-2">
-                                        <i className="fa-solid fa-basket-shopping text-amber-500 text-xl"></i>
-                                        <h2 className="text-lg font-bold">سلة الشراء</h2>
-                                    </div>
-                                    <button onClick={() => setIsCartOpen(false)} className="text-gray-400 hover:text-white p-2">
-                                        <i className="fa-solid fa-xmark text-xl"></i>
-                                    </button>
-                                </div>
-
-                                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                                    {cart.length === 0 ? (
-                                        <div className="text-center py-20 text-gray-500 space-y-3">
-                                            <i className="fa-solid fa-cart-flatbed text-5xl opacity-40"></i>
-                                            <p className="text-base font-semibold">سلة الشراء فارغة حالياً</p>
-                                        </div>
-                                    ) : (
-                                        cart.map(item => (
-                                            <div key={item.cartItemId} className="bg-gray-800/60 p-3 rounded-xl border border-gray-700 flex gap-3 items-center">
-                                                <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
-                                                <div className="flex-1 min-w-0">
-                                                    <h4 className="font-bold text-sm text-gray-100 truncate">{item.name}</h4>
-                                                    <p className="text-xs text-amber-400 font-medium">الحجم: {item.sizeName}</p>
-                                                    <p className="text-xs text-gray-400 mt-1">${item.price.toFixed(2)}</p>
-                                                </div>
-                                                <div className="flex items-center gap-2 bg-gray-900 rounded-lg p-1 border border-gray-700">
-                                                    <button onClick={() => updateCartQuantity(item.cartItemId, -1)} className="w-6 h-6 rounded bg-gray-800 flex items-center justify-center text-xs font-bold">-</button>
-                                                    <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
-                                                    <button onClick={() => updateCartQuantity(item.cartItemId, 1)} className="w-6 h-6 rounded bg-gray-800 flex items-center justify-center text-xs font-bold text-amber-400">+</button>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-
-                                    {cart.length > 0 && (
-                                        <div className="mt-6 bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-3">
-                                            <h3 className="font-bold text-sm text-amber-400 flex items-center gap-2">
-                                                <i className="fa-solid fa-truck-fast"></i>
-                                                تفاصيل الاستلام والتوصيل
-                                            </h3>
-                                            <div>
-                                                <label className="text-xs text-gray-400 block mb-1">الاسم الكريم:</label>
-                                                <input 
-                                                    type="text" 
-                                                    placeholder="أدخل اسمك هنا..."
-                                                    value={customerName}
-                                                    onChange={(e) => setCustomerName(e.target.value)}
-                                                    className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="text-xs text-gray-400 block mb-1">طريقة الاستلام:</label>
-                                                <div className="grid grid-cols-2 gap-2">
-                                                    <button onClick={() => setDeliveryType("pickup")} className={`p-2 rounded-lg text-xs font-bold border ${deliveryType === "pickup" ? "bg-amber-500 text-gray-950 border-amber-500" : "bg-gray-900 text-gray-400 border-gray-800"}`}>استلام من المطعم</button>
-                                                    <button onClick={() => setDeliveryType("delivery")} className={`p-2 rounded-lg text-xs font-bold border ${deliveryType === "delivery" ? "bg-amber-500 text-gray-950 border-amber-500" : "bg-gray-900 text-gray-400 border-gray-800"}`}>توصيل للمنزل</button>
-                                                </div>
-                                            </div>
-                                            {deliveryType === "delivery" && (
-                                                <>
-                                                    <div>
-                                                        <label className="text-xs text-gray-400 block mb-1">عنوان التوصيل:</label>
-                                                        <input type="text" placeholder="العنوان..." value={deliveryAddress} onChange={(e) => setDeliveryAddress(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white" />
-                                                    </div>
-                                                    <div>
-                                                        <div className="flex justify-between text-xs text-gray-400 mb-1">
-                                                            <span>مسافة التوصيل (بالأميال):</span>
-                                                            <span className="text-amber-400 font-bold">{deliveryDistance} ميل</span>
-                                                        </div>
-                                                        <input type="range" min="1" max="25" value={deliveryDistance} onChange={(e) => setDeliveryDistance(parseInt(e.target.value))} className="w-full accent-amber-500" />
-                                                    </div>
-                                                </>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-
-                                {cart.length > 0 && (
-                                    <div className="p-4 border-t border-gray-800 bg-gray-950 space-y-3">
-                                        <div className="space-y-1.5 text-xs text-gray-400">
-                                            <div className="flex justify-between"><span>المجموع الفرعي:</span><span className="text-white font-bold">${cartSubtotal.toFixed(2)}</span></div>
-                                            {deliveryType === "delivery" && (<div className="flex justify-between"><span>أجور التوصيل:</span><span className="text-amber-400 font-bold">${deliveryFee.toFixed(2)}</span></div>)}
-                                            <div className="flex justify-between text-sm text-white font-extrabold pt-2 border-t border-gray-800"><span>الإجمالي:</span><span className="text-amber-400">${cartTotal.toFixed(2)}</span></div>
-                                        </div>
-                                        <button onClick={sendWhatsAppOrder} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 text-sm shadow-lg">
-                                            <i className="fa-brands fa-whatsapp text-lg"></i>
-                                            <span>إرسال الطلب عبر الواتساب</span>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {isAdminOpen && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-                            <div className="bg-gray-900 border border-gray-800 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden my-8">
-                                <div className="p-4 bg-gray-950 border-b border-gray-800 flex items-center justify-between">
-                                    <h3 className="font-bold text-amber-400 flex items-center gap-2"><i className="fa-solid fa-sliders"></i> لوحة التحكم</h3>
-                                    <button onClick={() => setIsAdminOpen(false)} className="text-gray-400 hover:text-white"><i className="fa-solid fa-xmark text-xl"></i></button>
-                                </div>
-                                <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
-                                    <form onSubmit={handleSaveProduct} className="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-4">
-                                        <h4 className="font-bold text-sm text-white">{editingProduct ? "تعديل الطبق" : "إضافة طبق جديد"}</h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                            <div>
-                                                <label className="text-xs text-gray-400 block mb-1">اسم الطبق:</label>
-                                                <input type="text" required value={newProdName} onChange={(e) => setNewProdName(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white" />
-                                            </div>
-                                            <div>
-                                                <label className="text-xs text-gray-400 block mb-1">القسم:</label>
-                                                <select value={newProdCategory} onChange={(e) => setNewProdCategory(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
-                                                    {categories.filter(c => c.id !== "all").map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="text-xs text-gray-400 block mb-1">السعر ($):</label>
-                                                <input type="number" step="0.5" required value={newProdPrice} onChange={(e) => setNewProdPrice(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white" />
-                                            </div>
-                                            <div>
-                                                <label className="text-xs text-gray-400 block mb-1">رابط الصورة:</label>
-                                                <input type="url" value={newProdImage} onChange={(e) => setNewProdImage(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className="text-xs text-gray-400 block mb-1">الوصف:</label>
-                                            <textarea value={newProdDesc} onChange={(e) => setNewProdDesc(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white h-20"></textarea>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <button type="submit" className="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-xs">{editingProduct ? "حفظ" : "إضافة"}</button>
-                                            {editingProduct && (<button type="button" onClick={resetForm} className="bg-gray-800 text-gray-300 px-4 py-2 rounded-lg text-xs">إلغاء</button>)}
-                                        </div>
-                                    </form>
-
-                                    <div className="space-y-3">
-                                        <h4 className="font-bold text-sm text-gray-300">الأطباق الحالية ({products.length})</h4>
-                                        <div className="divide-y divide-gray-800">
-                                            {products.map(prod => (
-                                                <div key={prod.id} className="py-3 flex items-center justify-between gap-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <img src={prod.image} className="w-12 h-12 rounded-lg object-cover" />
-                                                        <div>
-                                                            <h5 className="font-bold text-xs text-white">{prod.name}</h5>
-                                                            <p className="text-xs text-amber-400">${prod.price}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button onClick={() => startEdit(prod)} className="bg-gray-800 text-amber-400 p-2 rounded-lg text-xs"><i className="fa-solid fa-pen-to-square"></i></button>
-                                                        <button onClick={() => deleteProduct(prod.id)} className="bg-red-950 text-red-400 p-2 rounded-lg text-xs"><i className="fa-solid fa-trash"></i></button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        function ProductCard({ product, onAddToCart }) {
-            const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || null);
-
-            return (
-                <div className="bg-gray-900 border border-gray-800/80 rounded-2xl overflow-hidden hover:border-amber-500/40 transition-all flex flex-col group shadow-lg">
-                    <div className="relative h-48 overflow-hidden bg-gray-950">
-                        <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-amber-400 border border-amber-500/30">
-                            ${selectedSize ? selectedSize.price.toFixed(2) : product.price.toFixed(2)}
-                        </div>
-                    </div>
-                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                        <div>
-                            <h3 className="font-bold text-lg text-white group-hover:text-amber-400 transition-colors">{product.name}</h3>
-                            <p className="text-gray-400 text-xs mt-2 line-clamp-2 leading-relaxed">{product.description}</p>
-                        </div>
-                        {product.sizes && product.sizes.length > 1 && (
-                            <div>
-                                <label className="text-[11px] text-gray-500 block mb-1.5 font-semibold">اختر الحجم:</label>
-                                <div className="flex gap-2 flex-wrap">
-                                    {product.sizes.map((size, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => setSelectedSize(size)}
-                                            className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${selectedSize?.name === size.name ? "bg-amber-500/20 text-amber-400 border border-amber-500/50" : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}
-                                        >
-                                            {size.name}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                        <button onClick={() => onAddToCart(product, selectedSize)} className="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
-                            <i className="fa-solid fa-plus"></i>
-                            <span>إضافة إلى السلة</span>
-                        </button>
-                    </div>
-                </div>
-            );
-        }
-
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-    </script>
-</body>
-</html>
+                                    className="w-full bg-gray-800/80 border border-gray-700 rounded-xl py-2.5 pr-11 pl-4 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition-all shadow-inner text-
