@@ -74,7 +74,7 @@
 
         function App() {
             const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('aklatna_products_v18');
+                const saved = localStorage.getItem('aklatna_products_v20');
                 return saved ? JSON.parse(saved) : PRODUCTS_DATA;
             });
             const [activeCategory, setActiveCategory] = useState("all");
@@ -93,7 +93,7 @@
             const [newProdImage, setNewProdImage] = useState("");
 
             useEffect(() => {
-                localStorage.setItem('aklatna_products_v18', JSON.stringify(products));
+                localStorage.setItem('aklatna_products_v20', JSON.stringify(products));
             }, [products]);
 
             const deliveryFee = deliveryType === "delivery" ? Math.max(2, deliveryDistance * 1.5) : 0;
@@ -137,9 +137,49 @@
                     return;
                 }
 
-                let message = "طلب جديد من أكلاتنا:\n";
-                message += "الاسم: " + customerName + "\n";
-                message += "النوع: " + (deliveryType === "delivery" ? "توصيل" : "استلام") + "\n";
+                const lines = [];
+                lines.push("طلب جديد من أكلاتنا:");
+                lines.push("الاسم: " + customerName);
+                lines.push("النوع: " + (deliveryType === "delivery" ? "توصيل" : "استلام"));
+                if (deliveryType === "delivery" && deliveryAddress) {
+                    lines.push("العنوان: " + deliveryAddress);
+                }
+                lines.push("--- الطلبات ---");
+                cart.forEach((item, index) => {
+                    lines.push((index + 1) + ". " + item.name + " x" + item.quantity + " = $" + (item.price * item.quantity));
+                });
+                lines.push("---------------");
+                lines.push("المجموع: $" + cartSubtotal.toFixed(2));
                 if (deliveryType === "delivery") {
-                    message += "العنوان: " + deliveryAddress + "\n";
-                    
+                    lines.push("التوصيل: $" + deliveryFee.toFixed(2));
+                }
+                lines.push("الإجمالي: $" + cartTotal.toFixed(2));
+
+                const fullMessage = lines.join("\n");
+                const cleanNumber = WHATSAPP_NUMBER.replace(/[^0-9]/g, '');
+                window.open("https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(fullMessage), '_blank');
+            };
+
+            const handleSaveProduct = (e) => {
+                e.preventDefault();
+                if (!newProdName || !newProdPrice) return;
+
+                const newProd = {
+                    id: Date.now(),
+                    name: newProdName,
+                    category: newProdCategory,
+                    price: parseFloat(newProdPrice),
+                    image: newProdImage || "dolma.jpg"
+                };
+
+                setProducts(prev => [newProd, ...prev]);
+                setNewProdName("");
+                setNewProdPrice("");
+                setNewProdImage("");
+                setIsAdminOpen(false);
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col pb-10">
+                    <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
+                        <div className="max-w-7xl mx-auto px-
