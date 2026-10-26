@@ -14,15 +14,6 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
-    
-    <!-- شريط الإعلانات والتنبيهات المهمة في بداية التطبيق -->
-    <div class="bg-amber-500 text-gray-950 font-bold py-2 px-4 text-center text-xs md:text-sm shadow-md flex flex-wrap justify-center items-center gap-4 z-40">
-        <span><i class="fa-solid fa-circle-check ml-1"></i> جميع اللحوم المستخدمة حلال 100%</span>
-        <span class="hidden md:inline">|</span>
-        <span><i class="fa-solid fa-clock ml-1"></i> يرجى إتمام الطلب قبل 24 ساعة</span>
-        <span class="hidden md:inline">|</span>
-        <span><i class="fa-solid fa-gift ml-1"></i> التوصيل مجاني للطلبات 60$ فما فوق ضمن 10 أميال</span>
-    </div>
 
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -59,6 +50,26 @@
             />
         </div>
     </section>
+
+    <!-- شريط التنبيهات والسياسات بين الصورة الرئيسية وأنواع الطعام -->
+    <div class="bg-gray-900 border-y border-amber-500/30 py-3 px-4 shadow-inner">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-6 text-xs md:text-sm font-bold text-amber-300 text-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-green-400"></i>
+                <span>جميع اللحوم المستخدمة حلال 100%</span>
+            </div>
+            <div class="hidden md:inline text-gray-600">|</div>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-clock text-amber-400"></i>
+                <span>يرجى إتمام الطلب قبل 24 ساعة</span>
+            </div>
+            <div class="hidden md:inline text-gray-600">|</div>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-gift text-red-400"></i>
+                <span>توصيل مجاني للطلبات 70$ فأكثر ضمن 15 ميل (رسوم رمزية 5$ للطلبات أقل من 70$)</span>
+            </div>
+        </div>
+    </div>
 
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8" id="categories-container">
@@ -312,15 +323,20 @@
         function calculateDeliveryFee(subtotal) {
             if (deliveryMode === 'pickup') return 0;
             if (calculatedMiles < 0) return 0;
-            if (calculatedMiles > 30) return -1;
+            if (calculatedMiles > 30) return -1; // أكثر من 30 ميل غير متاح
             
-            // التوصيل مجاني للطلبات التي يبلغ سعرها 60$ فما فوق ضمن نطاق 10 أميال
-            if (subtotal >= 60 && calculatedMiles <= 10) {
-                return 0;
+            // ضمن نطاق 15 ميل
+            if (calculatedMiles <= 15) {
+                if (subtotal >= 70) {
+                    return 0; // مجاني إذا كان الطلب 70$ فأكثر ضمن 15 ميل
+                } else {
+                    return 5; // رسوم رمزية 5$ إذا كان أقل من 70$ ضمن 15 ميل
+                }
             }
-
-            if (calculatedMiles <= 15) return 0;
-            return (calculatedMiles - 15) * 1;
+            
+            // ما بعد 15 ميل وحتى 30 ميل (يضاف دولار لكل ميل يتجاوز 15 ميل، بالإضافة لرسوم أساسية إن كان أقل من 70$)
+            var baseFee = (subtotal >= 70) ? 0 : 5;
+            return baseFee + (calculatedMiles - 15) * 1;
         }
 
         function updateCartUI() {
