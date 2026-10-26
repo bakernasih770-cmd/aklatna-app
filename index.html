@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
-        .suggestions-list { background-color: #1f2937; border: 1px solid #374151; max-height: 150px; overflow-y: auto; position: absolute; width: 100%; z-index: 100; border-radius: 0.5rem; margin-top: 2px; }
-        .suggestion-item { padding: 8px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
+        .suggestions-list { background-color: #1f2937; border: 1px solid #374151; max-height: 180px; overflow-y: auto; position: absolute; width: 100%; z-index: 100; border-radius: 0.5rem; margin-top: 2px; }
+        .suggestion-item { padding: 10px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
         .suggestion-item:hover { background-color: #374151; color: #fff; }
     </style>
 </head>
@@ -80,9 +80,9 @@
                 </div>
                 <div id="delivery-options" class="hidden space-y-2 text-xs relative">
                     <p class="text-gray-400 text-[10px]">الانطلاق من: 4704 Chaucer Dr, Greensboro, NC</p>
-                    <input type="text" id="delivery-address" placeholder="اكتب اسم الشارع أو العنوان..." oninput="searchAddress(this.value)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    <input type="text" id="delivery-address" placeholder="اكتب اسم الشارع (مثل: Battleground, Wendover)..." oninput="searchStreet(this.value)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
                     <div id="suggestions" class="suggestions-list hidden"></div>
-                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال العنوان لحساب مسافة القيادة...</p>
+                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إادخال الشارع لعرض المسافة...</p>
                 </div>
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
             </div>
@@ -122,7 +122,7 @@
             { id: 29, name: "كعك السمسم", category: "bakery", price: 5, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
             { id: 30, name: "الكليچة العراقية", category: "bakery", price: 12, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
             { id: 31, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 32, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 32, name: "ساندويچ تكة دجاج", category: "sandwiches", page: 12, price: 12, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
             { id: 33, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
             { id: 34, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
@@ -207,23 +207,42 @@
             updateCartUI();
         }
 
+        // بحث مخصص يركز حصرياً على أسماء الشوارع في جرينزبورو بمجرد كتابة الحروف الأولى
         var searchTimeout;
-        function searchAddress(query) {
+        function searchStreet(query) {
             clearTimeout(searchTimeout);
             var sugBox = document.getElementById('suggestions');
-            if (query.length < 3) {
+            if (query.length < 2) {
                 sugBox.classList.add('hidden');
                 return;
             }
 
             searchTimeout = setTimeout(function() {
-                var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query + ', Greensboro, NC') + '&limit=5';
+                // نطلب من خادم الخرائط جلب الشوارع التي تبدأ بالحروف المكتوبة حصرياً في Greensboro
+                var url = 'https://nominatim.openstreetmap.org/search?format=json&city=Greensboro&state=North Carolina&street=' + encodeURIComponent(query) + '&limit=8';
+                
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
+                        // إذا لم نجد نتائج دقيقة بالشارع فقط، نبحث بالاسم العام في المدينة
+                        if (!data || data.length === 0) {
+                            return fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query + ' street, Greensboro, NC') + '&limit=8');
+                        }
+                        return data;
+                    })
+                    .then(response => {
+                        if (Array.isArray(response)) return response;
+                        return response.json();
+                    })
+                    .then(data => {
                         var html = '';
+                        var seen = {};
                         for (var i = 0; i < data.length; i++) {
-                            html += '<div class="suggestion-item" onclick="selectAddress(\'' + data[i].display_name.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + data[i].display_name + '</div>';
+                            var displayName = data[i].display_name;
+                            if (!seen[displayName]) {
+                                seen[displayName] = true;
+                                html += '<div class="suggestion-item" onclick="selectStreet(\'' + displayName.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + displayName + '</div>';
+                            }
                         }
                         if (html) {
                             sugBox.innerHTML = html;
@@ -232,21 +251,21 @@
                             sugBox.classList.add('hidden');
                         }
                     }).catch(err => console.log(err));
-            }, 300);
+            }, 250);
         }
 
-        function selectAddress(addressText, lat, lon) {
-            document.getElementById('delivery-address').value = addressText;
+        function selectStreet(streetText, lat, lon) {
+            document.getElementById('delivery-address').value = streetText;
             document.getElementById('suggestions').classList.add('hidden');
 
-            // إذا كان العنوان المدخل هو عنوان المطبخ نفسه، نجعل المسافة صفر مباشرة
-            if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
+            // إذا كان الشارع هو نفس عنوان المطبخ، نصفر المسافة مباشرة لتكون صفر
+            if (streetText.toLowerCase().indexOf('chaucer') !== -1) {
                 calculatedMiles = 0.0;
                 updateCartUI();
                 return;
             }
 
-            document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية عبر الشوارع...';
+            document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
 
             var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
             
@@ -257,8 +276,7 @@
                         var meters = data.routes[0].distance;
                         var miles = meters / 1609.344;
                         calculatedMiles = parseFloat(miles.toFixed(1));
-                        // إذا كانت المسافة الناتجة أقل من نصف ميل للموقع القريب جداً، نعتبرها صفر
-                        if (calculatedMiles < 0.4) calculatedMiles = 0.0;
+                        if (calculatedMiles < 0.3) calculatedMiles = 0.0;
                         updateCartUI();
                     } else {
                         fallbackDirectDistance(lat, lon);
@@ -278,7 +296,7 @@
                     Math.sin(dLon/2) * Math.sin(dLon/2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             calculatedMiles = parseFloat((R * c * 1.3).toFixed(1));
-            if (calculatedMiles < 0.4) calculatedMiles = 0.0;
+            if (calculatedMiles < 0.3) calculatedMiles = 0.0;
             updateCartUI();
         }
 
@@ -340,7 +358,7 @@
                         deliveryTextElem.className = 'text-amber-400 font-bold';
                     }
                 } else {
-                    deliveryTextElem.innerText = 'الرجاء اختيار عنوانك من القائمة المقترحة';
+                    deliveryTextElem.innerText = 'الرجاء اختيار الشارع من القائمة المقترحة';
                     deliveryTextElem.className = 'text-amber-400 font-bold';
                 }
             }
@@ -407,7 +425,7 @@
             msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
             if (deliveryMode === 'delivery') {
                 msg += "من عنوان: 4704 Chaucer Dr, Greensboro, NC 27407\n";
-                msg += "إلى عنوان الزبون: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
+                msg += "إلى الشارع: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
                 msg += "مسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
             }
             msg += "--- الطلبات ---\n";
