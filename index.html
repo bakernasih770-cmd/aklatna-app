@@ -74,7 +74,7 @@
 
         function App() {
             const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('aklatna_products_v17');
+                const saved = localStorage.getItem('aklatna_products_v18');
                 return saved ? JSON.parse(saved) : PRODUCTS_DATA;
             });
             const [activeCategory, setActiveCategory] = useState("all");
@@ -93,7 +93,7 @@
             const [newProdImage, setNewProdImage] = useState("");
 
             useEffect(() => {
-                localStorage.setItem('aklatna_products_v17', JSON.stringify(products));
+                localStorage.setItem('aklatna_products_v18', JSON.stringify(products));
             }, [products]);
 
             const deliveryFee = deliveryType === "delivery" ? Math.max(2, deliveryDistance * 1.5) : 0;
@@ -137,11 +137,9 @@
                     return;
                 }
 
-                let message = `🍽️ *طلب جديد من أكلاتنا (طبخ بيتي عراقي)* 🍽️\n`;
-                message += `👤 *العميل:* ${customerName}\n`; message += `📍 *النوع:* ${deliveryType === "delivery" ? "توصيل للمنزل" : "استلام"}\n`;
+                let message = "طلب جديد من أكلاتنا:\n";
+                message += "الاسم: " + customerName + "\n";
+                message += "النوع: " + (deliveryType === "delivery" ? "توصيل" : "استلام") + "\n";
                 if (deliveryType === "delivery") {
-                    message += `🏠 *العنوان:* ${deliveryAddress}\n`; message += `🚗 *المسافة:* ${deliveryDistance} ميل\n`;
-                }
-                message += `--------------------------------\n`;
-                cart.forEach((item, index) => {
-                    message += `${index + 1}.${
+                    message += "العنوان: " + deliveryAddress + "\n";
+                    
