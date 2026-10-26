@@ -81,16 +81,22 @@
                 <div id="delivery-options" class="hidden space-y-2 text-xs relative">
                     <p class="text-gray-400 text-[10px]">الانطلاق من: 4704 Chaucer Dr, Greensboro, NC</p>
                     
-                    <!-- حقل رقم المبنى واسم الشارع معا -->
+                    <!-- 1. رقم المبنى واسم الشارع في حقل واحد مع البحث الفوري -->
                     <div class="relative">
-                        <input type="text" id="street-address" placeholder="رقم المبنى واسم الشارع (مثل: 4704 Chaucer Dr)" oninput="searchAddress()" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                        <input type="text" id="street-input" placeholder="رقم المبنى واسم الشارع (مثل: 4704 Chaucer Dr)" oninput="searchAddress()" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
                         <div id="suggestions" class="suggestions-list hidden"></div>
                     </div>
 
-                    <!-- حقل الرمز البريدي Zip Code -->
-                    <input type="text" id="zip-code" placeholder="الرمز البريدي Zip Code (مثل: 27407)" oninput="searchAddress()" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    <!-- 2. حقل المدينة -->
+                    <input type="text" id="city-input" value="Greensboro" placeholder="المدينة" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
 
-                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال العنوان لحساب المسافة...</p>
+                    <!-- 3. الولاية والرمز البريدي في صف واحد لتنظيم أفضل -->
+                    <div class="flex gap-2">
+                        <input type="text" value="NC" disabled class="w-1/3 p-2 bg-gray-800 border border-gray-700 rounded text-amber-400 font-bold text-center" title="الولاية ثابتة" />
+                        <input type="text" id="zip-input" placeholder="Zip Code (مثل: 27407)" oninput="searchAddress()" class="w-2/3 p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    </div>
+
+                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال واختيار العنوان لحساب المسافة...</p>
                 </div>
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
             </div>
@@ -218,8 +224,9 @@
         var searchTimeout;
         function searchAddress() {
             clearTimeout(searchTimeout);
-            var streetVal = document.getElementById('street-address').value;
-            var zipVal = document.getElementById('zip-code').value;
+            var streetVal = document.getElementById('street-input').value;
+            var cityVal = document.getElementById('city-input').value;
+            var zipVal = document.getElementById('zip-input').value;
             var sugBox = document.getElementById('suggestions');
 
             if (streetVal.length < 3) {
@@ -228,7 +235,7 @@
             }
 
             searchTimeout = setTimeout(function() {
-                var queryStr = streetVal + (zipVal ? ', ' + zipVal : '') + ', Greensboro, NC';
+                var queryStr = streetVal + ', ' + (cityVal || 'Greensboro') + ', NC' + (zipVal ? ' ' + zipVal : '');
                 var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(queryStr) + '&limit=5';
                 
                 fetch(url)
@@ -250,7 +257,7 @@
         }
 
         function selectAddress(addressText, lat, lon) {
-            document.getElementById('street-address').value = addressText;
+            document.getElementById('street-input').value = addressText;
             document.getElementById('suggestions').classList.add('hidden');
 
             if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
@@ -421,7 +428,9 @@
             msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
             if (deliveryMode === 'delivery') {
                 msg += "من عنوان: 4704 Chaucer Dr, Greensboro, NC 27407\n";
-                msg += "إلى عنوان الزبون: " + (document.getElementById('street-address').value || 'غير محدد') + " - Zip: " + (document.getElementById('zip-code').value || '') + "\n";
+                msg += "إلى العنوان: " + (document.getElementById('street-input').value || '') + ", " + 
+                       (document.getElementById('city-input').value || 'Greensboro') + ", NC " + 
+                       (document.getElementById('zip-input').value || '') + "\n";
                 msg += "مسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
             }
             msg += "--- الطلبات ---\n";
@@ -433,7 +442,7 @@
             if (deliveryMode === 'delivery') {
                 msg += "التوصيل: " + (deliveryFee === 0 ? "مجاني" : "$" + deliveryFee.toFixed(2)) + "\n";
             }
-            msg += "الإجمالي النهائي: $" + total.userDetails ? total.toFixed(2) : total.toFixed(2);
+            msg += "الإجمالي النهائي: $" + total.toFixed(2);
 
             window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
         }
