@@ -15,6 +15,15 @@
 </head>
 <body class="min-h-screen flex flex-col pb-10">
 
+    <!-- إشعار إضافة الأكلة (معاينة الأكلة عند الضغط) -->
+    <div id="toast-notification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gray-900 border border-amber-500/80 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all duration-300 opacity-0 pointer-events-none">
+        <img id="toast-img" src="" alt="" class="w-12 h-12 rounded-xl object-cover border border-amber-500">
+        <div>
+            <p class="text-xs text-amber-400 font-bold">تمت الإضافة إلى الصينية بنجاح! 🥘</p>
+            <p id="toast-title" class="text-sm font-extrabold"></p>
+        </div>
+    </div>
+
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -29,7 +38,8 @@
             </div>
             <div class="flex items-center space-x-3 space-x-reverse">
                 <button onclick="openCart()" class="bg-amber-500 text-gray-950 font-bold px-4 py-1.5 rounded-lg text-sm flex items-center gap-2">
-                    <span>السلة</span>
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>الصينية</span>
                     <span id="cart-badge" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
             </div>
@@ -85,11 +95,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
-    <!-- نافذة السلة -->
+    <!-- نافذة الصينية -->
     <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/70 hidden">
         <div class="w-full max-w-md bg-gray-900 text-white h-full flex flex-col shadow-2xl">
             <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h2 class="font-bold">سلة الشراء</h2>
+                <h2 class="font-bold">صينية الطلبات</h2>
                 <button onclick="closeCart()" class="text-gray-400 text-lg">✕</button>
             </div>
             <div class="flex-1 overflow-y-auto p-4 space-y-3" id="cart-items"></div>
@@ -186,7 +196,7 @@
                         '<div class="p-5 flex-1 flex flex-col justify-between">' +
                             '<h3 class="font-bold text-lg text-white mb-4">' + p.name + '</h3>' +
                             '<button onclick="addToCart(' + p.id + ')" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-2 rounded-xl text-xs">' +
-                                'إضافة إلى السلة' +
+                                'أضف إلى الصينية' +
                             '</button>' +
                         '</div>' +
                     '</div>';
@@ -205,7 +215,29 @@
             renderProducts();
         }
 
+        function showToast(product) {
+            var toast = document.getElementById('toast-notification');
+            document.getElementById('toast-img').src = product.image;
+            document.getElementById('toast-title').innerText = product.name + ' ($' + product.price.toFixed(2) + ')';
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(function() {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
         function addToCart(id) {
+            var selectedProduct = null;
+            for (var j = 0; j < products.length; j++) {
+                if (products[j].id === id) {
+                    selectedProduct = products[j];
+                    break;
+                }
+            }
+
             var found = false;
             for (var i = 0; i < cart.length; i++) {
                 if (cart[i].id === id) {
@@ -214,16 +246,15 @@
                     break;
                 }
             }
-            if (!found) {
-                for (var j = 0; j < products.length; j++) {
-                    if (products[j].id === id) {
-                        cart.push({ id: products[j].id, name: products[j].name, price: products[j].price, quantity: 1 });
-                        break;
-                    }
-                }
+            if (!found && selectedProduct) {
+                cart.push({ id: selectedProduct.id, name: selectedProduct.name, price: selectedProduct.price, quantity: 1 });
             }
+
+            if (selectedProduct) {
+                showToast(selectedProduct);
+            }
+
             updateCartUI();
-            openCart();
         }
 
         function updateQuantity(id, delta) {
@@ -323,18 +354,16 @@
         function calculateDeliveryFee(subtotal) {
             if (deliveryMode === 'pickup') return 0;
             if (calculatedMiles < 0) return 0;
-            if (calculatedMiles > 30) return -1; // أكثر من 30 ميل غير متاح
+            if (calculatedMiles > 30) return -1;
             
-            // ضمن نطاق 15 ميل
             if (calculatedMiles <= 15) {
                 if (subtotal >= 70) {
-                    return 0; // مجاني إذا كان الطلب 70$ فأكثر ضمن 15 ميل
+                    return 0;
                 } else {
-                    return 5; // رسوم رمزية 5$ إذا كان أقل من 70$ ضمن 15 ميل
+                    return 5;
                 }
             }
             
-            // ما بعد 15 ميل وحتى 30 ميل (يضاف دولار لكل ميل يتجاوز 15 ميل، بالإضافة لرسوم أساسية إن كان أقل من 70$)
             var baseFee = (subtotal >= 70) ? 0 : 5;
             return baseFee + (calculatedMiles - 15) * 1;
         }
@@ -355,7 +384,7 @@
 
             var container = document.getElementById('cart-items');
             if (cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-8">السلة فارغة</p>';
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-8">الصينية فارغة</p>';
                 document.getElementById('cart-footer').style.display = 'none';
                 return;
             }
@@ -454,7 +483,7 @@
 
             var total = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
 
-            var msg = "طلب جديد من أكلاتنا\n";
+            var msg = "طلب جديد من صينية أكلاتنا\n";
             msg += "الاسم: " + name + "\n";
             msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
             if (deliveryMode === 'delivery') {
