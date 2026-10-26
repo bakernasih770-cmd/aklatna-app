@@ -80,9 +80,9 @@
                 </div>
                 <div id="delivery-options" class="hidden space-y-2 text-xs relative">
                     <p class="text-gray-400 text-[10px]">الانطلاق من: 4704 Chaucer Dr, Greensboro, NC</p>
-                    <input type="text" id="delivery-address" placeholder="اكتب اسم الشارع (مثل: Battleground, Wendover)..." oninput="searchLocalStreets(this.value)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    <input type="text" id="delivery-address" placeholder="اكتب اسم الشارع أو العنوان..." oninput="searchRealAddress(this.value)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
                     <div id="suggestions" class="suggestions-list hidden"></div>
-                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال الشارع لعرض المسافة...</p>
+                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال الشارع واختياره من القائمة لحساب المسافة...</p>
                 </div>
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
             </div>
@@ -130,33 +130,10 @@
         var cart = [];
         var currentCategory = 'all';
         var deliveryMode = 'pickup';
-        var calculatedMiles = 0;
+        var calculatedMiles = -1; // البدء بقيمة سالبة لضمان إجبار الزبون على اختيار الشارع
         
         var originLat = 36.0468;
         var originLon = -79.8833;
-
-        // قاعدة بيانات داخلية لشوّارع جرينزبورو لتظهر فوراً عند كتابة الحروف الأولى
-        var greensboroStreets = [
-            { name: "Chaucer Dr, Greensboro, NC 27407 (عنوان المطعم)", lat: 36.0468, lon: -79.8833 },
-            { name: "Battleground Ave, Greensboro, NC", lat: 36.0950, lon: -79.8250 },
-            { name: "Wendover Ave, Greensboro, NC", lat: 36.0620, lon: -79.8350 },
-            { name: "Friendly Ave, Greensboro, NC", lat: 36.0750, lon: -79.8150 },
-            { name: "Cone Blvd, Greensboro, NC", lat: 36.1120, lon: -79.7900 },
-            { name: "Spring Garden St, Greensboro, NC", lat: 36.0680, lon: -79.8100 },
-            { name: "High Point Rd, Greensboro, NC", lat: 36.0350, lon: -79.8600 },
-            { name: "Church St, Greensboro, NC", lat: 36.0820, lon: -79.7890 },
-            { name: "Gate City Blvd, Greensboro, NC", lat: 36.0480, lon: -79.8200 },
-            { name: "College Rd, Greensboro, NC", lat: 36.0700, lon: -79.8500 },
-            { name: "Market St, Greensboro, NC", lat: 36.0720, lon: -79.7920 },
-            { name: "Lee St, Greensboro, NC", lat: 36.0400, lon: -79.7800 },
-            { name: "S Elm St, Greensboro, NC", lat: 36.0680, lon: -79.7930 },
-            { name: "N Elm St, Greensboro, NC", lat: 36.0850, lon: -79.7930 },
-            { name: "New Garden Rd, Greensboro, NC", lat: 36.1150, lon: -79.8550 },
-            { name: "Lawndale Dr, Greensboro, NC", lat: 36.1100, lon: -79.8000 },
-            { name: "Summit Ave, Greensboro, NC", lat: 36.1000, lon: -79.7750 },
-            { name: "Bindings Dr, Greensboro, NC", lat: 36.0500, lon: -79.8700 },
-            { name: "Timberline Dr, Greensboro, NC", lat: 36.0550, lon: -79.8400 }
-        ];
 
         function renderProducts() {
             var grid = document.getElementById('products-grid');
@@ -230,40 +207,42 @@
             updateCartUI();
         }
 
-        // عرض الشوارع فوراً عند كتابة الحروف الأولى مطابقة تامة
-        function searchLocalStreets(query) {
+        // بحث مباشر وحقيقي يعرض شوارع وأحياء جرينزبورو الحقيقية فور كتابة الحروف
+        var searchTimeout;
+        function searchRealAddress(query) {
+            clearTimeout(searchTimeout);
             var sugBox = document.getElementById('suggestions');
-            if (query.length < 1) {
+            if (query.length < 2) {
                 sugBox.classList.add('hidden');
                 return;
             }
 
-            var q = query.toLowerCase();
-            var html = '';
-            var count = 0;
-
-            for (var i = 0; i < greensboroStreets.length; i++) {
-                var st = greensboroStreets[i];
-                if (st.name.toLowerCase().indexOf(q) !== -1) {
-                    html += '<div class="suggestion-item" onclick="selectStreet(\'' + st.name.replace(/'/g, "") + '\', ' + st.lat + ', ' + st.lon + ')">' + st.name + '</div>';
-                    count++;
-                }
-            }
-
-            if (html && count > 0) {
-                sugBox.innerHTML = html;
-                sugBox.classList.remove('hidden');
-            } else {
-                sugBox.classList.add('hidden');
-            }
+            searchTimeout = setTimeout(function() {
+                var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query + ', Greensboro, NC') + '&limit=6';
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var html = '';
+                        for (var i = 0; i < data.length; i++) {
+                            var name = data[i].display_name;
+                            html += '<div class="suggestion-item" onclick="selectRealAddress(\'' + name.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + name + '</div>';
+                        }
+                        if (html) {
+                            sugBox.innerHTML = html;
+                            sugBox.classList.remove('hidden');
+                        } else {
+                            sugBox.classList.add('hidden');
+                        }
+                    }).catch(err => console.log(err));
+            }, 300);
         }
 
-        function selectStreet(streetText, lat, lon) {
-            document.getElementById('delivery-address').value = streetText;
+        function selectRealAddress(addressText, lat, lon) {
+            document.getElementById('delivery-address').value = addressText;
             document.getElementById('suggestions').classList.add('hidden');
 
-            // إذا كان العنوان هو مطبخ أم بكر نفسه، تصبح المسافة صفراً فوراً
-            if (streetText.toLowerCase().indexOf('chaucer') !== -1) {
+            // إذا كان العنوان هو نفس موقع المطبخ (Chaucer)
+            if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
                 calculatedMiles = 0.0;
                 updateCartUI();
                 return;
@@ -271,7 +250,7 @@
 
             document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
 
-            // حساب مسافة القيادة عبر الطرق باستخدام خدمة OSRM المجانية
+            // حساب مسافة القيادة الحقيقية عبر شبكة الطرق باستخدام OSRM
             var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
             
             fetch(osrmUrl)
@@ -307,9 +286,10 @@
 
         function calculateDeliveryFee() {
             if (deliveryMode === 'pickup') return 0;
-            if (calculatedMiles > 30) return -1;
-            if (calculatedMiles <= 15) return 0;
-            return (calculatedMiles - 15) * 1;
+            if (calculatedMiles < 0) return 0; // لم يتم اختيار عنوان بعد
+            if (calculatedMiles > 30) return -1; // أبعد من 30 ميل
+            if (calculatedMiles <= 15) return 0; // أول 15 ميل مجاناً
+            return (calculatedMiles - 15) * 1; // 1$ لكل ميل بعد الـ 15
         }
 
         function updateCartUI() {
@@ -363,16 +343,16 @@
                         deliveryTextElem.className = 'text-amber-400 font-bold';
                     }
                 } else {
-                    deliveryTextElem.innerText = 'الرجاء اختيار الشارع من القائمة المقترحة';
+                    deliveryTextElem.innerText = 'الرجاء كتابة واختيار الشارع من القائمة المنسدلة لحساب المسافة';
                     deliveryTextElem.className = 'text-amber-400 font-bold';
                 }
             }
 
-            var finalTotal = subtotal + (deliveryFee > 0 ? deliveryFee : 0);
+            var finalTotal = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
 
             html += '<div class="bg-gray-950 p-3 rounded-lg text-xs space-y-1 mt-3 border border-gray-800">' +
                 '<div class="flex justify-between text-gray-400"><span>المجموع الفرعي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
-                (deliveryMode === 'delivery' && deliveryFee !== -1 ? '<div class="flex justify-between text-amber-400"><span>رسوم التوصيل:</span><span>' + (deliveryFee === 0 ? 'مجاني' : '$' + deliveryFee.toFixed(2)) + '</span></div>' : '') +
+                (deliveryMode === 'delivery' && deliveryFee !== -1 && calculatedMiles >= 0 ? '<div class="flex justify-between text-amber-400"><span>رسوم التوصيل:</span><span>' + (deliveryFee === 0 ? 'مجاني' : '$' + deliveryFee.toFixed(2)) + '</span></div>' : '') +
                 '<div class="flex justify-between font-bold text-white text-sm pt-1 border-t border-gray-800"><span>الإجمالي النهائي:</span><span>$' + (deliveryFee === -1 ? subtotal.toFixed(2) : finalTotal.toFixed(2)) + '</span></div>' +
             '</div>';
 
@@ -398,6 +378,7 @@
                 btnPickup.className = "flex-1 p-2 border rounded text-xs bg-amber-500 text-black";
                 btnDelivery.className = "flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400";
                 options.classList.add('hidden');
+                calculatedMiles = -1;
             } else {
                 btnDelivery.className = "flex-1 p-2 border rounded text-xs bg-amber-500 text-black";
                 btnPickup.className = "flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400";
@@ -414,8 +395,8 @@
             }
 
             var deliveryFee = calculateDeliveryFee();
-            if (deliveryMode === 'delivery' && deliveryFee === -1) {
-                alert("عذراً، لا يمكن إتمام التوصيل لمسافة تتجاوز 30 ميلاً. يرجى اختيار الاستلام من المحل.");
+            if (deliveryMode === 'delivery' && (calculatedMiles < 0 || deliveryFee === -1)) {
+                alert("يرجى اختيار عنوان صحيح من القائمة المقترحة ضمن نطاق 30 ميلاً.");
                 return;
             }
 
@@ -423,14 +404,14 @@
             for (var i = 0; i < cart.length; i++) {
                 subtotal += (cart[i].price * cart[i].quantity);
             }
-            var total = subtotal + (deliveryFee > 0 ? deliveryFee : 0);
+            var total = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
 
             var msg = "طلب جديد من أكلاتنا\n";
             msg += "الاسم: " + name + "\n";
             msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
             if (deliveryMode === 'delivery') {
                 msg += "من عنوان: 4704 Chaucer Dr, Greensboro, NC 27407\n";
-                msg += "إلى الشارع: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
+                msg += "إلى عنوان الزبون: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
                 msg += "مسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
             }
             msg += "--- الطلبات ---\n";
