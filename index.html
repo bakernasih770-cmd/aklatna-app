@@ -31,51 +31,23 @@
         ];
 
         const PRODUCTS_DATA = [
-            { id: 1, name: "الدولمة العراقية", category: "main", price: 45, description: "دولمة عراقية مشكلة طازجة ومطبوخة على الأصول.", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" },
-            { id: 2, name: "الباچة", category: "main", price: 60, description: "باچة عراقية ملغومة وطازجة بأسلوب بيتي أصيل.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
-            { id: 3, name: "القوزي العراقي", category: "main", price: 70, description: "قوزي لحم فاخر مطبوخ بطريقة ممتازة.", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" },
-            { id: 4, name: "دجاج مع طبق رز أصفر", category: "main", price: 25, description: "دجاج محمر مع أرز أصفر معطر بالمكسرات والبهارات.", image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
-            { id: 5, name: "دجاج مع طبق رز أحمر", category: "main", price: 25, description: "دجاج شهي مع أرز أحمر مطبوخ بصلصة الطماطم.", image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
-            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, description: "قيمة نجفية أصيلة مع الأرز المعطر.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, description: "برياني دجاج مع الشعرية والمكسرات.", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, description: "برياني لحم فاخر مطبوخ بالبهارات العراقية.", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
-            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, description: "طبق باقلاء بالدهن الحر والبيض.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
-
-            { id: 10, name: "كباب شوي", category: "grills", price: 30, description: "كباب عراقي مشوي على الفحم.", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
-            { id: 11, name: "تكة لحم", category: "grills", price: 35, description: "قطع تكة اللحم البقري المشوية الطرية.", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 25, description: "تكة دجاج متبلة ومشوية.", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
-
-            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, description: "سمك تيلابيا مشوي على الطريقة العراقية.", image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80" },
-            { id: 14, name: "السمك المقلي مع الرز الأحمر", category: "fish", price: 32, description: "سمك زبيدي مقلي يقدم مع الرز الأحمر.", image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80" },
-
-            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, description: "كبة رز مقرمشة محشوة باللحم والمكسرات.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, description: "كبة جريش طازجة ومحشوة باللحم.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, description: "بتيتة چاب محشوة باللحم المتبل.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 18, name: "بورڭ اللحم", category: "appetizers", price: 2.5, description: "بورڭ مقرمش محشو باللحم.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 19, name: "بورڭ الجبن", category: "appetizers", price: 2.5, description: "بورڭ محشو بالجبنة اللذيذة.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, description: "قرص لحم بعجين عراقي طازج.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, description: "فطائر مشوية بالجبن والنعناع.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, description: "فطائر زعتر طازجة.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, description: "فطائر محشوة بقطع صدر الدجاج.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 24, name: "فليفلة", category: "appetizers", price: 2, description: "مقبلات فليفلة شهية.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-
-            { id: 25, name: "صمون عراقي", category: "bakery", price: 1, description: "صمون عراقي حجري طازج.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
-            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, description: "خبز تنور عراقي حار وطازج.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
-            { id: 27, name: "خبز عروك", category: "bakery", price: 3, description: "خبز عروك عراقي باللحم والمخضرات.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
-            { id: 28, name: "خبز بربري", category: "bakery", price: 2, description: "خبز بربري طازج ومحمص.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
-            { id: 29, name: "لفة خميرة", category: "bakery", price: 2, description: "لفة خميرة طرية وهشة.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
-            { id: 30, name: "كعك السمسم", category: "bakery", price: 5, description: "كعك مقرمش بالسمسم.", image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
-            { id: 31, name: "الكليچة العراقية", category: "bakery", price: 12, description: "كليچة عراقية بالتمر والجوز.", image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
-
-            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, description: "ساندويچ فلافل بالصمون مع الطحينة والعمبة.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, description: "ساندويچ تكة دجاج مشوية مع السلطة.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, description: "ساندويچ تكة لحم بقري مشوية بالصمون.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, description: "ساندويچ كباب مشوي على الفحم.", image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" }
+            { id: 1, name: "الدولمة العراقية", category: "main", price: 45, description: "دولمة عراقية مشكلة طازجة ومطبوخة على الأصول.", image: "dolma.jpg" },
+            { id: 2, name: "الباچة", category: "main", price: 60, description: "باچة عراقية ملغومة وطازجة بأسلوب بيتي أصيل.", image: "pacha.jpg" },
+            { id: 3, name: "القوزي العراقي", category: "main", price: 70, description: "قوزي لحم فاخر مطبوخ بطريقة ممتازة.", image: "dolma.jpg" },
+            { id: 4, name: "باقلاء بالدهن", category: "main", price: 18, description: "طبق باقلاء بالدهن الحر والبيض.", image: "baqla-dehn.jpg" },
+            { id: 5, name: "كباب شوي", category: "grills", price: 30, description: "كباب عراقي مشوي على الفحم.", image: "kebab.jpg" },
+            { id: 6, name: "السمك المقلي", category: "fish", price: 32, description: "سمك مقلي شهي يقدم على الطريقة العراقية.", image: "fried-fish.jpg" },
+            { id: 7, name: "كبة حلب", category: "appetizers", price: 3, description: "كبة رز مقرمشة محشوة باللحم والمكسرات.", image: "kibbeh-halab.jpg" },
+            { id: 8, name: "كبة الجريش", category: "appetizers", price: 3.5, description: "كبة جريش طازجة ومحشوة باللحم.", image: "kibbeh-jareesh.jpg" },
+            { id: 9, name: "لحم بعجين", category: "appetizers", price: 4, description: "قرص لحم بعجين عراقي طازج.", image: "lahm-bajin.jpg" },
+            { id: 10, name: "خبز تنور عراقي", category: "bakery", price: 1.5, description: "خبز تنور عراقي حار وطازج.", image: "khubz-tannour.jpg" },
+            { id: 11, name: "خبز عروك", category: "bakery", price: 3, description: "خبز عروك عراقي باللحم والخضروات.", image: "orook.jpg" },
+            { id: 12, name: "خبز / صمون", category: "bakery", name_en: "uzbek-bread", price: 2, description: "مخبوزات طازجة ولذيذة.", image: "uzbek-bread.jpg" }
         ];
 
         function App() {
             const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('aklatna_products_v12');
+                const saved = localStorage.getItem('aklatna_products_v14');
                 return saved ? JSON.parse(saved) : PRODUCTS_DATA;
             });
             const [activeCategory, setActiveCategory] = useState("all");
@@ -95,7 +67,7 @@
             const [newProdImage, setNewProdImage] = useState("");
 
             useEffect(() => {
-                localStorage.setItem('aklatna_products_v12', JSON.stringify(products));
+                localStorage.setItem('aklatna_products_v14', JSON.stringify(products));
             }, [products]);
 
             const deliveryFee = deliveryType === "delivery" ? Math.max(2, deliveryDistance * 1.5) : 0;
@@ -169,7 +141,7 @@
                     category: newProdCategory,
                     description: newProdDesc,
                     price: parseFloat(newProdPrice),
-                    image: newProdImage || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+                    image: newProdImage || "dolma.jpg"
                 };
 
                 setProducts(prev => [newProd, ...prev]);
@@ -205,11 +177,11 @@
                         </div>
                     </header>
 
-                    {/* خلفية السفرة العراقية برابط مباشر وواضح جداً */}
-                    <section className="relative py-24 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=2000&q=90')` }}>
-                        <div className="absolute inset-0 bg-black/60"></div>
+                    {/* قسم العنوان مع خلفية hero-bg.png الخاصة بك */}
+                    <section className="relative py-24 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('hero-bg.png')` }}>
+                        <div className="absolute inset-0 bg-black/65"></div>
                         <div className="relative z-10 max-w-4xl mx-auto">
-                            <h2 className="text-6xl md:text-8xl font-black text-amber-400 mb-3 tracking-wider drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">أكلاتنا</h2>
+                            <h2 className="text-6xl md:text-8xl font-black text-amber-400 mb-3 tracking-wider drop-shadow-[0_5px_5px_rgba(0,0,0,0.9)]">أكلاتنا</h2>
                             <p className="text-2xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.9)]">أطباق عراقية طازجة</p>
                             <input 
                                 type="text" 
@@ -308,7 +280,7 @@
                                         {CATEGORIES.filter(c => c.id !== "all").map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                     </select>
                                     <input type="number" step="0.5" placeholder="السعر ($)" value={newProdPrice} onChange={(e) => setNewProdPrice(e.target.value)} required className="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
-                                    <input type="url" placeholder="رابط الصورة (اختياري)" value={newProdImage} onChange={(e) => setNewProdImage(e.target.value)} className="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
+                                    <input type="text" placeholder="اسم ملف الصورة (مثل: dolma.jpg)" value={newProdImage} onChange={(e) => setNewProdImage(e.target.value)} className="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
                                     <textarea placeholder="الوصف" value={newProdDesc} onChange={(e) => setNewProdDesc(e.target.value)} className="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white h-16"></textarea>
                                     <button type="submit" className="w-full bg-amber-500 text-black font-bold py-2 rounded">حفظ وإضافة</button>
                                 </form>
