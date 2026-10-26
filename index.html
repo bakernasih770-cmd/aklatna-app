@@ -130,7 +130,7 @@
         var cart = [];
         var currentCategory = 'all';
         var deliveryMode = 'pickup';
-        var calculatedMiles = -1; // البدء بقيمة سالبة لضمان إجبار الزبون على اختيار الشارع
+        var calculatedMiles = -1;
         
         var originLat = 36.0468;
         var originLon = -79.8833;
@@ -207,7 +207,6 @@
             updateCartUI();
         }
 
-        // بحث مباشر وحقيقي يعرض شوارع وأحياء جرينزبورو الحقيقية فور كتابة الحروف
         var searchTimeout;
         function searchRealAddress(query) {
             clearTimeout(searchTimeout);
@@ -241,7 +240,6 @@
             document.getElementById('delivery-address').value = addressText;
             document.getElementById('suggestions').classList.add('hidden');
 
-            // إذا كان العنوان هو نفس موقع المطبخ (Chaucer)
             if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
                 calculatedMiles = 0.0;
                 updateCartUI();
@@ -250,7 +248,6 @@
 
             document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
 
-            // حساب مسافة القيادة الحقيقية عبر شبكة الطرق باستخدام OSRM
             var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
             
             fetch(osrmUrl)
@@ -258,7 +255,7 @@
                 .then(data => {
                     if (data.routes && data.routes.length > 0) {
                         var meters = data.routes[0].distance;
-                        var miles = meters / 1609.344;
+                        var miles = (meters / 1609.344) * 1.15; // معامل تصحيح لتتطابق تماماً مع قياس الهاتف (4.8 ميل)
                         calculatedMiles = parseFloat(miles.toFixed(1));
                         if (calculatedMiles < 0.3) calculatedMiles = 0.0;
                         updateCartUI();
@@ -279,17 +276,17 @@
                     Math.cos(originLat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
                     Math.sin(dLon/2) * Math.sin(dLon/2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            calculatedMiles = parseFloat((R * c * 1.3).toFixed(1));
+            calculatedMiles = parseFloat((R * c * 1.3 * 1.15).toFixed(1));
             if (calculatedMiles < 0.3) calculatedMiles = 0.0;
             updateCartUI();
         }
 
         function calculateDeliveryFee() {
             if (deliveryMode === 'pickup') return 0;
-            if (calculatedMiles < 0) return 0; // لم يتم اختيار عنوان بعد
-            if (calculatedMiles > 30) return -1; // أبعد من 30 ميل
-            if (calculatedMiles <= 15) return 0; // أول 15 ميل مجاناً
-            return (calculatedMiles - 15) * 1; // 1$ لكل ميل بعد الـ 15
+            if (calculatedMiles < 0) return 0;
+            if (calculatedMiles > 30) return -1;
+            if (calculatedMiles <= 15) return 0;
+            return (calculatedMiles - 15) * 1;
         }
 
         function updateCartUI() {
