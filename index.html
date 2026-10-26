@@ -18,7 +18,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
-        const WHATSAPP_NUMBER = "+13369448034";
+        const WHATSAPP_NUMBER = "13369448034";
 
         const CATEGORIES = [
             { id: "all", name: "الكل" },
@@ -74,7 +74,7 @@
 
         function App() {
             const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('aklatna_products_v20');
+                const saved = localStorage.getItem('aklatna_products_v21');
                 return saved ? JSON.parse(saved) : PRODUCTS_DATA;
             });
             const [activeCategory, setActiveCategory] = useState("all");
@@ -93,7 +93,7 @@
             const [newProdImage, setNewProdImage] = useState("");
 
             useEffect(() => {
-                localStorage.setItem('aklatna_products_v20', JSON.stringify(products));
+                localStorage.setItem('aklatna_products_v21', JSON.stringify(products));
             }, [products]);
 
             const deliveryFee = deliveryType === "delivery" ? Math.max(2, deliveryDistance * 1.5) : 0;
@@ -137,27 +137,24 @@
                     return;
                 }
 
-                const lines = [];
-                lines.push("طلب جديد من أكلاتنا:");
-                lines.push("الاسم: " + customerName);
-                lines.push("النوع: " + (deliveryType === "delivery" ? "توصيل" : "استلام"));
+                let message = "طلب جديد من أكلاتنا:\n";
+                message += "الاسم: " + customerName + "\n";
+                message += "النوع: " + (deliveryType === "delivery" ? "توصيل" : "استلام") + "\n";
                 if (deliveryType === "delivery" && deliveryAddress) {
-                    lines.push("العنوان: " + deliveryAddress);
+                    message += "العنوان: " + deliveryAddress + "\n";
                 }
-                lines.push("--- الطلبات ---");
+                message += "--- الطلبات ---\n";
                 cart.forEach((item, index) => {
-                    lines.push((index + 1) + ". " + item.name + " x" + item.quantity + " = $" + (item.price * item.quantity));
+                    message += (index + 1) + ". " + item.name + " x" + item.quantity + " = $" + (item.price * item.quantity) + "\n";
                 });
-                lines.push("---------------");
-                lines.push("المجموع: $" + cartSubtotal.toFixed(2));
+                message += "---------------\n";
+                message += "المجموع: $" + cartSubtotal.toFixed(2) + "\n";
                 if (deliveryType === "delivery") {
-                    lines.push("التوصيل: $" + deliveryFee.toFixed(2));
+                    message += "التوصيل: $" + deliveryFee.toFixed(2) + "\n";
                 }
-                lines.push("الإجمالي: $" + cartTotal.toFixed(2));
+                message += "الإجمالي: $" + cartTotal.toFixed(2);
 
-                const fullMessage = lines.join("\n");
-                const cleanNumber = WHATSAPP_NUMBER.replace(/[^0-9]/g, '');
-                window.open("https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(fullMessage), '_blank');
+                window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message), '_blank');
             };
 
             const handleSaveProduct = (e) => {
@@ -182,4 +179,16 @@
             return (
                 <div className="min-h-screen flex flex-col pb-10">
                     <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
-                        <div className="max-w-7xl mx-auto px-
+                        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+                            <div className="flex items-center space-x-3 space-x-reverse">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center text-white text-xl font-bold">
+                                    <i className="fa-solid fa-utensils"></i>
+                                </div>
+                                <div>
+                                    <h1 className="text-2xl font-extrabold text-amber-400">أكلاتنا</h1>
+                                    <p className="text-xs text-gray-400">طبخ بيتي عراقي في Greensboro, NC</p>
+                                    <p className="text-xs text-amber-300 font-bold mt-0.5">أم بكر: <span dir="ltr">336-944-8034</span></p>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-3 space-x-reverse">
+                                <button onClick
