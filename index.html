@@ -6,9 +6,6 @@
     <title>أكلاتنا - طبخ بيتي عراقي في جرينزبورو</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- مكتبة OpenStreetMap للبحث الجغرافي المجاني -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
         .suggestions-list { background-color: #1f2937; border: 1px solid #374151; max-height: 150px; overflow-y: auto; position: absolute; width: 100%; z-index: 100; border-radius: 0.5rem; margin-top: 2px; }
@@ -85,7 +82,7 @@
                     <p class="text-gray-400 text-[10px]">الانطلاق من: 4704 Chaucer Dr, Greensboro, NC</p>
                     <input type="text" id="delivery-address" placeholder="اكتب اسم الشارع أو العنوان..." oninput="searchAddress(this.value)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
                     <div id="suggestions" class="suggestions-list hidden"></div>
-                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال العنوان لحساب المسافة...</p>
+                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال العنوان لحساب مسافة القيادة...</p>
                 </div>
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
             </div>
@@ -135,7 +132,6 @@
         var deliveryMode = 'pickup';
         var calculatedMiles = 0;
         
-        // إحداثيات عنوان المطبخ الثابت في جرينزبورو: 4704 Chaucer Dr, Greensboro, NC 27407
         var originLat = 36.0468;
         var originLon = -79.8833;
 
@@ -211,7 +207,6 @@
             updateCartUI();
         }
 
-        // البحث التلقائي عن الشوارع والعناوين في جرينزبورو (مجاني عبر Nominatim)
         var searchTimeout;
         function searchAddress(query) {
             clearTimeout(searchTimeout);
@@ -243,23 +238,43 @@
         function selectAddress(addressText, lat, lon) {
             document.getElementById('delivery-address').value = addressText;
             document.getElementById('suggestions').classList.add('hidden');
+            document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية عبر الشوارع...';
 
-            // حساب المسافة بالميل (حساب هندسي مباشر بين الإحداثيات)
-            var R = 3958.8; // نصف قطر الأرض بالاميال
+            // حساب مسافة القيادة الحقيقية عبر شبكة الطرق باستخدام خدمة OSRM المجانية
+            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
+            
+            fetch(osrmUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        var meters = data.routes[0].distance; // المسافة بالأمتار
+                        var miles = meters / 1609.344; // تحويل إلى أميال
+                        calculatedMiles = parseFloat(miles.toFixed(1));
+                        updateCartUI();
+                    } else {
+                        fallbackDirectDistance(lat, lon);
+                    }
+                })
+                .catch(err => {
+                    fallbackDirectDistance(lat, lon);
+                });
+        }
+
+        function fallbackDirectDistance(lat, lon) {
+            var R = 3958.8;
             var dLat = (lat - originLat) * Math.PI / 180;
             var dLon = (lon - originLon) * Math.PI / 180;
             var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
                     Math.cos(originLat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
                     Math.sin(dLon/2) * Math.sin(dLon/2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            calculatedMiles = parseFloat((R * c).toFixed(1));
-
+            calculatedMiles = parseFloat((R * c * 1.3).toFixed(1)); // معامل تصحيح تقريبي للطرق
             updateCartUI();
         }
 
         function calculateDeliveryFee() {
             if (deliveryMode === 'pickup') return 0;
-            if (calculatedMiles > 30) return -1; // علامة أن المسافة أبعد من الحد الأقصى
+            if (calculatedMiles > 30) return -1;
             if (calculatedMiles <= 15) return 0;
             return (calculatedMiles - 15) * 1;
         }
@@ -307,11 +322,11 @@
             if (deliveryMode === 'delivery') {
                 if (calculatedMiles > 0) {
                     if (deliveryFee === -1) {
-                        deliveryTextElem.innerText = 'المسافة: ' + calculatedMiles + ' ميل (عذراً، التوصيل غير متاح لأكثر من 30 ميل)';
+                        deliveryTextElem.innerText = 'مسافة القيادة: ' + calculatedMiles + ' ميل (عذراً، التوصيل غير متاح لأكثر من 30 ميل)';
                         deliveryTextElem.className = 'text-red-400 font-bold';
                     } else {
                         var feeStr = deliveryFee === 0 ? 'مجاني 🎁' : '$' + deliveryFee.toFixed(2);
-                        deliveryTextElem.innerText = 'المسافة: ' + calculatedMiles + ' ميل (التوصيل: ' + feeStr + ')';
+                        deliveryTextElem.innerText = 'مسافة القيادة الفعلية: ' + calculatedMiles + ' ميل (التوصيل: ' + feeStr + ')';
                         deliveryTextElem.className = 'text-amber-400 font-bold';
                     }
                 } else {
@@ -383,7 +398,7 @@
             if (deliveryMode === 'delivery') {
                 msg += "من عنوان: 4704 Chaucer Dr, Greensboro, NC 27407\n";
                 msg += "إلى عنوان الزبون: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
-                msg += "المسافة المقدرة: " + calculatedMiles + " ميل\n";
+                msg += "مسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
             }
             msg += "--- الطلبات ---\n";
             for (var j = 0; j < cart.length; j++) {
