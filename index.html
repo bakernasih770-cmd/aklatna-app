@@ -5,29 +5,310 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أكلاتنا - طبخ بيتي عراقي في جرينزبورو</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
     </style>
 </head>
-<body class="min-h-screen">
-    <div id="root"></div>
+<body class="min-h-screen flex flex-col pb-10">
+    <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center text-white text-xl font-bold">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold text-amber-400">أكلاتنا</h1>
+                    <p class="text-xs text-gray-400">طبخ بيتي عراقي في Greensboro, NC</p>
+                    <p class="text-xs text-amber-300 font-bold mt-0.5">أم بكر: 336-944-8034</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <button onclick="openCart()" class="bg-amber-500 text-gray-950 font-bold px-4 py-1.5 rounded-lg text-sm flex items-center gap-2">
+                    <span>السلة</span>
+                    <span id="cart-badge" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
-        const WHATSAPP_NUMBER = "13369448034";
+    <section class="relative py-20 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('hero-bg.jpg')">
+        <div class="absolute inset-0 bg-black/65"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider">أكلاتنا</h2>
+            <p class="text-xl md:text-2xl font-extrabold text-white mb-6">أطباق عراقية طازجة</p>
+            <input 
+                type="text" 
+                id="search-input"
+                placeholder="ابحث عن طبقك المفضّل..." 
+                oninput="renderProducts()"
+                class="w-full max-w-lg bg-gray-900/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
+            />
+        </div>
+    </section>
 
-        const CATEGORIES = [
-            { id: "all", name: "الكل" },
-            { id: "main", name: "الأطباق الرئيسية" },
-            { id: "grills", name: "المشويات" },
-            { id: "fish", name: "الأسماك" },
-            { id: "appetizers", name: "المعجنات والمقبلات" },
-            { id: "bakery", name: "المخبوزات والخبز" },
-            { id: "sandwiches", name: "السندويتشات" }
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <div class="flex gap-2 overflow-x-auto pb-4 mb-8" id="categories-container">
+            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
+            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
+            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
+            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
+            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
+            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
+            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
+            <!-- يتم تحميل الأطباق هنا -->
+        </div>
+    </main>
+
+    <!-- نافذة السلة -->
+    <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/70 hidden">
+        <div class="w-full max-w-md bg-gray-900 text-white h-full flex flex-col shadow-2xl">
+            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="font-bold">سلة الشراء</h2>
+                <button onclick="closeCart()" class="text-gray-400 text-lg">✕</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="cart-items">
+                <!-- عناصر السلة -->
+            </div>
+            <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
+                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs" />
+                <div class="flex gap-2">
+                    <button onclick="setDelivery('pickup')" id="btn-pickup" class="flex-1 p-2 border rounded text-xs bg-amber-500 text-black">استلام</button>
+                    <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400">توصيل</button>
+                </div>
+                <div id="delivery-options" class="hidden space-y-2 text-xs">
+                    <input type="text" id="delivery-address" placeholder="عنوان التوصيل" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    <input type="range" id="delivery-range" min="1" max="25" value="3" oninput="updateDeliveryFee()" class="w-full accent-amber-500" />
+                    <p id="delivery-text" class="text-amber-400">المسافة: 3 ميل (التوصيل: $4.50)</p>
+                </div>
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var products = [
+            { id: 1, name: "الدولمة العراقية", category: "main", price: 45, image: "dolma.jpg" },
+            { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg" },
+            { id: 3, name: "القوزي العراقي", category: "main", price: 70, image: "dolma.jpg" },
+            { id: 4, name: "دجاج مع طبق رز أصفر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
+            { id: 5, name: "دجاج مع طبق رز أحمر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
+            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
+            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
+            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
+            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg" },
+            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg" },
+            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
+            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
+            { id: 13, name: "السمك المقلي", category: "fish", price: 32, image: "fried-fish.jpg" },
+            { id: 14, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "fried-fish.jpg" },
+            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg" },
+            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "kibbeh-jareesh.jpg" },
+            { id: 17, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg" },
+            { id: 18, name: "بتيتة چاب", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 19, name: "بورڭ اللحم", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 20, name: "بورڭ الجبن", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
+            { id: 25, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, image: "khubz-tannour.jpg" },
+            { id: 26, name: "خبز عروك", category: "bakery", price: 3, image: "orook.jpg" },
+            { id: 27, name: "صمون عراقي / بربري", category: "bakery", price: 2, image: "uzbek-bread.jpg" },
+            { id: 28, name: "لفة خميرة", category: "bakery", price: 2, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
+            { id: 29, name: "كعك السمسم", category: "bakery", price: 5, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
+            { id: 30, name: "الكليچة العراقية", category: "bakery", price: 12, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
+            { id: 31, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 32, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 33, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 34, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
 
-        const PRODUCTS_DATA =
+        var cart = [];
+        var currentCategory = 'all';
+        var deliveryMode = 'pickup';
+
+        function renderProducts() {
+            var grid = document.getElementById('products-grid');
+            var query = document.getElementById('search-input').value.toLowerCase();
+            var html = '';
+            
+            for (var i = 0; i < products.length; i++) {
+                var p = products[i];
+                var matchCat = (currentCategory === 'all' || p.category === currentCategory);
+                var matchQuery = p.name.toLowerCase().indexOf(query) !== -1;
+                
+                if (matchCat && matchQuery) {
+                    html += '<div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col">' +
+                        '<div class="relative h-48 bg-gray-950">' +
+                            '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover">' +
+                            '<span class="absolute top-3 left-3 bg-black/70 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
+                        '</div>' +
+                        '<div class="p-5 flex-1 flex flex-col justify-between">' +
+                            '<h3 class="font-bold text-lg text-white mb-4">' + p.name + '</h3>' +
+                            '<button onclick="addToCart(' + p.id + ')" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-2 rounded-xl text-xs">' +
+                                'إضافة إلى السلة' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>';
+                }
+            }
+            grid.innerHTML = html;
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            var buttons = document.querySelectorAll('.cat-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
+            }
+            btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
+            renderProducts();
+        }
+
+        function addToCart(id) {
+            var found = false;
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === id) {
+                    cart[i].quantity += 1;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                for (var j = 0; j < products.length; j++) {
+                    if (products[j].id === id) {
+                        cart.push({ id: products[j].id, name: products[j].name, price: products[j].price, quantity: 1 });
+                        break;
+                    }
+                }
+            }
+            updateCartUI();
+            openCart();
+        }
+
+        function updateQuantity(id, delta) {
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === id) {
+                    cart[i].quantity += delta;
+                    if (cart[i].quantity <= 0) {
+                        cart.splice(i, 1);
+                    }
+                    break;
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            var badge = document.getElementById('cart-badge');
+            var totalQty = 0;
+            for (var i = 0; i < cart.length; i++) {
+                totalQty += cart[i].quantity;
+            }
+
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            var container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-8">السلة فارغة</p>';
+                document.getElementById('cart-footer').style.display = 'none';
+                return;
+            }
+            document.getElementById('cart-footer').style.display = 'block';
+
+            var html = '';
+            for (var j = 0; j < cart.length; j++) {
+                var item = cart[j];
+                html += '<div class="flex justify-between items-center bg-gray-800 p-2 rounded-lg text-xs">' +
+                    '<span>' + item.name + ' ($' + item.price + ')</span>' +
+                    '<div class="flex items-center gap-2">' +
+                        '<button onclick="updateQuantity(' + item.id + ', -1)" class="px-2 bg-gray-700 rounded">-</button>' +
+                        '<span>' + item.quantity + '</span>' +
+                        '<button onclick="updateQuantity(' + item.id + ', 1)" class="px-2 bg-gray-700 rounded">+</button>' +
+                    '</div>' +
+                '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function openCart() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+            updateCartUI();
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function setDelivery(mode) {
+            deliveryMode = mode;
+            var btnPickup = document.getElementById('btn-pickup');
+            var btnDelivery = document.getElementById('btn-delivery');
+            var options = document.getElementById('delivery-options');
+
+            if (mode === 'pickup') {
+                btnPickup.className = "flex-1 p-2 border rounded text-xs bg-amber-500 text-black";
+                btnDelivery.className = "flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400";
+                options.classList.add('hidden');
+            } else {
+                btnDelivery.className = "flex-1 p-2 border rounded text-xs bg-amber-500 text-black";
+                btnPickup.className = "flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400";
+                options.classList.remove('hidden');
+            }
+        }
+
+        function updateDeliveryFee() {
+            var distance = document.getElementById('delivery-range').value;
+            var fee = Math.max(2, distance * 1.5);
+            document.getElementById('delivery-text').innerText = 'المسافة: ' + distance + ' ميل (التوصيل: $' + fee.toFixed(2) + ')';
+        }
+
+        function sendWhatsAppOrder() {
+            var name = document.getElementById('customer-name').value;
+            if (!name) {
+                alert("يرجى إدخال اسمك لتأكيد الطلب.");
+                return;
+            }
+
+            var subtotal = 0;
+            for (var i = 0; i < cart.length; i++) {
+                subtotal += (cart[i].price * cart[i].quantity);
+            }
+
+            var distance = document.getElementById('delivery-range').value;
+            var fee = deliveryMode === 'delivery' ? Math.max(2, distance * 1.5) : 0;
+            var total = subtotal + fee;
+
+            var msg = "طلب جديد من أكلاتنا\n";
+            msg += "الاسم: " + name + "\n";
+            msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل" : "استلام") + "\n";
+            if (deliveryMode === 'delivery') {
+                msg += "العنوان: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
+            }
+            msg += "--- الطلبات ---\n";
+            for (var j = 0; j < cart.length; j++) {
+                msg += (j + 1) + ". " + cart[j].name + " x" + cart[j].quantity + " = $" + (cart[j].price * cart[j].quantity) + "\n";
+            }
+            msg += "---------------\n";
+            msg += "المجموع: $" + subtotal.toFixed(2) + "\n";
+            if (deliveryMode === 'delivery') {
+                msg += "التوصيل: $" + fee.toFixed(2) + "\n";
+            }
+            msg += "الإجمالي: $" + total.toFixed(2);
+
+            window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
