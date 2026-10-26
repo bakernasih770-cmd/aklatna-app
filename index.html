@@ -80,9 +80,9 @@
                 </div>
                 <div id="delivery-options" class="hidden space-y-2 text-xs relative">
                     <p class="text-gray-400 text-[10px]">الانطلاق من: 4704 Chaucer Dr, Greensboro, NC</p>
-                    <input type="text" id="delivery-address" placeholder="اكتب اسم الشارع (مثل: Battleground, Wendover)..." oninput="searchStreet(this.value)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    <input type="text" id="delivery-address" placeholder="اكتب اسم الشارع (مثل: Battleground, Wendover)..." oninput="searchLocalStreets(this.value)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
                     <div id="suggestions" class="suggestions-list hidden"></div>
-                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إادخال الشارع لعرض المسافة...</p>
+                    <p id="delivery-text" class="text-amber-400 font-bold">الرجاء إدخال الشارع لعرض المسافة...</p>
                 </div>
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
             </div>
@@ -122,7 +122,7 @@
             { id: 29, name: "كعك السمسم", category: "bakery", price: 5, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
             { id: 30, name: "الكليچة العراقية", category: "bakery", price: 12, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
             { id: 31, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 32, name: "ساندويچ تكة دجاج", category: "sandwiches", page: 12, price: 12, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
+            { id: 32, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
             { id: 33, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
             { id: 34, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
@@ -134,6 +134,29 @@
         
         var originLat = 36.0468;
         var originLon = -79.8833;
+
+        // قاعدة بيانات داخلية لشوّارع جرينزبورو لتظهر فوراً عند كتابة الحروف الأولى
+        var greensboroStreets = [
+            { name: "Chaucer Dr, Greensboro, NC 27407 (عنوان المطعم)", lat: 36.0468, lon: -79.8833 },
+            { name: "Battleground Ave, Greensboro, NC", lat: 36.0950, lon: -79.8250 },
+            { name: "Wendover Ave, Greensboro, NC", lat: 36.0620, lon: -79.8350 },
+            { name: "Friendly Ave, Greensboro, NC", lat: 36.0750, lon: -79.8150 },
+            { name: "Cone Blvd, Greensboro, NC", lat: 36.1120, lon: -79.7900 },
+            { name: "Spring Garden St, Greensboro, NC", lat: 36.0680, lon: -79.8100 },
+            { name: "High Point Rd, Greensboro, NC", lat: 36.0350, lon: -79.8600 },
+            { name: "Church St, Greensboro, NC", lat: 36.0820, lon: -79.7890 },
+            { name: "Gate City Blvd, Greensboro, NC", lat: 36.0480, lon: -79.8200 },
+            { name: "College Rd, Greensboro, NC", lat: 36.0700, lon: -79.8500 },
+            { name: "Market St, Greensboro, NC", lat: 36.0720, lon: -79.7920 },
+            { name: "Lee St, Greensboro, NC", lat: 36.0400, lon: -79.7800 },
+            { name: "S Elm St, Greensboro, NC", lat: 36.0680, lon: -79.7930 },
+            { name: "N Elm St, Greensboro, NC", lat: 36.0850, lon: -79.7930 },
+            { name: "New Garden Rd, Greensboro, NC", lat: 36.1150, lon: -79.8550 },
+            { name: "Lawndale Dr, Greensboro, NC", lat: 36.1100, lon: -79.8000 },
+            { name: "Summit Ave, Greensboro, NC", lat: 36.1000, lon: -79.7750 },
+            { name: "Bindings Dr, Greensboro, NC", lat: 36.0500, lon: -79.8700 },
+            { name: "Timberline Dr, Greensboro, NC", lat: 36.0550, lon: -79.8400 }
+        ];
 
         function renderProducts() {
             var grid = document.getElementById('products-grid');
@@ -207,58 +230,39 @@
             updateCartUI();
         }
 
-        // بحث مخصص يركز حصرياً على أسماء الشوارع في جرينزبورو بمجرد كتابة الحروف الأولى
-        var searchTimeout;
-        function searchStreet(query) {
-            clearTimeout(searchTimeout);
+        // عرض الشوارع فوراً عند كتابة الحروف الأولى مطابقة تامة
+        function searchLocalStreets(query) {
             var sugBox = document.getElementById('suggestions');
-            if (query.length < 2) {
+            if (query.length < 1) {
                 sugBox.classList.add('hidden');
                 return;
             }
 
-            searchTimeout = setTimeout(function() {
-                // نطلب من خادم الخرائط جلب الشوارع التي تبدأ بالحروف المكتوبة حصرياً في Greensboro
-                var url = 'https://nominatim.openstreetmap.org/search?format=json&city=Greensboro&state=North Carolina&street=' + encodeURIComponent(query) + '&limit=8';
-                
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        // إذا لم نجد نتائج دقيقة بالشارع فقط، نبحث بالاسم العام في المدينة
-                        if (!data || data.length === 0) {
-                            return fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query + ' street, Greensboro, NC') + '&limit=8');
-                        }
-                        return data;
-                    })
-                    .then(response => {
-                        if (Array.isArray(response)) return response;
-                        return response.json();
-                    })
-                    .then(data => {
-                        var html = '';
-                        var seen = {};
-                        for (var i = 0; i < data.length; i++) {
-                            var displayName = data[i].display_name;
-                            if (!seen[displayName]) {
-                                seen[displayName] = true;
-                                html += '<div class="suggestion-item" onclick="selectStreet(\'' + displayName.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + displayName + '</div>';
-                            }
-                        }
-                        if (html) {
-                            sugBox.innerHTML = html;
-                            sugBox.classList.remove('hidden');
-                        } else {
-                            sugBox.classList.add('hidden');
-                        }
-                    }).catch(err => console.log(err));
-            }, 250);
+            var q = query.toLowerCase();
+            var html = '';
+            var count = 0;
+
+            for (var i = 0; i < greensboroStreets.length; i++) {
+                var st = greensboroStreets[i];
+                if (st.name.toLowerCase().indexOf(q) !== -1) {
+                    html += '<div class="suggestion-item" onclick="selectStreet(\'' + st.name.replace(/'/g, "") + '\', ' + st.lat + ', ' + st.lon + ')">' + st.name + '</div>';
+                    count++;
+                }
+            }
+
+            if (html && count > 0) {
+                sugBox.innerHTML = html;
+                sugBox.classList.remove('hidden');
+            } else {
+                sugBox.classList.add('hidden');
+            }
         }
 
         function selectStreet(streetText, lat, lon) {
             document.getElementById('delivery-address').value = streetText;
             document.getElementById('suggestions').classList.add('hidden');
 
-            // إذا كان الشارع هو نفس عنوان المطبخ، نصفر المسافة مباشرة لتكون صفر
+            // إذا كان العنوان هو مطبخ أم بكر نفسه، تصبح المسافة صفراً فوراً
             if (streetText.toLowerCase().indexOf('chaucer') !== -1) {
                 calculatedMiles = 0.0;
                 updateCartUI();
@@ -267,6 +271,7 @@
 
             document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
 
+            // حساب مسافة القيادة عبر الطرق باستخدام خدمة OSRM المجانية
             var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
             
             fetch(osrmUrl)
