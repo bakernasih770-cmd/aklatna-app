@@ -58,9 +58,7 @@
             <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
-            <!-- يتم تحميل الأطباق هنا -->
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
     <!-- نافذة السلة -->
@@ -70,9 +68,7 @@
                 <h2 class="font-bold">سلة الشراء</h2>
                 <button onclick="closeCart()" class="text-gray-400 text-lg">✕</button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="cart-items">
-                <!-- عناصر السلة -->
-            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="cart-items"></div>
             <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
                 <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs" />
                 <div class="flex gap-2">
@@ -80,9 +76,11 @@
                     <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400">توصيل</button>
                 </div>
                 <div id="delivery-options" class="hidden space-y-2 text-xs">
-                    <input type="text" id="delivery-address" placeholder="عنوان التوصيل" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
-                    <input type="range" id="delivery-range" min="1" max="25" value="3" oninput="updateDeliveryFee()" class="w-full accent-amber-500" />
-                    <p id="delivery-text" class="text-amber-400">المسافة: 3 ميل (التوصيل: $4.50)</p>
+                    <p class="text-gray-400 text-[10px]">الانطلاق من: 4704 Chaucer Dr, Greensboro, NC</p>
+                    <input type="text" id="delivery-address" placeholder="عنوان الزبون (الشارع والمنطقة)" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    <label class="block text-gray-300 mt-1">المسافة المقدرة بالميل:</label>
+                    <input type="range" id="delivery-range" min="1" max="30" value="5" oninput="updateDeliveryFee()" class="w-full accent-amber-500" />
+                    <p id="delivery-text" class="text-amber-400 font-bold">المسافة: 5 ميل (التوصيل: مجاني 🎁)</p>
                 </div>
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
             </div>
@@ -203,6 +201,23 @@
             updateCartUI();
         }
 
+        function calculateDeliveryFee() {
+            if (deliveryMode === 'pickup') return 0;
+            var distance = parseInt(document.getElementById('delivery-range').value) || 0;
+            if (distance <= 15) {
+                return 0;
+            } else {
+                return (distance - 15) * 1;
+            }
+        }
+
+        function updateDeliveryFee() {
+            var distance = document.getElementById('delivery-range').value;
+            var fee = calculateDeliveryFee();
+            var text = fee === 0 ? "مجاني 🎁" : "$" + fee.toFixed(2);
+            document.getElementById('delivery-text').innerText = 'المسافة: ' + distance + ' ميل (التوصيل: ' + text + ')';
+        }
+
         function updateCartUI() {
             var badge = document.getElementById('cart-badge');
             var totalQty = 0;
@@ -225,9 +240,11 @@
             }
             document.getElementById('cart-footer').style.display = 'block';
 
+            var subtotal = 0;
             var html = '';
             for (var j = 0; j < cart.length; j++) {
                 var item = cart[j];
+                subtotal += (item.price * item.quantity);
                 html += '<div class="flex justify-between items-center bg-gray-800 p-2 rounded-lg text-xs">' +
                     '<span>' + item.name + ' ($' + item.price + ')</span>' +
                     '<div class="flex items-center gap-2">' +
@@ -237,6 +254,16 @@
                     '</div>' +
                 '</div>';
             }
+
+            var deliveryFee = calculateDeliveryFee();
+            var total = subtotal + deliveryFee;
+
+            html += '<div class="bg-gray-950 p-3 rounded-lg text-xs space-y-1 mt-3 border border-gray-800">' +
+                '<div class="flex justify-between text-gray-400"><span>المجموع الفرعي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
+                '<div class="flex justify-between text-amber-400"><span>رسوم التوصيل:</span><span>' + (deliveryFee === 0 ? 'مجاني' : '$' + deliveryFee.toFixed(2)) + '</span></div>' +
+                '<div class="flex justify-between font-bold text-white text-sm pt-1 border-t border-gray-800"><span>الإجمالي النهائي:</span><span>$' + total.toFixed(2) + '</span></div>' +
+            '</div>';
+
             container.innerHTML = html;
         }
 
@@ -264,12 +291,7 @@
                 btnPickup.className = "flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400";
                 options.classList.remove('hidden');
             }
-        }
-
-        function updateDeliveryFee() {
-            var distance = document.getElementById('delivery-range').value;
-            var fee = Math.max(2, distance * 1.5);
-            document.getElementById('delivery-text').innerText = 'المسافة: ' + distance + ' ميل (التوصيل: $' + fee.toFixed(2) + ')';
+            updateCartUI();
         }
 
         function sendWhatsAppOrder() {
@@ -284,15 +306,17 @@
                 subtotal += (cart[i].price * cart[i].quantity);
             }
 
+            var deliveryFee = calculateDeliveryFee();
+            var total = subtotal + deliveryFee;
             var distance = document.getElementById('delivery-range').value;
-            var fee = deliveryMode === 'delivery' ? Math.max(2, distance * 1.5) : 0;
-            var total = subtotal + fee;
 
             var msg = "طلب جديد من أكلاتنا\n";
             msg += "الاسم: " + name + "\n";
-            msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل" : "استلام") + "\n";
+            msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
             if (deliveryMode === 'delivery') {
-                msg += "العنوان: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
+                msg += "من عنوان: 4704 Chaucer Dr, Greensboro, NC 27407\n";
+                msg += "إلى عنوان الزبون: " + (document.getElementById('delivery-address').value || 'غير محدد') + "\n";
+                msg += "المسافة المقدرة: " + distance + " ميل\n";
             }
             msg += "--- الطلبات ---\n";
             for (var j = 0; j < cart.length; j++) {
@@ -301,9 +325,9 @@
             msg += "---------------\n";
             msg += "المجموع: $" + subtotal.toFixed(2) + "\n";
             if (deliveryMode === 'delivery') {
-                msg += "التوصيل: $" + fee.toFixed(2) + "\n";
+                msg += "التوصيل: " + (deliveryFee === 0 ? "مجاني" : "$" + deliveryFee.toFixed(2)) + "\n";
             }
-            msg += "الإجمالي: $" + total.toFixed(2);
+            msg += "الإجمالي النهائي: $" + total.toFixed(2);
 
             window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
         }
