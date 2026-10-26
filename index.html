@@ -15,15 +15,6 @@
 </head>
 <body class="min-h-screen flex flex-col pb-10">
 
-    <!-- إشعار إضافة الأكلة (معاينة الأكلة عند الضغط) -->
-    <div id="toast-notification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gray-900 border border-amber-500/80 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all duration-300 opacity-0 pointer-events-none">
-        <img id="toast-img" src="" alt="" class="w-12 h-12 rounded-xl object-cover border border-amber-500">
-        <div>
-            <p class="text-xs text-amber-400 font-bold">تمت الإضافة إلى الصينية بنجاح! 🥘</p>
-            <p id="toast-title" class="text-sm font-extrabold"></p>
-        </div>
-    </div>
-
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -95,38 +86,48 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
-    <!-- نافذة الصينية -->
-    <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/70 hidden">
-        <div class="w-full max-w-md bg-gray-900 text-white h-full flex flex-col shadow-2xl">
+    <!-- صفحة / نافذة صينية الطلبات التفصيلية بالكامل مع الصور -->
+    <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
+        <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h2 class="font-bold">صينية الطلبات</h2>
-                <button onclick="closeCart()" class="text-gray-400 text-lg">✕</button>
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة</h2>
+                <button onclick="closeCart()" class="text-gray-400 text-lg hover:text-white">✕</button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="cart-items"></div>
+            
+            <!-- قائمة الطلبات مع صور الأكلات بشكل كامل -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
+
+            <!-- تفاصيل الحساب، التوصيل، وإرسال الواتساب -->
             <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
-                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs" />
+                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
+                
                 <div class="flex gap-2">
-                    <button onclick="setDelivery('pickup')" id="btn-pickup" class="flex-1 p-2 border rounded text-xs bg-amber-500 text-black">استلام</button>
-                    <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400">توصيل</button>
+                    <button onclick="setDelivery('pickup')" id="btn-pickup" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black">استلام من المحل</button>
+                    <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400">توصيل للمنزل</button>
                 </div>
-                <div id="delivery-options" class="hidden space-y-2 text-xs relative">
-                    <p class="text-gray-400 font-bold mb-1">يرجى إدخال عنوان التوصيل:</p>
+
+                <div id="delivery-options" class="hidden space-y-2 text-xs relative bg-gray-900 p-3 rounded-lg border border-gray-800">
+                    <p class="text-amber-300 font-bold mb-1">عنوان التوصيل:</p>
                     
                     <div class="relative">
-                        <input type="text" id="street-input" placeholder="رقم المبنى واسم الشارع (مثل: 1828 Micknight Mill Rd)" oninput="searchAddress()" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                        <input type="text" id="street-input" placeholder="رقم المبنى واسم الشارع (مثل: 1828 Micknight Mill Rd)" oninput="searchAddress()" class="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
                         <div id="suggestions" class="suggestions-list hidden"></div>
                     </div>
 
-                    <input type="text" id="city-input" value="Greensboro" placeholder="المدينة" oninput="searchAddress()" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                    <input type="text" id="city-input" value="Greensboro" placeholder="المدينة" oninput="searchAddress()" class="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
 
                     <div class="flex gap-2">
-                        <input type="text" id="state-input" value="NC" placeholder="الولاية" oninput="searchAddress()" class="w-1/3 p-2 bg-gray-900 border border-gray-700 rounded text-white text-center font-bold" />
-                        <input type="text" id="zip-input" placeholder="Zip Code (مثل: 27405)" oninput="searchAddress()" class="w-2/3 p-2 bg-gray-900 border border-gray-700 rounded text-white" />
+                        <input type="text" id="state-input" value="NC" placeholder="الولاية" oninput="searchAddress()" class="w-1/3 p-2 bg-gray-950 border border-gray-700 rounded text-white text-center font-bold" />
+                        <input type="text" id="zip-input" placeholder="Zip Code (مثل: 27405)" oninput="searchAddress()" class="w-2/3 p-2 bg-gray-950 border border-gray-700 rounded text-white" />
                     </div>
 
                     <p id="delivery-text" class="text-amber-400 font-bold mt-1">الرجاء إدخال واختيار العنوان من القائمة لحساب المسافة...</p>
                 </div>
-                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-xs">إرسال الطلب عبر الواتساب</button>
+
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>إرسال الطلب عبر الواتساب</span>
+                </button>
             </div>
         </div>
     </div>
@@ -215,20 +216,6 @@
             renderProducts();
         }
 
-        function showToast(product) {
-            var toast = document.getElementById('toast-notification');
-            document.getElementById('toast-img').src = product.image;
-            document.getElementById('toast-title').innerText = product.name + ' ($' + product.price.toFixed(2) + ')';
-            
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            toast.classList.add('opacity-100');
-
-            setTimeout(function() {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 2500);
-        }
-
         function addToCart(id) {
             var selectedProduct = null;
             for (var j = 0; j < products.length; j++) {
@@ -247,14 +234,11 @@
                 }
             }
             if (!found && selectedProduct) {
-                cart.push({ id: selectedProduct.id, name: selectedProduct.name, price: selectedProduct.price, quantity: 1 });
+                cart.push({ id: selectedProduct.id, name: selectedProduct.name, price: selectedProduct.price, image: selectedProduct.image, quantity: 1 });
             }
 
-            if (selectedProduct) {
-                showToast(selectedProduct);
-            }
-
-            updateCartUI();
+            // عند الضغط يفتح مباشرة واجهة الصينية الشاملة
+            openCart();
         }
 
         function updateQuantity(id, delta) {
@@ -384,7 +368,7 @@
 
             var container = document.getElementById('cart-items');
             if (cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-8">الصينية فارغة</p>';
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-16">صينية الطلبات فارغة حالياً</p>';
                 document.getElementById('cart-footer').style.display = 'none';
                 return;
             }
@@ -395,12 +379,18 @@
             for (var j = 0; j < cart.length; j++) {
                 var item = cart[j];
                 subtotal += (item.price * item.quantity);
-                html += '<div class="flex justify-between items-center bg-gray-800 p-2 rounded-lg text-xs">' +
-                    '<span>' + item.name + ' ($' + item.price + ')</span>' +
-                    '<div class="flex items-center gap-2">' +
-                        '<button onclick="updateQuantity(' + item.id + ', -1)" class="px-2 bg-gray-700 rounded">-</button>' +
-                        '<span>' + item.quantity + '</span>' +
-                        '<button onclick="updateQuantity(' + item.id + ', 1)" class="px-2 bg-gray-700 rounded">+</button>' +
+                
+                // عرض الأكلة بالصورة الكاملة والاسم والسعر مع أزرار زيادة ونقصان الكمية
+                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
+                    '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50">' +
+                    '<div class="flex-1">' +
+                        '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
+                        '<p class="text-xs text-amber-400 font-bold mt-1">$' + (item.price * item.quantity).toFixed(2) + ' <span class="text-[10px] text-gray-400">($' + item.price + ' للوجبة)</span></p>' +
+                    '</div>' +
+                    '<div class="flex items-center gap-2 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
+                        '<button onclick="updateQuantity(' + item.id + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold">-</button>' +
+                        '<span class="text-xs font-bold w-4 text-center">' + item.quantity + '</span>' +
+                        '<button onclick="updateQuantity(' + item.id + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold">+</button>' +
                     '</div>' +
                 '</div>';
             }
@@ -426,10 +416,10 @@
 
             var finalTotal = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
 
-            html += '<div class="bg-gray-950 p-3 rounded-lg text-xs space-y-1 mt-3 border border-gray-800">' +
+            html += '<div class="bg-gray-950 p-3 rounded-xl text-xs space-y-1.5 mt-3 border border-gray-800">' +
                 '<div class="flex justify-between text-gray-400"><span>المجموع الفرعي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
                 (deliveryMode === 'delivery' && deliveryFee !== -1 && calculatedMiles >= 0 ? '<div class="flex justify-between text-amber-400"><span>رسوم التوصيل:</span><span>' + (deliveryFee === 0 ? 'مجاني' : '$' + deliveryFee.toFixed(2)) + '</span></div>' : '') +
-                '<div class="flex justify-between font-bold text-white text-sm pt-1 border-t border-gray-800"><span>الإجمالي النهائي:</span><span>$' + (deliveryFee === -1 ? subtotal.toFixed(2) : finalTotal.toFixed(2)) + '</span></div>' +
+                '<div class="flex justify-between font-bold text-white text-sm pt-1.5 border-t border-gray-800"><span>الإجمالي النهائي:</span><span class="text-amber-400">$' + (deliveryFee === -1 ? subtotal.toFixed(2) : finalTotal.toFixed(2)) + '</span></div>' +
             '</div>';
 
             container.innerHTML = html;
@@ -451,13 +441,13 @@
             var options = document.getElementById('delivery-options');
 
             if (mode === 'pickup') {
-                btnPickup.className = "flex-1 p-2 border rounded text-xs bg-amber-500 text-black";
-                btnDelivery.className = "flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400";
+                btnPickup.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black";
+                btnDelivery.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400";
                 options.classList.add('hidden');
                 calculatedMiles = -1;
             } else {
-                btnDelivery.className = "flex-1 p-2 border rounded text-xs bg-amber-500 text-black";
-                btnPickup.className = "flex-1 p-2 border rounded text-xs bg-gray-900 text-gray-400";
+                btnDelivery.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black";
+                btnPickup.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400";
                 options.classList.remove('hidden');
             }
             updateCartUI();
@@ -466,7 +456,7 @@
         function sendWhatsAppOrder() {
             var name = document.getElementById('customer-name').value;
             if (!name) {
-                alert("يرجى إدخال اسمك لتأكيد الطلب.");
+                alert("يرجى إدخال اسمك الكريم لتأكيد الطلب.");
                 return;
             }
 
@@ -483,9 +473,9 @@
 
             var total = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
 
-            var msg = "طلب جديد من صينية أكلاتنا\n";
+            var msg = "طلب جديد من صينية أكلاتنا 🥘\n";
             msg += "الاسم: " + name + "\n";
-            msg += "النوع: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
+            msg += "نوع الطلب: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
             if (deliveryMode === 'delivery') {
                 msg += "إلى العنوان: " + (document.getElementById('street-input').value || '') + ", " + 
                        (document.getElementById('city-input').value || '') + ", " + 
@@ -493,12 +483,12 @@
                        (document.getElementById('zip-input').value || '') + "\n";
                 msg += "مسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
             }
-            msg += "--- الطلبات ---\n";
+            msg += "--- تفاصيل الوجبات ---\n";
             for (var j = 0; j < cart.length; j++) {
                 msg += (j + 1) + ". " + cart[j].name + " x" + cart[j].quantity + " = $" + (cart[j].price * cart[j].quantity) + "\n";
             }
-            msg += "---------------\n";
-            msg += "المجموع: $" + subtotal.toFixed(2) + "\n";
+            msg += "-----------------------\n";
+            msg += "المجموع الفرعي: $" + subtotal.toFixed(2) + "\n";
             if (deliveryMode === 'delivery') {
                 msg += "التوصيل: " + (deliveryFee === 0 ? "مجاني" : "$" + deliveryFee.toFixed(2)) + "\n";
             }
