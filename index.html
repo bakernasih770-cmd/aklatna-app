@@ -238,18 +238,27 @@
         function selectAddress(addressText, lat, lon) {
             document.getElementById('delivery-address').value = addressText;
             document.getElementById('suggestions').classList.add('hidden');
+
+            // إذا كان العنوان المدخل هو عنوان المطبخ نفسه، نجعل المسافة صفر مباشرة
+            if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
+                calculatedMiles = 0.0;
+                updateCartUI();
+                return;
+            }
+
             document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية عبر الشوارع...';
 
-            // حساب مسافة القيادة الحقيقية عبر شبكة الطرق باستخدام خدمة OSRM المجانية
             var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
             
             fetch(osrmUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data.routes && data.routes.length > 0) {
-                        var meters = data.routes[0].distance; // المسافة بالأمتار
-                        var miles = meters / 1609.344; // تحويل إلى أميال
+                        var meters = data.routes[0].distance;
+                        var miles = meters / 1609.344;
                         calculatedMiles = parseFloat(miles.toFixed(1));
+                        // إذا كانت المسافة الناتجة أقل من نصف ميل للموقع القريب جداً، نعتبرها صفر
+                        if (calculatedMiles < 0.4) calculatedMiles = 0.0;
                         updateCartUI();
                     } else {
                         fallbackDirectDistance(lat, lon);
@@ -268,7 +277,8 @@
                     Math.cos(originLat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
                     Math.sin(dLon/2) * Math.sin(dLon/2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            calculatedMiles = parseFloat((R * c * 1.3).toFixed(1)); // معامل تصحيح تقريبي للطرق
+            calculatedMiles = parseFloat((R * c * 1.3).toFixed(1));
+            if (calculatedMiles < 0.4) calculatedMiles = 0.0;
             updateCartUI();
         }
 
@@ -320,7 +330,7 @@
             var deliveryTextElem = document.getElementById('delivery-text');
 
             if (deliveryMode === 'delivery') {
-                if (calculatedMiles > 0) {
+                if (calculatedMiles >= 0) {
                     if (deliveryFee === -1) {
                         deliveryTextElem.innerText = 'مسافة القيادة: ' + calculatedMiles + ' ميل (عذراً، التوصيل غير متاح لأكثر من 30 ميل)';
                         deliveryTextElem.className = 'text-red-400 font-bold';
