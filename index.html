@@ -89,16 +89,15 @@
     <!-- النافذة التفصيلية للأكلة -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
         <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
-            <div class="relative h-64 bg-gray-950">
+            <div class="relative h-64 bg-gray-950 flex items-center justify-center">
                 <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
-                <button onclick="closeProductModal()" class="absolute top-3 left-3 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">✕</button>
-                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black"></span>
+                <div id="modal-img-placeholder" class="text-gray-500 text-xs hidden">لا توجد صورة حالياً</div>
+                <button onclick="closeProductModal()" class="absolute top-3 left-3 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center font-bold z-10">✕</button>
+                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-10"></span>
             </div>
             <div class="p-6 space-y-4">
                 <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
                 
-                <div id="modal-size-options" class="space-y-2 text-xs text-gray-300"></div>
-
                 <div class="flex items-center justify-between pt-2 border-t border-gray-800">
                     <span class="text-xs text-gray-400 font-bold">الكمية:</span>
                     <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
@@ -161,25 +160,52 @@
 
     <script>
         var products = [
-            { id: 1, name: "الدولمة العراقية", category: "main", price: 45, image: "dolma.jpg" },
+            // الأطباق الرئيسية
+            { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg" },
             { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg" },
-            { id: 3, name: "القوزي العراقي", category: "main", price: 70, image: "qoozi.jpg" },
-            { id: 4, name: "الدجاج مع الرز", category: "main", price: 25, image: "chicken with rice.png" },
+            { id: 3, name: "القوزي", category: "main", price: 70, image: "qoozi.jpg" },
+            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png" },
+            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "" },
+            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "" },
+            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "" },
+            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "" },
             { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg" },
+
+            // المشويات
             { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg" },
-            { id: 11, name: "تكة لحم", category: "grills", price: 32, image: "tekka meat.png" },
-            { id: 12, name: "دجاج مشوي", category: "grills", price: 26, image: "grilled chicken.png" },
-            { id: 13, name: "السمك المقلي", category: "fish", price: 32, image: "fried-fish.jpg" },
-            { id: 14, name: "السمك المسگوف", category: "fish", price: 40, image: "masgouf.jpg" },
+            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "tekka meat.png" },
+            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "" },
+
+            // الأسماك
+            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "fried-fish.jpg" },
+            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "masgouf.jpg" },
+
+            // المعجنات والمقبلات
             { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg" },
             { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png" },
-            { id: 17, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg" },
-            { id: 18, name: "فلافل", category: "appetizers", price: 12, image: "falafel-plate.jpg" },
-            { id: 25, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, image: "khubz-tannour.jpg" },
-            { id: 26, name: "خبز عروك", category: "bakery", price: 3, image: "orook.jpg" },
-            { id: 27, name: "صمون عراقي", category: "bakery", price: 2, image: "samoon.jpg" },
-            { id: 28, name: "كليجة عراقية", category: "bakery", price: 15, image: "kleacha.png" },
-            { id: 34, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
+            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "" },
+            { id: 18, name: "بورڭ اللحم", category: "appetizers", price: 2.5, image: "" },
+            { id: 19, name: "بورڭ الجبن", category: "appetizers", price: 2.5, image: "" },
+            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg" },
+            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "" },
+            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "" },
+            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "" },
+            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "" },
+
+            // المخبوزات والخبز
+            { id: 25, name: "صمون عراقي", category: "bakery", price: 1, image: "samoon.jpg" },
+            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, image: "khubz-tannour.jpg" },
+            { id: 27, name: "خبز عروك", category: "bakery", price: 3, image: "orook.jpg" },
+            { id: 28, name: "خبز بربري", category: "bakery", price: 2, image: "uzbek-bread.jpg" },
+            { id: 29, name: "لفة خميرة", category: "bakery", price: 2, image: "" },
+            { id: 30, name: "كعك السمسم", category: "bakery", price: 5, image: "" },
+            { id: 31, name: "الكليچة", category: "bakery", price: 12, image: "kleacha.png" },
+
+            // السندويتشات
+            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg" },
+            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "" },
+            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "" },
+            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
 
         var cart = [];
@@ -204,9 +230,13 @@
                 var matchQuery = p.name.toLowerCase().indexOf(query) !== -1;
                 
                 if (matchCat && matchQuery) {
+                    var imgContent = p.image ? 
+                        '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover">' :
+                        '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-gray-500 text-xs font-bold">صورة قريباً 📸</div>';
+
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-48 bg-gray-950">' +
-                            '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover">' +
+                            imgContent +
                             '<span class="absolute top-3 left-3 bg-black/70 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
                         '</div>' +
                         '<div class="p-5 flex-1 flex flex-col justify-between text-center">' +
@@ -241,7 +271,19 @@
             if (!currentActiveProduct) return;
 
             currentModalQty = 1;
-            document.getElementById('modal-img').src = currentActiveProduct.image;
+            var modalImg = document.getElementById('modal-img');
+            var modalPlaceholder = document.getElementById('modal-img-placeholder');
+
+            if (currentActiveProduct.image) {
+                modalImg.src = currentActiveProduct.image;
+                modalImg.classList.remove('hidden');
+                modalPlaceholder.classList.add('hidden');
+            } else {
+                modalImg.src = '';
+                modalImg.classList.add('hidden');
+                modalPlaceholder.classList.remove('hidden');
+            }
+
             document.getElementById('modal-title').innerText = currentActiveProduct.name;
             document.getElementById('modal-price').innerText = '$' + currentActiveProduct.price.toFixed(2);
             document.getElementById('modal-qty').innerText = currentModalQty;
@@ -274,7 +316,7 @@
                     id: currentActiveProduct.id,
                     name: currentActiveProduct.name,
                     price: currentActiveProduct.price,
-                    image: currentActiveProduct.image,
+                    image: currentActiveProduct.image || '',
                     quantity: currentModalQty
                 });
             }
@@ -423,8 +465,12 @@
                 var item = cart[j];
                 subtotal += (item.price * item.quantity);
                 
+                var itemImg = item.image ? 
+                    '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50">' :
+                    '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-gray-500 text-center">لا صورة</div>';
+
                 html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
-                    '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50">' +
+                    itemImg +
                     '<div class="flex-1">' +
                         '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
                         '<p class="text-xs text-amber-400 font-bold mt-1">$' + (item.price * item.quantity).toFixed(2) + ' <span class="text-[10px] text-gray-400">($' + item.price + ' للوجبة)</span></p>' +
@@ -539,7 +585,6 @@
             window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
         }
 
-        // تشغيل الدالة فور تحميل الصفحة لضمان ظهور الأطباق مباشرة
         renderProducts();
     </script>
 </body>
