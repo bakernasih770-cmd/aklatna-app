@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+افذة الأوامر (Termina<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -37,7 +37,7 @@
         </div>
     </header>
 
-    <section class="relative py-20 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('hero-bg.jpg')">
+    <section class="relative py-20 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('images/hero-bg.jpg')">
         <div class="absolute inset-0 bg-black/65"></div>
         <div class="relative z-10 max-w-4xl mx-auto">
             <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider">أكلاتنا</h2>
@@ -86,7 +86,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
-    <!-- النافذة التفصيلية للأكلة (عند الضغط على الصورة) -->
+    <!-- النافذة التفصيلية للأكلة -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
         <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
             <div class="relative h-64 bg-gray-950">
@@ -97,10 +97,7 @@
             <div class="p-6 space-y-4">
                 <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
                 
-                <!-- مكان مخصص لتفاصيل أحجام القدور أو الخيارات لاحقاً -->
-                <div id="modal-size-options" class="space-y-2 text-xs text-gray-300">
-                    <!-- سيتم تخصيصها مستقبلاً حسب رغبتك -->
-                </div>
+                <div id="modal-size-options" class="space-y-2 text-xs text-gray-300"></div>
 
                 <div class="flex items-center justify-between pt-2 border-t border-gray-800">
                     <span class="text-xs text-gray-400 font-bold">الكمية:</span>
@@ -164,40 +161,20 @@
 
     <script>
         var products = [
-            { id: 1, name: "الدولمة العراقية", category: "main", price: 45, image: "dolma.jpg" },
-            { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg" },
-            { id: 3, name: "القوزي العراقي", category: "main", price: 70, image: "dolma.jpg" },
-            { id: 4, name: "دجاج مع طبق رز أصفر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
-            { id: 5, name: "دجاج مع طبق رز أحمر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
-            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" },
-            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg" },
-            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg" },
-            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
-            { id: 13, name: "السمك المقلي", category: "fish", price: 32, image: "fried-fish.jpg" },
-            { id: 14, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "fried-fish.jpg" },
-            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg" },
-            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "kibbeh-jareesh.jpg" },
-            { id: 17, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg" },
-            { id: 18, name: "بتيتة چاب", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 19, name: "بورڭ اللحم", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 20, name: "بورڭ الجبن", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80" },
-            { id: 25, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, image: "khubz-tannour.jpg" },
-            { id: 26, name: "خبز عروك", category: "bakery", price: 3, image: "orook.jpg" },
-            { id: 27, name: "صمون عراقي / بربري", category: "bakery", price: 2, image: "uzbek-bread.jpg" },
-            { id: 28, name: "لفة خميرة", category: "bakery", price: 2, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" },
-            { id: 29, name: "كعك السمسم", category: "bakery", price: 5, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
-            { id: 30, name: "الكليچة العراقية", category: "bakery", price: 12, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80" },
-            { id: 31, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 32, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 33, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" },
-            { id: 34, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
+            { id: 1, name: "الدولمة العراقية", category: "main", price: 45, image: "images/dolma.jpg" },
+            { id: 2, name: "الباچة", category: "main", price: 60, image: "images/pacha.jpg" },
+            { id: 3, name: "القوزي العراقي", category: "main", price: 70, image: "images/dolma.jpg" },
+            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "images/baqla-dehn.jpg" },
+            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "images/kebab.jpg" },
+            { id: 13, name: "السمك المقلي", category: "fish", price: 32, image: "images/fried-fish.jpg" },
+            { id: 14, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "images/fried-fish.jpg" },
+            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "images/kibbeh-halab.jpg" },
+            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "images/kibbeh-jareesh.jpg" },
+            { id: 17, name: "لحم بعجين", category: "appetizers", price: 4, image: "images/lahm-bajin.jpg" },
+            { id: 25, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, image: "images/khubz-tannour.jpg" },
+            { id: 26, name: "خبز عروك", category: "bakery", price: 3, image: "images/orook.jpg" },
+            { id: 27, name: "صمون عراقي / بربري", category: "bakery", price: 2, image: "images/uzbek-bread.jpg" },
+            { id: 34, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "images/kebab.jpg" }
         ];
 
         var cart = [];
@@ -221,7 +198,6 @@
                 var matchQuery = p.name.toLowerCase().indexOf(query) !== -1;
                 
                 if (matchCat && matchQuery) {
-                    // عند النقر على الصورة أو بطاقة الأكلة، تفتح النافذة التفصيلية ولا تُضاف للسلة مباشرة
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-48 bg-gray-950">' +
                             '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover">' +
@@ -297,7 +273,7 @@
 
             closeProductModal();
             updateCartUI();
-            openCart(); // فتح الصينية لعرض الحسابات
+            openCart();
         }
 
         function updateQuantity(id, delta) {
@@ -519,43 +495,4 @@
             }
 
             var subtotal = 0;
-            for (var i = 0; i < cart.length; i++) {
-                subtotal += (cart[i].price * cart[i].quantity);
-            }
-
-            var deliveryFee = calculateDeliveryFee(subtotal);
-            if (deliveryMode === 'delivery' && (calculatedMiles < 0 || deliveryFee === -1)) {
-                alert("يرجى إدخال واختيار عنوان صحيح ضمن نطاق 30 ميلاً.");
-                return;
-            }
-
-            var total = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
-
-            var msg = "طلب جديد من صينية أكلاتنا 🥘\n";
-            msg += "الاسم: " + name + "\n";
-            msg += "نوع الطلب: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
-            if (deliveryMode === 'delivery') {
-                msg += "إلى العنوان: " + (document.getElementById('street-input').value || '') + ", " + 
-                       (document.getElementById('city-input').value || '') + ", " + 
-                       (document.getElementById('state-input').value || '') + " " + 
-                       (document.getElementById('zip-input').value || '') + "\n";
-                msg += "مسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
-            }
-            msg += "--- تفاصيل الوجبات ---\n";
-            for (var j = 0; j < cart.length; j++) {
-                msg += (j + 1) + ". " + cart[j].name + " x" + cart[j].quantity + " = $" + (cart[j].price * cart[j].quantity) + "\n";
-            }
-            msg += "-----------------------\n";
-            msg += "المجموع الفرعي: $" + subtotal.toFixed(2) + "\n";
-            if (deliveryMode === 'delivery') {
-                msg += "التوصيل: " + (deliveryFee === 0 ? "مجاني" : "$" + deliveryFee.toFixed(2)) + "\n";
-            }
-            msg += "الإجمالي النهائي: $" + total.toFixed(2);
-
-            window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
-        }
-
-        renderProducts();
-    </script>
-</body>
-</html>
+            for (var i = 0; i < cart.length;l) أو محرر الكود (VS Code) لإرسال التعديلات
