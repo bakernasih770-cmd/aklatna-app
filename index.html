@@ -11,6 +11,20 @@
         .suggestions-list { background-color: #1f2937; border: 1px solid #374151; max-height: 180px; overflow-y: auto; position: absolute; width: 100%; z-index: 100; border-radius: 0.5rem; margin-top: 2px; }
         .suggestion-item { padding: 10px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
         .suggestion-item:hover { background-color: #374151; color: #fff; }
+
+        /* طبقات الخلفية لتلاشي ناعم وبدون أي فلاش */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1.5s ease-in-out;
+            opacity: 0;
+            z-index: 1;
+        }
+        .hero-bg.active {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -35,8 +49,12 @@
         </div>
     </header>
 
-    <!-- قسم الهيرو (خلفية متغيرة بسلاسة) -->
-    <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('gallery-1.jpg'); transition: background-image 1s ease-in-out;">
+    <!-- قسم الهيرو بخلفية تتلاشى بسلاسة تامة بدون فلاش -->
+    <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950">
+        <!-- طبقات الصور لتوليد تداخل هادئ -->
+        <div class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
+        <div class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
+
         <div class="relative z-10 max-w-4xl mx-auto">
             <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)]">أكلاتنا</h2>
             <p class="text-xl md:text-2xl font-extrabold text-white mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">أطباق عراقية طازجة ومحضرة بكل حب</p>
@@ -202,17 +220,30 @@
             { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
 
+        // مصفوفة صور الخلفية
         var heroImages = ["gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg", "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg"];
-        var currentHeroIndex = 0;
+        var activeBgIndex = 0;
 
-        function changeHeroBackground() {
-            var heroSection = document.getElementById('hero-section');
-            if (heroSection) {
-                currentHeroIndex = (currentHeroIndex + 1) % heroImages.length;
-                heroSection.style.backgroundImage = "url('" + heroImages[currentHeroIndex] + "')";
-            }
+        function smoothChangeHeroBackground() {
+            var bgs = document.querySelectorAll('.hero-bg');
+            if (bgs.length < 2) return;
+
+            var nextIndex = (activeBgIndex + 1) % heroImages.length;
+            
+            // تحديد أي طبقة ستستقبل الصورة القادمة وتتلاشى بسلاسة
+            var currentLayer = bgs[activeBgIndex];
+            var nextLayer = bgs[(activeBgIndex + 1) % 2]; 
+
+            nextLayer.style.backgroundImage = "url('" + heroImages[nextIndex] + "')";
+            
+            currentLayer.classList.remove('active');
+            nextLayer.classList.add('active');
+
+            activeBgIndex = nextIndex;
         }
-        setInterval(changeHeroBackground, 4000);
+
+        // تغيير الخلفية كل 5 ثوانٍ بتلاشي ناعم جداً
+        setInterval(smoothChangeHeroBackground, 5000);
 
         var cart = [];
         var currentCategory = 'all';
@@ -551,12 +582,10 @@
             window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
         }
 
-        // تشغيل عرض الأطباق فوراً عند اكتمال تحميل المستند
+        // تشغيل الأطباق فوراً عند التحميل
         window.addEventListener('DOMContentLoaded', (event) => {
             renderProducts();
         });
-        
-        // تشغيل فورب كاحتياط إضافي
         renderProducts();
     </script>
 </body>
