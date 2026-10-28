@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أكلاتنا - طبخ بيتي عراقي في جرينزبورو</title>
+    <title>أكلاتنا - Iraqi Homemade Food in Greensboro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -41,13 +41,13 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
+                    <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% | 100% Halal Iraqi Food</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3 space-x-reverse">
                 <button onclick="openCart()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all relative">
                     <i class="fa-solid fa-utensils"></i>
-                    <span>الصينية</span>
+                    <span>الصينية / Cart</span>
                     <span id="cart-badge" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
             </div>
@@ -60,12 +60,13 @@
 
         <div class="relative z-10 max-w-4xl mx-auto pb-6">
             <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
-            <p class="text-xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
+            <p class="text-xl md:text-3xl font-extrabold text-white mb-2 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
+            <p class="text-sm md:text-lg text-amber-300 font-semibold mb-8 drop-shadow-[0_2px_2px_rgba(0,0,0,0.95)]">Fresh Iraqi Dishes</p>
             
             <input 
                 type="text" 
                 id="search-input"
-                placeholder="ابحث عن طبقك المفضّل..." 
+                placeholder="ابحث عن طبقك المفضّل... / Search your dish..." 
                 oninput="renderProducts()"
                 class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
             />
@@ -76,33 +77,17 @@
         <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-6 text-xs md:text-sm font-bold text-amber-300 text-center">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-circle-check text-green-400"></i>
-                <span>جميع اللحوم المستخدمة حلال 100%</span>
+                <span>جميع اللحوم المستخدمة حلال 100% (100% Halal Meat)</span>
             </div>
             <div class="hidden md:inline text-gray-600">|</div>
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-clock text-amber-400"></i>
-                <span>يرجى إتمام الطلب قبل 24 ساعة</span>
-            </div>
-            <div class="hidden md:inline text-gray-600">|</div>
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-gift text-red-400"></i>
-                <span>توصيل مجاني للطلبات 70$ فأكثر ضمن 15 ميل (رسوم رمزية 5$ للطلبات أقل من 70$)</span>
+                <span>يرجى إتمام الطلب قبل 24 ساعة (Order 24h in advance)</span>
             </div>
         </div>
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-        <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
-            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
-            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
-            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
-            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
-            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
-            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
-            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
-        </div>
-
-        <!-- شبكة الأطباق مضمونة ومبرمجة لترسم نفسها فوراً وثابتة تماماً -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
@@ -113,16 +98,19 @@
                 
                 <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/80 hover:bg-black text-amber-400 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg border border-amber-500/30 transition-all z-10">
                     <i class="fa-solid fa-arrow-right"></i>
-                    <span>العودة للقائمة</span>
+                    <span>العودة للقائمة / Back</span>
                 </button>
                 
                 <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-10"></span>
             </div>
             <div class="p-6 space-y-4">
-                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
+                <div>
+                    <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
+                    <p id="modal-title-en" class="text-sm font-bold text-gray-300 mt-0.5"></p>
+                </div>
                 
                 <div class="flex items-center justify-between pt-2 border-t border-gray-800">
-                    <span class="text-xs text-gray-400 font-bold">الكمية المطلوب طلبها:</span>
+                    <span class="text-xs text-gray-400 font-bold">الكمية / Quantity:</span>
                     <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
                         <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
                         <span id="modal-qty" class="text-sm font-extrabold w-6 text-center text-amber-400">1</span>
@@ -132,7 +120,7 @@
 
                 <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cart-plus"></i>
-                    <span>أضف إلى الصينية</span>
+                    <span>أضف إلى الصينية / Add to Cart</span>
                 </button>
             </div>
         </div>
@@ -141,7 +129,7 @@
     <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
         <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة</h2>
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة / Cart</h2>
                 
                 <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
                     <i class="fa-solid fa-arrow-right"></i>
@@ -152,15 +140,15 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
 
             <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
-                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
+                <input type="text" id="customer-name" placeholder="الاسم الكريم / Your Name" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
                 
                 <div class="flex gap-2">
-                    <button onclick="setDelivery('pickup')" id="btn-pickup" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black">استلام من المحل</button>
-                    <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400">توصيل للمنزل</button>
+                    <button onclick="setDelivery('pickup')" id="btn-pickup" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black">استلام من المحل / Pickup</button>
+                    <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400">توصيل للمنزل / Delivery</button>
                 </div>
 
                 <div id="delivery-options" class="hidden space-y-2 text-xs relative bg-gray-900 p-3 rounded-lg border border-gray-800">
-                    <p class="text-amber-300 font-bold mb-1">عنوان التوصيل:</p>
+                    <p class="text-amber-300 font-bold mb-1">عنوان التوصيل / Delivery Address:</p>
                     
                     <div class="relative">
                         <input type="text" id="street-input" placeholder="رقم المبنى واسم الشارع (مثل: 1828 Micknight Mill Rd)" oninput="searchAddress()" class="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
@@ -179,7 +167,317 @@
 
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span>إرسال الطلب عبر الواتساب</span>
+                    <span>إرسال الطلب عبر الواتساب / Send Order via WhatsApp</span>
                 </button>
             </div>
         </div>
+    </div>
+
+    <script>
+        var products = [
+            { id: 1, nameAr: "الدولمة", nameEn: "Dolma", price: 45, image: "dolma.jpg" },
+            { id: 2, nameAr: "الباچة", nameEn: "Pacha", price: 60, image: "pacha.jpg" },
+            { id: 3, nameAr: "القوزي", nameEn: "Qoozi", price: 70, image: "qoozi.jpg" },
+            { id: 4, nameAr: "دجاج مع طبق رز اصفر", nameEn: "Chicken with Yellow Rice", price: 25, image: "chicken with rice.png" },
+            { id: 5, nameAr: "دجاج مع طبق رز احمر", nameEn: "Chicken with Red Rice", price: 25, image: "" },
+            { id: 6, nameAr: "القيمة مع الرز", nameEn: "Gheimeh with Rice", price: 20, image: "" },
+            { id: 7, nameAr: "البرياني بالدجاج", nameEn: "Chicken Biryani", price: 28, image: "byriani chicken.png" },
+            { id: 8, nameAr: "البرياني باللحم", nameEn: "Meat Biryani", price: 32, image: "byriani meat.png" },
+            { id: 9, nameAr: "باقلاء بالدهن", nameEn: "Baqla Bel-Dihn", price: 18, image: "baqla-dehn.jpg" },
+            { id: 10, nameAr: "كباب شوي", nameEn: "Grilled Kebab", price: 30, image: "kebab.jpg" },
+            { id: 11, nameAr: "تكة لحم", nameEn: "Meat Tikka", price: 35, image: "tekka meat.png" },
+            { id: 12, nameAr: "تكة دجاج", nameEn: "Chicken Tikka", price: 25, image: "" },
+            { id: 13, nameAr: "السمك المشوي Tilapia", nameEn: "Grilled Tilapia Fish", price: 28, image: "masgouf.jpg" },
+            { id: 14, nameAr: "السمك المقلي مع الرز الاحمر (الزبيدي)", nameEn: "Fried Fish with Red Rice", price: 32, image: "fried-fish.jpg" },
+            { id: 15, nameAr: "كبة حلب", nameEn: "Kibbeh Halab", price: 3, image: "kibbeh-halab.jpg" },
+            { id: 16, nameAr: "كبة الجريش", nameEn: "Jareesh Kibbeh", price: 3.5, image: "cuba gereash.png" },
+            { id: 17, nameAr: "بتيتة چاب", nameEn: "Potato Chop", price: 3, image: "" },
+            { id: 18, nameAr: "بورك اللحم", nameEn: "Meat Börek", price: 2.5, image: "" },
+            { id: 19, nameAr: "بورك الجبن", nameEn: "Cheese Börek", price: 2.5, image: "" },
+            { id: 20, nameAr: "لحم بعجين", nameEn: "Lahm Bajeen", price: 4, image: "lahm-bajin.jpg" },
+            { id: 21, nameAr: "فطائر الجبن بالنعناع", nameEn: "Mint Cheese Pastries", price: 3, image: "" },
+            { id: 22, nameAr: "فطائر الزعتر", nameEn: "Thyme Pastries", price: 2.5, image: "" },
+            { id: 23, nameAr: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pastries", price: 3.5, image: "" },
+            { id: 24, nameAr: "فليفلة", nameEn: "Stuffed Pepper", price: 2, image: "" },
+            { id: 25, nameAr: "صمون عراقي", nameEn: "Iraqi Samoon Bread", price: 1, image: "samoon.jpg" },
+            { id: 26, nameAr: "خبز عراقي (تنور)", nameEn: "Tannour Bread", price: 1.5, image: "khubz-tannour.jpg" },
+            { id: 27, nameAr: "خبز عروك", nameEn: "Arouk Bread", price: 3, image: "orook.jpg" },
+            { id: 28, nameAr: "خبز بربري", nameEn: "Barbari Bread", price: 2, image: "uzbek-bread.jpg" },
+            { id: 29, nameAr: "لفة خميرة", nameEn: "Khamira Bread Roll", price: 2, image: "" },
+            { id: 30, nameAr: "كعك السمسم", nameEn: "Sesame Cookies", price: 5, image: "" },
+            { id: 31, nameAr: "الكليچة", nameEn: "Kleicha Dates Cookies", price: 12, image: "kleacha.png" },
+            { id: 32, nameAr: "ساندويچ فلافل", nameEn: "Falafel Sandwich", price: 8, image: "falafel-plate.jpg" },
+            { id: 33, nameAr: "ساندويچ تكة دجاج", nameEn: "Chicken Tikka Sandwich", price: 12, image: "" },
+            { id: 34, nameAr: "ساندويچ تكة لحم", nameEn: "Meat Tikka Sandwich", price: 14, image: "" },
+            { id: 35, nameAr: "ساندويچ كباب شوي", nameEn: "Grilled Kebab Sandwich", price: 11, image: "kebab.jpg" }
+        ];
+
+        var heroImages = [
+            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
+            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
+            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
+            "gallery-13.jpg", "gallery-14.jpg"
+        ];
+        
+        var currentImgIndex = 0;
+        var isLayerOneActive = true;
+
+        function smoothChangeHeroBackground() {
+            var layer1 = document.getElementById('bg-layer-1');
+            var layer2 = document.getElementById('bg-layer-2');
+            if (!layer1 || !layer2) return;
+
+            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+            var nextImage = heroImages[currentImgIndex];
+
+            if (isLayerOneActive) {
+                layer2.style.backgroundImage = "url('" + nextImage + "')";
+                layer1.classList.remove('active');
+                layer2.classList.add('active');
+            } else {
+                layer1.style.backgroundImage = "url('" + nextImage + "')";
+                layer2.classList.remove('active');
+                layer1.classList.add('active');
+            }
+            isLayerOneActive = !isLayerOneActive;
+        }
+
+        setInterval(smoothChangeHeroBackground, 4500);
+
+        var cart = [];
+        var deliveryMode = 'pickup';
+        var calculatedMiles = -1;
+        var currentActiveProduct = null;
+        var currentModalQty = 1;
+        var originLat = 36.0468;
+        var originLon = -79.8833;
+
+        function renderProducts() {
+            var grid = document.getElementById('products-grid');
+            if (!grid) return;
+            var queryInput = document.getElementById('search-input');
+            var query = (queryInput && queryInput.value) ? queryInput.value.toLowerCase().trim() : '';
+            var html = '';
+            
+            for (var i = 0; i < products.length; i++) {
+                var p = products[i];
+                var matchQuery = (query === '' || p.nameAr.toLowerCase().indexOf(query) !== -1 || p.nameEn.toLowerCase().indexOf(query) !== -1);
+                
+                if (matchQuery) {
+                    var imgContent = p.image ? 
+                        '<img src="' + p.image + '" alt="' + p.nameEn + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' :
+                        '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold">طبق بيتي طازج / Fresh Dish 🍲</div>';
+
+                    html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
+                        '<div class="relative h-60 bg-gray-950">' +
+                            imgContent +
+                            '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
+                        '</div>' +
+                        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
+                            '<div>' +
+                                '<h3 class="font-extrabold text-base text-white mb-0.5">' + p.nameAr + '</h3>' +
+                                '<p class="text-xs font-bold text-amber-300">' + p.nameEn + '</p>' +
+                            '</div>' +
+                            '<span class="text-[11px] text-gray-400 font-medium mt-2">اضغط للعرض والطلب / Click to order 🔍</span>' +
+                        '</div>' +
+                    '</div>';
+                }
+            }
+            grid.innerHTML = html;
+        }
+
+        function openProductModal(id) {
+            for (var j = 0; j < products.length; j++) {
+                if (products[j].id === id) {
+                    currentActiveProduct = products[j];
+                    break;
+                }
+            }
+            if (!currentActiveProduct) return;
+            currentModalQty = 1;
+            var modalImg = document.getElementById('modal-img');
+
+            if (currentActiveProduct.image) {
+                modalImg.src = currentActiveProduct.image;
+            } else {
+                modalImg.src = 'gallery-1.jpg';
+            }
+            document.getElementById('modal-title').innerText = currentActiveProduct.nameAr;
+            document.getElementById('modal-title-en').innerText = currentActiveProduct.nameEn;
+            updateModalPriceUI();
+            document.getElementById('modal-qty').innerText = currentModalQty;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function changeModalQty(delta) {
+            currentModalQty += delta;
+            if (currentModalQty < 1) currentModalQty = 1;
+            document.getElementById('modal-qty').innerText = currentModalQty;
+            updateModalPriceUI();
+        }
+
+        function updateModalPriceUI() {
+            if (!currentActiveProduct) return;
+            var totalPrice = currentActiveProduct.price * currentModalQty;
+            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
+        }
+
+        function confirmAddToCart() {
+            if (!currentActiveProduct) return;
+            var found = false;
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === currentActiveProduct.id) {
+                    cart[i].quantity += currentModalQty;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                cart.push({
+                    id: currentActiveProduct.id,
+                    nameAr: currentActiveProduct.nameAr,
+                    nameEn: currentActiveProduct.nameEn,
+                    price: currentActiveProduct.price,
+                    image: currentActiveProduct.image || '',
+                    quantity: currentModalQty
+                });
+            }
+            closeProductModal();
+            updateCartUI();
+        }
+
+        function updateQuantity(id, delta) {
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === id) {
+                    cart[i].quantity += delta;
+                    if (cart[i].quantity <= 0) {
+                        cart.splice(i, 1);
+                    }
+                    break;
+                }
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(id) {
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === id) {
+                    cart.splice(i, 1);
+                    break;
+                }
+            }
+            updateCartUI();
+        }
+
+        var searchTimeout;
+        function searchAddress() {
+            clearTimeout(searchTimeout);
+            var streetVal = document.getElementById('street-input').value;
+            var cityVal = document.getElementById('city-input').value;
+            var stateVal = document.getElementById('state-input').value;
+            var zipVal = document.getElementById('zip-input').value;
+            var sugBox = document.getElementById('suggestions');
+
+            if (streetVal.length < 3) {
+                sugBox.classList.add('hidden');
+                return;
+            }
+            searchTimeout = setTimeout(function() {
+                var queryStr = streetVal + ', ' + (cityVal || 'Greensboro') + ', ' + (stateVal || 'NC') + (zipVal ? ' ' + zipVal : '');
+                var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(queryStr) + '&limit=5';
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var html = '';
+                        for (var i = 0; i < data.length; i++) {
+                            var name = data[i].display_name;
+                            html += '<div class="suggestion-item" onclick="selectAddress(\'' + name.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + name + '</div>';
+                        }
+                        if (html) {
+                            sugBox.innerHTML = html;
+                            sugBox.classList.remove('hidden');
+                        } else {
+                            sugBox.classList.add('hidden');
+                        }
+                    }).catch(err => console.log(err));
+            }, 300);
+        }
+
+        function selectAddress(addressText, lat, lon) {
+            document.getElementById('street-input').value = addressText;
+            document.getElementById('suggestions').classList.add('hidden');
+            if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
+                calculatedMiles = 0.0;
+                updateCartUI();
+                return;
+            }
+            document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية... / Calculating distance...';
+            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
+            fetch(osrmUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        var meters = data.routes[0].distance;
+                        var miles = meters / 1609.344;
+                        calculatedMiles = parseFloat(miles.toFixed(1));
+                        if (calculatedMiles < 0.3) calculatedMiles = 0.0;
+                        updateCartUI();
+                    } else {
+                        fallbackDirectDistance(lat, lon);
+                    }
+                }).catch(err => fallbackDirectDistance(lat, lon));
+        }
+
+        function fallbackDirectDistance(lat, lon) {
+            var R = 3958.8;
+            var dLat = (lat - originLat) * Math.PI / 180;
+            var dLon = (lon - originLon) * Math.PI / 180;
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(originLat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            calculatedMiles = parseFloat((R * c * 1.25).toFixed(1));
+            if (calculatedMiles < 0.3) calculatedMiles = 0.0;
+            updateCartUI();
+        }
+
+        function calculateDeliveryFee(subtotal) {
+            if (deliveryMode === 'pickup') return 0;
+            if (calculatedMiles < 0) return 0;
+            if (calculatedMiles > 30) return -1;
+            if (calculatedMiles <= 15) {
+                return (subtotal >= 70) ? 0 : 5;
+            }
+            var baseFee = (subtotal >= 70) ? 0 : 5;
+            return baseFee + (calculatedMiles - 15) * 1;
+        }
+
+        function updateCartUI() {
+            var badge = document.getElementById('cart-badge');
+            var totalQty = 0;
+            for (var i = 0; i < cart.length; i++) { totalQty += cart[i].quantity; }
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            var container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-16">صينية الطلبات فارغة حالياً / Cart is empty</p>';
+                document.getElementById('cart-footer').style.display = 'none';
+                return;
+            }
+            document.getElementById('cart-footer').style.display = 'block';
+
+            var subtotal = 0;
+            var html = '';
+            for (var j = 0; j < cart.length; j++) {
+                var item = cart[j];
+                subtotal += (item.price * item.quantity);
+                var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.nameEn + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-amber-400 text-center">طبق</div>';
+
+                html +=
