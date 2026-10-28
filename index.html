@@ -32,8 +32,9 @@
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
+                <!-- 1. إزالة الدائرة البيضاء خلف الشعار -->
                 <div class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
-                    <img src="halal.jpeg" alt="شعار حلال" class="w-full h-full object-cover rounded-full mix-blend-screen">
+                    <img src="halal.jpeg" alt="شعار حلال" class="w-full h-full object-contain mix-blend-screen filter brightness-125">
                 </div>
                 <div>
                     <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
@@ -49,14 +50,19 @@
         </div>
     </header>
 
-    <!-- قسم الهيرو بخلفية تتلاشى بسلاسة وتتضمن الـ 14 صورة بالكامل -->
-    <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950">
+    <!-- قسم الهيرو (مع إنزال شريط البحث للأسفل لتظهر الصورة بالكامل) -->
+    <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
         <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
         <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
 
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)]">أكلاتنا</h2>
-            <p class="text-xl md:text-2xl font-extrabold text-white mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">أطباق عراقية طازجة ومحضرة بكل حب</p>
+        <div class="relative z-10 max-w-4xl mx-auto pb-6">
+            <!-- 2. تكبير كلمة أكلاتنا بضعف الحجم (Text-7xl / 9xl) -->
+            <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
+            
+            <!-- 3. حذف جملة ومحضرة بكل حب وبقاء الجملة الأولى فقط -->
+            <p class="text-xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
+            
+            <!-- 4. إنزال شريط البحث إلى الأسفل لكي تظهر كامل الصورة -->
             <input 
                 type="text" 
                 id="search-input"
@@ -99,6 +105,7 @@
             <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
         </div>
 
+        <!-- شبكة الأطباق مع صورة كاملة واسم الطبق تحتها دون قطع -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
@@ -106,7 +113,7 @@
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
         <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
             <div class="relative h-64 bg-gray-950 flex items-center justify-center">
-                <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-contain">
                 <div id="modal-img-placeholder" class="text-gray-500 text-xs hidden">لا توجد صورة حالياً</div>
                 
                 <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/80 hover:bg-black text-amber-400 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg border border-amber-500/30 transition-all z-10">
@@ -219,7 +226,7 @@
             { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
 
-        // قائمة الـ 14 صورة كاملة بدون نقص
+        // مصفوفة الـ 14 صورة بالكامل للخلفية المتغيرة بسلاسة
         var heroImages = [
             "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
             "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
@@ -250,7 +257,6 @@
             isLayerOneActive = !isLayerOneActive;
         }
 
-        // تغيير الصور كل 4.5 ثانية بشكل هادئ وسلس جداً ودائم
         setInterval(smoothChangeHeroBackground, 4500);
 
         var cart = [];
@@ -262,6 +268,7 @@
         var originLat = 36.0468;
         var originLon = -79.8833;
 
+        // 5. عرض الصور كاملة دون قطع واسم الطبق تحتها
         function renderProducts() {
             var grid = document.getElementById('products-grid');
             if (!grid) return;
@@ -276,16 +283,16 @@
                 
                 if (matchCat && matchQuery) {
                     var imgContent = p.image ? 
-                        '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover">' :
+                        '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-contain p-2">' :
                         '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-gray-500 text-xs font-bold">صورة قريباً 📸</div>';
 
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
-                        '<div class="relative h-48 bg-gray-950">' +
+                        '<div class="relative h-56 bg-gray-950 flex items-center justify-center">' +
                             imgContent +
-                            '<span class="absolute top-3 left-3 bg-black/70 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
+                            '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
                         '</div>' +
-                        '<div class="p-5 flex-1 flex flex-col justify-between text-center">' +
-                            '<h3 class="font-bold text-lg text-white mb-2">' + p.name + '</h3>' +
+                        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
+                            '<h3 class="font-extrabold text-base text-white mb-1">' + p.name + '</h3>' +
                             '<span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>' +
                         '</div>' +
                     '</div>';
@@ -492,7 +499,7 @@
             for (var j = 0; j < cart.length; j++) {
                 var item = cart[j];
                 subtotal += (item.price * item.quantity);
-                var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-gray-500 text-center">لا صورة</div>';
+                var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-contain bg-gray-950 border border-amber-500/50">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-gray-500 text-center">لا صورة</div>';
 
                 html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
                     itemImg +
@@ -590,7 +597,7 @@
             window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
         }
 
-        // تشغيل مباشر لإبراز الأطباق
+        // تشغيل مباشر وعرض الأطباق
         renderProducts();
         window.onload = function() {
             renderProducts();
