@@ -11,10 +11,7 @@
         .suggestions-list { background-color: #1f2937; border: 1px solid #374151; max-height: 180px; overflow-y: auto; position: absolute; width: 100%; z-index: 100; border-radius: 0.5rem; margin-top: 2px; }
         .suggestion-item { padding: 10px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
         .suggestion-item:hover { background-color: #374151; color: #fff; }
-        
-        #hero-section {
-            transition: background-image 1s ease-in-out;
-        }
+        #hero-section { transition: background-image 1s ease-in-out; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -39,7 +36,7 @@
         </div>
     </header>
 
-    <!-- قسم الهيرو الصافي والواضح بدون أي ضبابية أو تظليل -->
+    <!-- قسم الهيرو بدون أي تظليل وبخلفية واضحة -->
     <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('gallery-1.jpg')">
         <div class="relative z-10 max-w-4xl mx-auto">
             <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)]">أكلاتنا</h2>
@@ -86,7 +83,7 @@
             <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[300px]" id="products-grid"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
     <!-- النافذة التفصيلية للأكلة -->
@@ -206,12 +203,7 @@
             { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
 
-        var heroImages = [
-            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
-            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
-            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
-            "gallery-13.jpg", "gallery-14.jpg"
-        ];
+        var heroImages = ["gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg", "gallery-5.jpg"];
         var currentHeroIndex = 0;
 
         function changeHeroBackground() {
@@ -221,8 +213,7 @@
                 heroSection.style.backgroundImage = "url('" + heroImages[currentHeroIndex] + "')";
             }
         }
-
-        setInterval(changeHeroBackground, 3500);
+        setInterval(changeHeroBackground, 4000);
 
         var cart = [];
         var currentCategory = 'all';
@@ -230,7 +221,6 @@
         var calculatedMiles = -1;
         var currentActiveProduct = null;
         var currentModalQty = 1;
-        
         var originLat = 36.0468;
         var originLon = -79.8833;
 
@@ -286,7 +276,6 @@
                 }
             }
             if (!currentActiveProduct) return;
-
             currentModalQty = 1;
             var modalImg = document.getElementById('modal-img');
             var modalPlaceholder = document.getElementById('modal-img-placeholder');
@@ -300,7 +289,6 @@
                 modalImg.classList.add('hidden');
                 modalPlaceholder.classList.remove('hidden');
             }
-
             document.getElementById('modal-title').innerText = currentActiveProduct.name;
             updateModalPriceUI();
             document.getElementById('modal-qty').innerText = currentModalQty;
@@ -326,7 +314,6 @@
 
         function confirmAddToCart() {
             if (!currentActiveProduct) return;
-
             var found = false;
             for (var i = 0; i < cart.length; i++) {
                 if (cart[i].id === currentActiveProduct.id) {
@@ -344,7 +331,6 @@
                     quantity: currentModalQty
                 });
             }
-
             closeProductModal();
             updateCartUI();
             openCart();
@@ -376,11 +362,9 @@
                 sugBox.classList.add('hidden');
                 return;
             }
-
             searchTimeout = setTimeout(function() {
                 var queryStr = streetVal + ', ' + (cityVal || 'Greensboro') + ', ' + (stateVal || 'NC') + (zipVal ? ' ' + zipVal : '');
                 var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(queryStr) + '&limit=5';
-                
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
@@ -402,13 +386,13 @@
         function selectAddress(addressText, lat, lon) {
             document.getElementById('street-input').value = addressText;
             document.getElementById('suggestions').classList.add('hidden');
-
             if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
                 calculatedMiles = 0.0;
                 updateCartUI();
                 return;
             }
-
             document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
-
-            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=
+            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
+            fetch(osrmUrl)
+                .then(response => response.json())
+                .then(data => {
