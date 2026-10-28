@@ -12,12 +12,7 @@
         .suggestion-item { padding: 10px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
         .suggestion-item:hover { background-color: #374151; color: #fff; }
 
-        /* قص الشعار دائرياً لإزالة أي خلفية بيضاء خارجية نهائياً */
-        .halal-logo-clip {
-            clip-path: circle(48% at center);
-        }
-
-        /* حركة خلفية المعرض بسلاسة */
+        /* حركة سلسة ومتدرجة للصور الـ 14 في الخلفية */
         .hero-bg {
             position: absolute;
             inset: 0;
@@ -39,9 +34,14 @@
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
-                <!-- شعار الحلال مع القص الدائري النقي -->
-                <div class="w-12 h-12 rounded-full border-2 border-emerald-500 overflow-hidden flex items-center justify-center bg-gray-950 shadow-md">
-                    <img src="halal.jpeg" alt="شعار حلال" class="w-full h-full object-cover halal-logo-clip scale-110">
+                <!-- شعار حلال SVG نقي دائر بدون خلفية بيضاء نهائياً -->
+                <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <circle cx="50" cy="50" r="48" fill="#10b981" />
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#ffffff" stroke-width="3" />
+                        <text x="50" y="48" font-family="'Cairo', sans-serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">حلال</text>
+                        <text x="50" y="68" font-family="sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="1">HALAL</text>
+                    </svg>
                 </div>
                 <div>
                     <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
@@ -288,143 +288,4 @@
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-60 bg-gray-950">' +
                             imgContent +
-                            '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
-                        '</div>' +
-                        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
-                            '<h3 class="font-extrabold text-base text-white mb-1">' + p.name + '</h3>' +
-                            '<span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>' +
-                        '</div>' +
-                    '</div>';
-                }
-            }
-            grid.innerHTML = html;
-        }
-
-        function filterCategory(cat, btn) {
-            currentCategory = cat;
-            var buttons = document.querySelectorAll('.cat-btn');
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
-            }
-            if (btn) {
-                btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
-            }
-            renderProducts();
-        }
-
-        function openProductModal(id) {
-            for (var j = 0; j < products.length; j++) {
-                if (products[j].id === id) {
-                    currentActiveProduct = products[j];
-                    break;
-                }
-            }
-            if (!currentActiveProduct) return;
-            currentModalQty = 1;
-            var modalImg = document.getElementById('modal-img');
-            var modalPlaceholder = document.getElementById('modal-img-placeholder');
-
-            if (currentActiveProduct.image) {
-                modalImg.src = currentActiveProduct.image;
-                modalImg.classList.remove('hidden');
-                modalPlaceholder.classList.add('hidden');
-            } else {
-                modalImg.src = '';
-                modalImg.classList.add('hidden');
-                modalPlaceholder.classList.remove('hidden');
-            }
-            document.getElementById('modal-title').innerText = currentActiveProduct.name;
-            updateModalPriceUI();
-            document.getElementById('modal-qty').innerText = currentModalQty;
-            document.getElementById('product-modal').classList.remove('hidden');
-        }
-
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
-        }
-
-        function changeModalQty(delta) {
-            currentModalQty += delta;
-            if (currentModalQty < 1) currentModalQty = 1;
-            document.getElementById('modal-qty').innerText = currentModalQty;
-            updateModalPriceUI();
-        }
-
-        function updateModalPriceUI() {
-            if (!currentActiveProduct) return;
-            var totalPrice = currentActiveProduct.price * currentModalQty;
-            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
-        }
-
-        function confirmAddToCart() {
-            if (!currentActiveProduct) return;
-            var found = false;
-            for (var i = 0; i < cart.length; i++) {
-                if (cart[i].id === currentActiveProduct.id) {
-                    cart[i].quantity += currentModalQty;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                cart.push({
-                    id: currentActiveProduct.id,
-                    name: currentActiveProduct.name,
-                    price: currentActiveProduct.price,
-                    image: currentActiveProduct.image || '',
-                    quantity: currentModalQty
-                });
-            }
-            closeProductModal();
-            updateCartUI();
-        }
-
-        function updateQuantity(id, delta) {
-            for (var i = 0; i < cart.length; i++) {
-                if (cart[i].id === id) {
-                    cart[i].quantity += delta;
-                    if (cart[i].quantity <= 0) {
-                        cart.splice(i, 1);
-                    }
-                    break;
-                }
-            }
-            updateCartUI();
-        }
-
-        var searchTimeout;
-        function searchAddress() {
-            clearTimeout(searchTimeout);
-            var streetVal = document.getElementById('street-input').value;
-            var cityVal = document.getElementById('city-input').value;
-            var stateVal = document.getElementById('state-input').value;
-            var zipVal = document.getElementById('zip-input').value;
-            var sugBox = document.getElementById('suggestions');
-
-            if (streetVal.length < 3) {
-                sugBox.classList.add('hidden');
-                return;
-            }
-            searchTimeout = setTimeout(function() {
-                var queryStr = streetVal + ', ' + (cityVal || 'Greensboro') + ', ' + (stateVal || 'NC') + (zipVal ? ' ' + zipVal : '');
-                var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(queryStr) + '&limit=5';
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        var html = '';
-                        for (var i = 0; i < data.length; i++) {
-                            var name = data[i].display_name;
-                            html += '<div class="suggestion-item" onclick="selectAddress(\'' + name.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + name + '</div>';
-                        }
-                        if (html) {
-                            sugBox.innerHTML = html;
-                            sugBox.classList.remove('hidden');
-                        } else {
-                            sugBox.classList.add('hidden');
-                        }
-                    }).catch(err => console.log(err));
-            }, 300);
-        }
-
-        function selectAddress(addressText, lat, lon) {
-            document.getElementById('street-input').value = addressText;
+                            '<span class="absolute top-3 left-3 bg-black/75 px-
