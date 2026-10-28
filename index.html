@@ -66,7 +66,7 @@
                 type="text" 
                 id="search-input"
                 placeholder="ابحث عن طبقك المفضّل..." 
-                oninput="filterSearch()"
+                oninput="filterItems()"
                 class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
             />
         </div>
@@ -94,147 +94,279 @@
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
         <!-- أزرار التبويبات الفعالة -->
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
-            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950 shadow">الكل</button>
-            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأطباق الرئيسية</button>
-            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المشويات</button>
-            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأسماك</button>
-            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المعجنات والمقبلات</button>
-            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المخبوزات والخبز</button>
-            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">السندويتشات</button>
+            <button onclick="selectCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950 shadow">الكل</button>
+            <button onclick="selectCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأطباق الرئيسية</button>
+            <button onclick="selectCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المشويات</button>
+            <button onclick="selectCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأسماك</button>
+            <button onclick="selectCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المعجنات والمقبلات</button>
+            <button onclick="selectCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المخبوزات والخبز</button>
+            <button onclick="selectCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">السندويتشات</button>
         </div>
 
-        <!-- شبكة عرض الأطباق بالكامل (مكتوبة مباشرة لتظهر فورا وتعمل التبويبات والتفاصيل عليها 100%) -->
+        <!-- شبكة عرض الـ 35 طبقاً بالتفصيل المباشر -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
             
             <!-- الأطباق الرئيسية -->
-            <div data-category="main" onclick="openProductModal('الدولمة', 45, 'dolma.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('الدولمة', 45, 'dolma.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="dolma.jpg" alt="الدولمة" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$45.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">الدولمة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">الدولمة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('الباچة', 60, 'pacha.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('الباچة', 60, 'pacha.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="pacha.jpg" alt="الباچة" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$60.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">الباچة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">الباچة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('القوزي', 70, 'qoozi.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('القوزي', 70, 'qoozi.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="qoozi.jpg" alt="القوزي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$70.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">القوزي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">القوزي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('دجاج مع طبق رز اصفر', 25, 'chicken with rice.png')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('دجاج مع طبق رز اصفر', 25, 'chicken with rice.png')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="chicken with rice.png" alt="دجاج مع طبق رز اصفر" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$25.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">دجاج مع طبق رز اصفر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">دجاج مع طبق رز اصفر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('دجاج مع طبق رز احمر', 25, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('دجاج مع طبق رز احمر', 25, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$25.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">دجاج مع طبق رز احمر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">دجاج مع طبق رز احمر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('القيمة مع الرز', 20, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('القيمة مع الرز', 20, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$20.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">القيمة مع الرز</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">القيمة مع الرز</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('البرياني بالدجاج', 28, 'byriani chicken.png')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('البرياني بالدجاج', 28, 'byriani chicken.png')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="byriani chicken.png" alt="البرياني بالدجاج" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$28.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">البرياني بالدجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">البرياني بالدجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('البرياني باللحم', 32, 'byriani meat.png')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('البرياني باللحم', 32, 'byriani meat.png')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="byriani meat.png" alt="البرياني باللحم" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$32.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">البرياني باللحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">البرياني باللحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openProductModal('باقلاء بالدهن', 18, 'baqla-dehn.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="main" onclick="showModal('باقلاء بالدهن', 18, 'baqla-dehn.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="baqla-dehn.jpg" alt="باقلاء بالدهن" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$18.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">باقلاء بالدهن</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">باقلاء بالدهن</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- المشويات -->
-            <div data-category="grills" onclick="openProductModal('كباب شوي', 30, 'kebab.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="grills" onclick="showModal('كباب شوي', 30, 'kebab.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="kebab.jpg" alt="كباب شوي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$30.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">كباب شوي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">كباب شوي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="grills" onclick="openProductModal('تكة لحم', 35, 'tekka meat.png')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="grills" onclick="showModal('تكة لحم', 35, 'tekka meat.png')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="tekka meat.png" alt="تكة لحم" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$35.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">تكة لحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">تكة لحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="grills" onclick="openProductModal('تكة دجاج', 25, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="grills" onclick="showModal('تكة دجاج', 25, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$25.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">تكة دجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">تكة دجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- الأسماك -->
-            <div data-category="fish" onclick="openProductModal('السمك المشوي Tilapia', 28, 'masgouf.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="fish" onclick="showModal('السمك المشوي Tilapia', 28, 'masgouf.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="masgouf.jpg" alt="السمك المشوي Tilapia" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$28.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">السمك المشوي Tilapia</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">السمك المشوي Tilapia</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="fish" onclick="openProductModal('السمك المقلي مع الرز الاحمر', 32, 'fried-fish.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="fish" onclick="showModal('السمك المقلي مع الرز الاحمر', 32, 'fried-fish.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="fried-fish.jpg" alt="السمك المقلي مع الرز الاحمر" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$32.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">السمك المقلي مع الرز الاحمر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">السمك المقلي مع الرز الاحمر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- المعجنات والمقبلات -->
-            <div data-category="appetizers" onclick="openProductModal('كبة حلب', 3, 'kibbeh-halab.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('كبة حلب', 3, 'kibbeh-halab.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="kibbeh-halab.jpg" alt="كبة حلب" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">كبة حلب</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">كبة حلب</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('كبة الجريش', 3.5, 'cuba gereash.png')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('كبة الجريش', 3.5, 'cuba gereash.png')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="cuba gereash.png" alt="كبة الجريش" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.50</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">كبة الجريش</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">كبة الجريش</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('بتيتة چاب', 3, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('بتيتة چاب', 3, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">بتيتة چاب</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">بتيتة چاب</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('بورك اللحم', 2.5, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('بورك اللحم', 2.5, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.50</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">بورك اللحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">بورك اللحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('بورك الجبن', 2.5, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('بورك الجبن', 2.5, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.50</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">بورك الجبن</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">بورك الجبن</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('لحم بعجين', 4, 'lahm-bajin.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('لحم بعجين', 4, 'lahm-bajin.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="lahm-bajin.jpg" alt="لحم بعجين" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$4.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">لحم بعجين</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">لحم بعجين</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('فطائر الجبن بالنعناع', 3, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('فطائر الجبن بالنعناع', 3, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">فطائر الجبن بالنعناع</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">فطائر الجبن بالنعناع</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('فطائر الزعتر', 2.5, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('فطائر الزعتر', 2.5, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.50</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">فطائر الزعتر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">فطائر الزعتر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('فطائر صدر الدجاج', 3.5, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('فطائر صدر الدجاج', 3.5, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.50</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">فطائر صدر الدجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">فطائر صدر الدجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openProductModal('فليفلة', 2, '')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="appetizers" onclick="showModal('فليفلة', 2, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">فليفلة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">فليفلة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- المخبوزات والخبز -->
-            <div data-category="bakery" onclick="openProductModal('صمون عراقي', 1, 'samoon.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-cat="bakery" onclick="showModal('صمون عراقي', 1, 'samoon.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="samoon.jpg" alt="صمون عراقي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$1.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="font-extrabold text-base text-white mb-1">صمون عراقي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">صمون عراقي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="bakery" onclick="openProductModal('خبز عراقي (تنور)', 1.5, 'khubz-tannour.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
-                <div class="relative h-60 bg-gray-950"><img src="khubz-tannour.jpg" alt="خبز عراقي (تنور)" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-
+            <div data-cat="bakery" onclick="showModal('خبز عراقي (تنور)', 1.5, 'khubz-tannour.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950"><img src="khubz-tannour.jpg" alt="خبز عراقي (تنور)" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$1.50</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">خبز عراقي (تنور)</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="bakery" onclick="showModal('خبز عروك', 3, 'orook.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950"><img src="orook.jpg" alt="خبز عروك" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">خبز عروك</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="bakery" onclick="showModal('خبز بربري', 2, 'uzbek-bread.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950"><img src="uzbek-bread.jpg" alt="خبز بربري" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">خبز بربري</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="bakery" onclick="showModal('لفة خميرة', 2, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">لفة خميرة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="bakery" onclick="showModal('كعك السمسم', 5, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$5.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">كعك السمسم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="bakery" onclick="showModal('الكليچة', 12, 'kleacha.png')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950"><img src="kleacha.png" alt="الكليچة" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$12.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">الكليچة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <!-- السندويتشات -->
+            <div data-cat="sandwiches" onclick="showModal('ساندويچ فلافل', 8, 'falafel-plate.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950"><img src="falafel-plate.jpg" alt="ساندويچ فلافل" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$8.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">ساندويچ فلافل</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="sandwiches" onclick="showModal('ساندويچ تكة دجاج', 12, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$12.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">ساندويچ تكة دجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="sandwiches" onclick="showModal('ساندويچ تكة لحم', 14, '')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$14.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">ساندويچ تكة لحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+            <div data-cat="sandwiches" onclick="showModal('ساندويچ كباب شوي', 11, 'kebab.jpg')" class="dish-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950"><img src="kebab.jpg" alt="ساندويچ كباب شوي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$11.00</span></div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="dish-title font-extrabold text-base text-white mb-1">ساندويچ كباب شوي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- نافذة تفاصيل الطبق -->
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
+        <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
+            <div class="relative h-64 bg-gray-950 flex items-center justify-center">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';">
+                
+                <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/80 hover:bg-black text-amber-400 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg border border-amber-500/30 transition-all z-10">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>العودة للقائمة</span>
+                </button>
+                
+                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-10"></span>
+            </div>
+            <div class="p-6 space-y-4">
+                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
+                
+                <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+                    <span class="text-xs text-gray-400 font-bold">الكمية المطلوب طلبها:</span>
+                    <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
+                        <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
+                        <span id="modal-qty" class="text-sm font-extrabold w-6 text-center text-amber-400">1</span>
+                        <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
+                    </div>
+                </div>
+
+                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-cart-plus"></i>
+                    <span>أضف إلى الصينية</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة صينية الطلبات -->
+    <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
+        <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة</h2>
+                
+                <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>العودة للقائمة</span>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
+
+            <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
+                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
+                
+                <div class="flex gap-2">
+                    <button onclick="setDelivery('pickup')" id="btn-pickup" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black">استلام من المحل</button>
+                    <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400">توصيل للمنزل</button>
+                </div>
+
+                <div id="delivery-options" class="hidden space-y-2 text-xs relative bg-gray-900 p-3 rounded-lg border border-gray-800">
+                    <p class="text-amber-300 font-bold mb-1">عنوان التوصيل:</p>
+                    
+                    <div class="relative">
+                        <input type="text" id="street-input" placeholder="رقم المبنى واسم الشارع (مثل: 1828 Micknight Mill Rd)" oninput="searchAddress()" class="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
+                        <div id="suggestions" class="suggestions-list hidden"></div>
+                    </div>
+
+                    <input type="text" id="city-input" value="Greensboro" placeholder="المدينة" oninput="searchAddress()" class="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
+
+                    <div class="flex gap-2">
+                        <input type="text" id="state-input" value="NC" placeholder="الولاية" oninput="searchAddress()" class="w-1/3 p-2 bg-gray-950 border border-gray-700 rounded text-white text-center font-bold" />
+                        <input type="text" id="zip-input" placeholder="Zip Code (مثل: 27405)" oninput="searchAddress()" class="w-2/3 p-2 bg-gray-950 border border-gray-700 rounded text-white" />
+                    </div>
+
+                    <p id="delivery-text" class="text-amber-400 font-bold mt-1">الرجاء إدخال وااختيار العنوان من القائمة لحساب المسافة...</p>
+                </div>
+
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>إرسال الطلب عبر الواتساب</span>
+                </button>
+            </div>
+        </div>
+    </div>
