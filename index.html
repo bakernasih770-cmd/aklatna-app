@@ -11,7 +11,6 @@
         .suggestions-list { background-color: #1f2937; border: 1px solid #374151; max-height: 180px; overflow-y: auto; position: absolute; width: 100%; z-index: 100; border-radius: 0.5rem; margin-top: 2px; }
         .suggestion-item { padding: 10px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
         .suggestion-item:hover { background-color: #374151; color: #fff; }
-        #hero-section { transition: background-image 1s ease-in-out; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -36,8 +35,8 @@
         </div>
     </header>
 
-    <!-- قسم الهيرو بدون أي تظليل وبخلفية واضحة -->
-    <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('gallery-1.jpg')">
+    <!-- قسم الهيرو بخلفية تتغير بسلاسة -->
+    <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('gallery-1.jpg'); transition: background-image 1s ease-in-out;">
         <div class="relative z-10 max-w-4xl mx-auto">
             <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)]">أكلاتنا</h2>
             <p class="text-xl md:text-2xl font-extrabold text-white mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">أطباق عراقية طازجة ومحضرة بكل حب</p>
@@ -203,7 +202,8 @@
             { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
 
-        var heroImages = ["gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg", "gallery-5.jpg"];
+        // مصفوفة صور الخلفية المتحركة
+        var heroImages = ["gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg", "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg"];
         var currentHeroIndex = 0;
 
         function changeHeroBackground() {
@@ -366,33 +366,4 @@
                 var queryStr = streetVal + ', ' + (cityVal || 'Greensboro') + ', ' + (stateVal || 'NC') + (zipVal ? ' ' + zipVal : '');
                 var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(queryStr) + '&limit=5';
                 fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        var html = '';
-                        for (var i = 0; i < data.length; i++) {
-                            var name = data[i].display_name;
-                            html += '<div class="suggestion-item" onclick="selectAddress(\'' + name.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + name + '</div>';
-                        }
-                        if (html) {
-                            sugBox.innerHTML = html;
-                            sugBox.classList.remove('hidden');
-                        } else {
-                            sugBox.classList.add('hidden');
-                        }
-                    }).catch(err => console.log(err));
-            }, 300);
-        }
-
-        function selectAddress(addressText, lat, lon) {
-            document.getElementById('street-input').value = addressText;
-            document.getElementById('suggestions').classList.add('hidden');
-            if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
-                calculatedMiles = 0.0;
-                updateCartUI();
-                return;
-            }
-            document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
-            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
-            fetch(osrmUrl)
-                .then(response => response.json())
-                .then(data => {
+                    .then(response
