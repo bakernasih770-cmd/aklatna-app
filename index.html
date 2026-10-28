@@ -92,15 +92,15 @@
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-        <!-- أزرار التبويبات والتصنيفات -->
+        <!-- أزرار التبويبات الفعالة -->
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
-            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
-            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
-            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
-            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
-            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
-            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
-            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
+            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950 shadow">الكل</button>
+            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأطباق الرئيسية</button>
+            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المشويات</button>
+            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأسماك</button>
+            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المعجنات والمقبلات</button>
+            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المخبوزات والخبز</button>
+            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">السندويتشات</button>
         </div>
 
         <!-- شبكة عرض الأطباق -->
@@ -189,7 +189,7 @@
     </div>
 
     <script>
-        // قائمة الـ 35 طبق بالكامل مع تصنيفاتها السليمة
+        // قاعدة بيانات الأطباق بالكامل (35 طبقاً)
         var products = [
             { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg" },
             { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg" },
@@ -204,7 +204,7 @@
             { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "tekka meat.png" },
             { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "" },
             { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg" },
-            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg" },
+            { id: 14, name: "السمك المقلي مع الرز الاحمر (الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg" },
             { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg" },
             { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png" },
             { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "" },
@@ -269,6 +269,69 @@
         var originLat = 36.0468;
         var originLon = -79.8833;
 
-        // دالة عرض الأطباق التفاعلية حسب التبويب والبحث
+        // دالة توليد وعرض الأطباق فوراً
         function renderProducts() {
-            var grid = document.getElementById('
+            var grid = document.getElementById('products-grid');
+            if (!grid) return;
+            var queryInput = document.getElementById('search-input');
+            var query = (queryInput && queryInput.value) ? queryInput.value.toLowerCase().trim() : '';
+            var html = '';
+            
+            for (var i = 0; i < products.length; i++) {
+                var p = products[i];
+                var matchCat = (currentCategory === 'all' || p.category === currentCategory);
+                var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
+                
+                if (matchCat && matchQuery) {
+                    var imgContent = p.image ? 
+                        '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' :
+                        '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲</div>';
+
+                    html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
+                        '<div class="relative h-60 bg-gray-950">' +
+                            imgContent +
+                            '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
+                        '</div>' +
+                        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
+                            '<h3 class="font-extrabold text-base text-white mb-1">' + p.name + '</h3>' +
+                            '<span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>' +
+                        '</div>' +
+                    '</div>';
+                }
+            }
+            grid.innerHTML = html;
+        }
+
+        // تفيعل التبويبات الفوري
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            var buttons = document.querySelectorAll('.cat-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700";
+            }
+            if (btn) {
+                btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950 shadow";
+            }
+            renderProducts();
+        }
+
+        function openProductModal(id) {
+            for (var j = 0; j < products.length; j++) {
+                if (products[j].id === id) {
+                    currentActiveProduct = products[j];
+                    break;
+                }
+            }
+            if (!currentActiveProduct) return;
+            currentModalQty = 1;
+            var modalImg = document.getElementById('modal-img');
+
+            if (currentActiveProduct.image) {
+                modalImg.src = currentActiveProduct.image;
+            } else {
+                modalImg.src = 'gallery-1.jpg';
+            }
+            document.getElementById('modal-title').innerText = currentActiveProduct.name;
+            updateModalPriceUI();
+            document.getElementById('modal-qty').innerText = currentModalQty;
+            document.getElementById('product-modal').classList.remove
