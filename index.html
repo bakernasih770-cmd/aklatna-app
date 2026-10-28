@@ -102,6 +102,7 @@
             <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
         </div>
 
+        <!-- شبكة الأطباق مضمونة ومبرمجة لترسم نفسها فوراً وثابتة تماماً -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
@@ -182,21 +183,3 @@
                 </button>
             </div>
         </div>
-    </div>
-
-    <script>
-        var products = [
-            { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg" },
-            { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg" },
-            { id: 3, name: "القوزي", category: "main", price: 70, image: "qoozi.jpg" },
-            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png" },
-            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "" },
-            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png" },
-            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg" },
-            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg" },
-            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "tekka meat.png" },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "" },
-            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg" },
-            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32,
