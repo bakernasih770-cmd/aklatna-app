@@ -39,11 +39,11 @@
         </div>
     </header>
 
-    <!-- قسم الهيرو (بدون تظليل أسود، وصور تتغير تلقائياً) -->
+    <!-- قسم الهيرو الصافي والواضح بدون أي ضبابية أو تظليل -->
     <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center bg-cover bg-center bg-no-repeat" style="background-image: url('gallery-1.jpg')">
-        <div class="relative z-10 max-w-4xl mx-auto bg-black/40 backdrop-blur-sm p-6 rounded-2xl inline-block">
-            <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider drop-shadow-lg">أكلاتنا</h2>
-            <p class="text-xl md:text-2xl font-extrabold text-white mb-6 drop-shadow-md">أطباق عراقية طازجة ومحضرة بكل حب</p>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)]">أكلاتنا</h2>
+            <p class="text-xl md:text-2xl font-extrabold text-white mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">أطباق عراقية طازجة ومحضرة بكل حب</p>
             <input 
                 type="text" 
                 id="search-input"
@@ -86,7 +86,7 @@
             <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[300px]" id="products-grid"></div>
     </main>
 
     <!-- النافذة التفصيلية للأكلة -->
@@ -169,7 +169,6 @@
 
     <script>
         var products = [
-            // الأطباق الرئيسية
             { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg" },
             { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg" },
             { id: 3, name: "القوزي", category: "main", price: 70, image: "qoozi.jpg" },
@@ -179,29 +178,21 @@
             { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png" },
             { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png" },
             { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg" },
-
-            // المشويات
             { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg" },
             { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "tekka meat.png" },
             { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "" },
-
-            // الأسماك
             { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg" },
             { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg" },
-
-            // المعجنات والمقبلات
             { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg" },
             { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png" },
             { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "" },
-            { id: 18, name: "بورڭ اللحم", category: "appetizers", price: 2.5, image: "" },
-            { id: 19, name: "بورڭ الجبن", category: "appetizers", price: 2.5, image: "" },
+            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "" },
+            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "" },
             { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg" },
             { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "" },
             { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "" },
             { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "" },
             { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "" },
-
-            // المخبوزات والخبز
             { id: 25, name: "صمون عراقي", category: "bakery", price: 1, image: "samoon.jpg" },
             { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, image: "khubz-tannour.jpg" },
             { id: 27, name: "خبز عروك", category: "bakery", price: 3, image: "orook.jpg" },
@@ -209,8 +200,6 @@
             { id: 29, name: "لفة خميرة", category: "bakery", price: 2, image: "" },
             { id: 30, name: "كعك السمسم", category: "bakery", price: 5, image: "" },
             { id: 31, name: "الكليچة", category: "bakery", price: 12, image: "kleacha.png" },
-
-            // السندويتشات
             { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg" },
             { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "" },
             { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "" },
@@ -233,7 +222,7 @@
             }
         }
 
-        setInterval(changeHeroBackground, 4000);
+        setInterval(changeHeroBackground, 3500);
 
         var cart = [];
         var currentCategory = 'all';
@@ -248,13 +237,14 @@
         function renderProducts() {
             var grid = document.getElementById('products-grid');
             if (!grid) return;
-            var query = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : '';
+            var queryInput = document.getElementById('search-input');
+            var query = queryInput ? queryInput.value.toLowerCase().trim() : '';
             var html = '';
             
             for (var i = 0; i < products.length; i++) {
                 var p = products[i];
                 var matchCat = (currentCategory === 'all' || p.category === currentCategory);
-                var matchQuery = p.name.toLowerCase().indexOf(query) !== -1;
+                var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
                 
                 if (matchCat && matchQuery) {
                     var imgContent = p.image ? 
@@ -421,30 +411,4 @@
 
             document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
 
-            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
-            
-            fetch(osrmUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.routes && data.routes.length > 0) {
-                        var meters = data.routes[0].distance;
-                        var miles = meters / 1609.344;
-                        calculatedMiles = parseFloat(miles.toFixed(1));
-                        if (calculatedMiles < 0.3) calculatedMiles = 0.0;
-                        updateCartUI();
-                    } else {
-                        fallbackDirectDistance(lat, lon);
-                    }
-                })
-                .catch(err => {
-                    fallbackDirectDistance(lat, lon);
-                });
-        }
-
-        function fallbackDirectDistance(lat, lon) {
-            var R = 3958.8;
-            var dLat = (lat - originLat) * Math.PI / 180;
-            var dLon = (lon - originLon) * Math.PI / 180;
-            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.cos(originLat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
-                    Math.sin(dLon/2) *
+            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=
