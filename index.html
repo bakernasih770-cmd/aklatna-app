@@ -12,7 +12,12 @@
         .suggestion-item { padding: 10px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
         .suggestion-item:hover { background-color: #374151; color: #fff; }
 
-        /* حركة واستبدال سلس للـ 14 صورة في الخلفية */
+        /* قص الشعار دائرياً لإزالة أي خلفية بيضاء خارجية نهائياً */
+        .halal-logo-clip {
+            clip-path: circle(48% at center);
+        }
+
+        /* حركة خلفية المعرض بسلاسة */
         .hero-bg {
             position: absolute;
             inset: 0;
@@ -25,7 +30,7 @@
         }
         .hero-bg.active {
             opacity: 1;
-            transform: scale(1.05); /* حركة زوم ببطء ناعم جداً */
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -34,9 +39,9 @@
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
-                <!-- شعار الحلال بدون حواف بيضاء ومؤطر بالدائرة الخضراء -->
-                <div class="w-12 h-12 rounded-full border-2 border-emerald-500 overflow-hidden flex items-center justify-center bg-emerald-950 shadow-md">
-                    <img src="halal.jpeg" alt="شعار حلال" class="w-full h-full object-cover scale-125">
+                <!-- شعار الحلال مع القص الدائري النقي -->
+                <div class="w-12 h-12 rounded-full border-2 border-emerald-500 overflow-hidden flex items-center justify-center bg-gray-950 shadow-md">
+                    <img src="halal.jpeg" alt="شعار حلال" class="w-full h-full object-cover halal-logo-clip scale-110">
                 </div>
                 <div>
                     <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
@@ -52,7 +57,6 @@
         </div>
     </header>
 
-    <!-- قسم الهيرو مع حركة تنقل الخلفية السلسة -->
     <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
         <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
         <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
@@ -71,7 +75,6 @@
         </div>
     </section>
 
-    <!-- شريط السياسات والمزايا -->
     <div class="bg-gray-900 border-y border-amber-500/30 py-3 px-4 shadow-inner">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-6 text-xs md:text-sm font-bold text-amber-300 text-center">
             <div class="flex items-center gap-2">
@@ -91,7 +94,6 @@
         </div>
     </div>
 
-    <!-- شبكة الأطباق الرئيسية -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
             <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
@@ -106,7 +108,6 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
-    <!-- النافذة التفصيلية للأكلة -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
         <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
             <div class="relative h-64 bg-gray-950 flex items-center justify-center">
@@ -140,13 +141,11 @@
         </div>
     </div>
 
-    <!-- نافذة صينية الطلبات الشاملة (مع مفتاح العودة للقائمة) -->
     <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
         <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
                 <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة</h2>
                 
-                <!-- مفتاح العودة إلى القائمة -->
                 <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
                     <i class="fa-solid fa-arrow-right"></i>
                     <span>العودة للقائمة</span>
@@ -190,3 +189,242 @@
     </div>
 
     <script>
+        var products = [
+            { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg" },
+            { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg" },
+            { id: 3, name: "القوزي", category: "main", price: 70, image: "qoozi.jpg" },
+            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png" },
+            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "" },
+            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "" },
+            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png" },
+            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png" },
+            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg" },
+            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg" },
+            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "tekka meat.png" },
+            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "" },
+            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg" },
+            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg" },
+            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg" },
+            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png" },
+            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "" },
+            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "" },
+            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "" },
+            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg" },
+            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "" },
+            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "" },
+            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "" },
+            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "" },
+            { id: 25, name: "صمون عراقي", category: "bakery", price: 1, image: "samoon.jpg" },
+            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 1.5, image: "khubz-tannour.jpg" },
+            { id: 27, name: "خبز عروك", category: "bakery", price: 3, image: "orook.jpg" },
+            { id: 28, name: "خبز بربري", category: "bakery", price: 2, image: "uzbek-bread.jpg" },
+            { id: 29, name: "لفة خميرة", category: "bakery", price: 2, image: "" },
+            { id: 30, name: "كعك السمسم", category: "bakery", price: 5, image: "" },
+            { id: 31, name: "الكليچة", category: "bakery", price: 12, image: "kleacha.png" },
+            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg" },
+            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "" },
+            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "" },
+            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
+        ];
+
+        var heroImages = [
+            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
+            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
+            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
+            "gallery-13.jpg", "gallery-14.jpg"
+        ];
+        
+        var currentImgIndex = 0;
+        var isLayerOneActive = true;
+
+        function smoothChangeHeroBackground() {
+            var layer1 = document.getElementById('bg-layer-1');
+            var layer2 = document.getElementById('bg-layer-2');
+            if (!layer1 || !layer2) return;
+
+            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+            var nextImage = heroImages[currentImgIndex];
+
+            if (isLayerOneActive) {
+                layer2.style.backgroundImage = "url('" + nextImage + "')";
+                layer1.classList.remove('active');
+                layer2.classList.add('active');
+            } else {
+                layer1.style.backgroundImage = "url('" + nextImage + "')";
+                layer2.classList.remove('active');
+                layer1.classList.add('active');
+            }
+            isLayerOneActive = !isLayerOneActive;
+        }
+
+        setInterval(smoothChangeHeroBackground, 4500);
+
+        var cart = [];
+        var currentCategory = 'all';
+        var deliveryMode = 'pickup';
+        var calculatedMiles = -1;
+        var currentActiveProduct = null;
+        var currentModalQty = 1;
+        var originLat = 36.0468;
+        var originLon = -79.8833;
+
+        function renderProducts() {
+            var grid = document.getElementById('products-grid');
+            if (!grid) return;
+            var queryInput = document.getElementById('search-input');
+            var query = queryInput ? queryInput.value.toLowerCase().trim() : '';
+            var html = '';
+            
+            for (var i = 0; i < products.length; i++) {
+                var p = products[i];
+                var matchCat = (currentCategory === 'all' || p.category === currentCategory);
+                var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
+                
+                if (matchCat && matchQuery) {
+                    var imgContent = p.image ? 
+                        '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover">' :
+                        '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-gray-500 text-xs font-bold">صورة قريباً 📸</div>';
+
+                    html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
+                        '<div class="relative h-60 bg-gray-950">' +
+                            imgContent +
+                            '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$' + p.price.toFixed(2) + '</span>' +
+                        '</div>' +
+                        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
+                            '<h3 class="font-extrabold text-base text-white mb-1">' + p.name + '</h3>' +
+                            '<span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>' +
+                        '</div>' +
+                    '</div>';
+                }
+            }
+            grid.innerHTML = html;
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            var buttons = document.querySelectorAll('.cat-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
+            }
+            if (btn) {
+                btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
+            }
+            renderProducts();
+        }
+
+        function openProductModal(id) {
+            for (var j = 0; j < products.length; j++) {
+                if (products[j].id === id) {
+                    currentActiveProduct = products[j];
+                    break;
+                }
+            }
+            if (!currentActiveProduct) return;
+            currentModalQty = 1;
+            var modalImg = document.getElementById('modal-img');
+            var modalPlaceholder = document.getElementById('modal-img-placeholder');
+
+            if (currentActiveProduct.image) {
+                modalImg.src = currentActiveProduct.image;
+                modalImg.classList.remove('hidden');
+                modalPlaceholder.classList.add('hidden');
+            } else {
+                modalImg.src = '';
+                modalImg.classList.add('hidden');
+                modalPlaceholder.classList.remove('hidden');
+            }
+            document.getElementById('modal-title').innerText = currentActiveProduct.name;
+            updateModalPriceUI();
+            document.getElementById('modal-qty').innerText = currentModalQty;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function changeModalQty(delta) {
+            currentModalQty += delta;
+            if (currentModalQty < 1) currentModalQty = 1;
+            document.getElementById('modal-qty').innerText = currentModalQty;
+            updateModalPriceUI();
+        }
+
+        function updateModalPriceUI() {
+            if (!currentActiveProduct) return;
+            var totalPrice = currentActiveProduct.price * currentModalQty;
+            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
+        }
+
+        function confirmAddToCart() {
+            if (!currentActiveProduct) return;
+            var found = false;
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === currentActiveProduct.id) {
+                    cart[i].quantity += currentModalQty;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                cart.push({
+                    id: currentActiveProduct.id,
+                    name: currentActiveProduct.name,
+                    price: currentActiveProduct.price,
+                    image: currentActiveProduct.image || '',
+                    quantity: currentModalQty
+                });
+            }
+            closeProductModal();
+            updateCartUI();
+        }
+
+        function updateQuantity(id, delta) {
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === id) {
+                    cart[i].quantity += delta;
+                    if (cart[i].quantity <= 0) {
+                        cart.splice(i, 1);
+                    }
+                    break;
+                }
+            }
+            updateCartUI();
+        }
+
+        var searchTimeout;
+        function searchAddress() {
+            clearTimeout(searchTimeout);
+            var streetVal = document.getElementById('street-input').value;
+            var cityVal = document.getElementById('city-input').value;
+            var stateVal = document.getElementById('state-input').value;
+            var zipVal = document.getElementById('zip-input').value;
+            var sugBox = document.getElementById('suggestions');
+
+            if (streetVal.length < 3) {
+                sugBox.classList.add('hidden');
+                return;
+            }
+            searchTimeout = setTimeout(function() {
+                var queryStr = streetVal + ', ' + (cityVal || 'Greensboro') + ', ' + (stateVal || 'NC') + (zipVal ? ' ' + zipVal : '');
+                var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(queryStr) + '&limit=5';
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var html = '';
+                        for (var i = 0; i < data.length; i++) {
+                            var name = data[i].display_name;
+                            html += '<div class="suggestion-item" onclick="selectAddress(\'' + name.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + name + '</div>';
+                        }
+                        if (html) {
+                            sugBox.innerHTML = html;
+                            sugBox.classList.remove('hidden');
+                        } else {
+                            sugBox.classList.add('hidden');
+                        }
+                    }).catch(err => console.log(err));
+            }, 300);
+        }
+
+        function selectAddress(addressText, lat, lon) {
+            document.getElementById('street-input').value = addressText;
