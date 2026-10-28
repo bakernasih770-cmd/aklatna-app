@@ -12,13 +12,13 @@
         .suggestion-item { padding: 10px 12px; font-size: 11px; color: #d1d5db; cursor: pointer; border-bottom: 1px solid #374151; }
         .suggestion-item:hover { background-color: #374151; color: #fff; }
 
-        /* طبقات الخلفية لتلاشي ناعم وبدون أي فلاش أو توقف */
+        /* طبقات الخلفية لتلاشي ناعم بدون فلاش بين الـ 14 صورة */
         .hero-bg {
             position: absolute;
             inset: 0;
             background-size: cover;
             background-position: center;
-            transition: opacity 1.8s ease-in-out;
+            transition: opacity 2s ease-in-out;
             opacity: 0;
             z-index: 1;
         }
@@ -51,8 +51,8 @@
 
     <!-- قسم الهيرو بخلفية تتلاشى بسلاسة وتتضمن الـ 14 صورة بالكامل -->
     <section id="hero-section" class="relative py-28 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950">
-        <div class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
-        <div class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
+        <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
+        <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto">
             <h2 class="text-5xl md:text-7xl font-black text-amber-400 mb-2 tracking-wider drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)]">أكلاتنا</h2>
@@ -219,34 +219,39 @@
             { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg" }
         ];
 
-        // مصفوفة الـ 14 صورة كاملة لخلفية الهيرو
+        // قائمة الـ 14 صورة كاملة بدون نقص
         var heroImages = [
             "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
             "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
             "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
             "gallery-13.jpg", "gallery-14.jpg"
         ];
-        var activeBgIndex = 0;
+        
+        var currentImgIndex = 0;
+        var isLayerOneActive = true;
 
         function smoothChangeHeroBackground() {
-            var bgs = document.querySelectorAll('.hero-bg');
-            if (bgs.length < 2) return;
+            var layer1 = document.getElementById('bg-layer-1');
+            var layer2 = document.getElementById('bg-layer-2');
+            if (!layer1 || !layer2) return;
 
-            var nextIndex = (activeBgIndex + 1) % heroImages.length;
-            
-            var currentLayer = bgs[activeBgIndex % 2];
-            var nextLayer = bgs[(activeBgIndex + 1) % 2]; 
+            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+            var nextImage = heroImages[currentImgIndex];
 
-            nextLayer.style.backgroundImage = "url('" + heroImages[nextIndex] + "')";
-            
-            currentLayer.classList.remove('active');
-            nextLayer.classList.add('active');
-
-            activeBgIndex = nextIndex;
+            if (isLayerOneActive) {
+                layer2.style.backgroundImage = "url('" + nextImage + "')";
+                layer1.classList.remove('active');
+                layer2.classList.add('active');
+            } else {
+                layer1.style.backgroundImage = "url('" + nextImage + "')";
+                layer2.classList.remove('active');
+                layer1.classList.add('active');
+            }
+            isLayerOneActive = !isLayerOneActive;
         }
 
-        // تغيير الصور بدون توقف (كل 4 ثوانٍ بتلاشي ناعم ومتواصل)
-        setInterval(smoothChangeHeroBackground, 4000);
+        // تغيير الصور كل 4.5 ثانية بشكل هادئ وسلس جداً ودائم
+        setInterval(smoothChangeHeroBackground, 4500);
 
         var cart = [];
         var currentCategory = 'all';
@@ -487,4 +492,109 @@
             for (var j = 0; j < cart.length; j++) {
                 var item = cart[j];
                 subtotal += (item.price * item.quantity);
-                var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w
+                var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-gray-500 text-center">لا صورة</div>';
+
+                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
+                    itemImg +
+                    '<div class="flex-1">' +
+                        '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
+                        '<p class="text-xs text-amber-400 font-bold mt-1">$' + (item.price * item.quantity).toFixed(2) + ' <span class="text-[10px] text-gray-400">($' + item.price + ' للوجبة)</span></p>' +
+                    '</div>' +
+                    '<div class="flex items-center gap-2 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
+                        '<button onclick="updateQuantity(' + item.id + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold">-</button>' +
+                        '<span class="text-xs font-bold w-4 text-center">' + item.quantity + '</span>' +
+                        '<button onclick="updateQuantity(' + item.id + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold">+</button>' +
+                    '</div>' +
+                '</div>';
+            }
+
+            var deliveryFee = calculateDeliveryFee(subtotal);
+            var deliveryTextElem = document.getElementById('delivery-text');
+            if (deliveryMode === 'delivery') {
+                if (calculatedMiles >= 0) {
+                    if (deliveryFee === -1) {
+                        deliveryTextElem.innerText = 'مسافة القيادة: ' + calculatedMiles + ' ميل (عذراً، التوصيل غير متاح لأكثر من 30 ميل)';
+                        deliveryTextElem.className = 'text-red-400 font-bold';
+                    } else {
+                        var feeStr = deliveryFee === 0 ? 'مجاني 🎁' : '$' + deliveryFee.toFixed(2);
+                        deliveryTextElem.innerText = 'مسافة القيادة الفعلية: ' + calculatedMiles + ' ميل (التوصيل: ' + feeStr + ')';
+                        deliveryTextElem.className = 'text-amber-400 font-bold';
+                    }
+                } else {
+                    deliveryTextElem.innerText = 'الرجاء إدخال واختيار العنوان من القائمة لحساب المسافة';
+                    deliveryTextElem.className = 'text-amber-400 font-bold';
+                }
+            }
+
+            var finalTotal = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
+            html += '<div class="bg-gray-950 p-3 rounded-xl text-xs space-y-1.5 mt-3 border border-gray-800">' +
+                '<div class="flex justify-between text-gray-400"><span>المجموع الفرعي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
+                (deliveryMode === 'delivery' && deliveryFee !== -1 && calculatedMiles >= 0 ? '<div class="flex justify-between text-amber-400"><span>رسوم التوصيل:</span><span>' + (deliveryFee === 0 ? 'مجاني' : '$' + deliveryFee.toFixed(2)) + '</span></div>' : '') +
+                '<div class="flex justify-between font-bold text-white text-sm pt-1.5 border-t border-gray-800"><span>الإجمالي النهائي:</span><span class="text-amber-400">$' + (deliveryFee === -1 ? subtotal.toFixed(2) : finalTotal.toFixed(2)) + '</span></div>' +
+            '</div>';
+            container.innerHTML = html;
+        }
+
+        function openCart() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+            updateCartUI();
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function setDelivery(mode) {
+            deliveryMode = mode;
+            var btnPickup = document.getElementById('btn-pickup');
+            var btnDelivery = document.getElementById('btn-delivery');
+            var options = document.getElementById('delivery-options');
+            if (mode === 'pickup') {
+                btnPickup.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black";
+                btnDelivery.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400";
+                options.classList.add('hidden');
+                calculatedMiles = -1;
+            } else {
+                btnDelivery.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black";
+                btnPickup.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400";
+                options.classList.remove('hidden');
+            }
+            updateCartUI();
+        }
+
+        function sendWhatsAppOrder() {
+            var name = document.getElementById('customer-name').value;
+            if (!name) {
+                alert("يرجى إدخال اسمك الكريم لتأكيد الطلب.");
+                return;
+            }
+            var subtotal = 0;
+            for (var i = 0; i < cart.length; i++) { subtotal += (cart[i].price * cart[i].quantity); }
+            var deliveryFee = calculateDeliveryFee(subtotal);
+            if (deliveryMode === 'delivery' && (calculatedMiles < 0 || deliveryFee === -1)) {
+                alert("يرجى إدخال واختيار عنوان صحيح ضمن نطاق 30 ميلاً.");
+                return;
+            }
+            var total = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
+            var msg = "طلب جديد من صينية أكلاتنا 🥘\nالاسم: " + name + "\nنوع الطلب: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
+            if (deliveryMode === 'delivery') {
+                msg += "إلى العنوان: " + (document.getElementById('street-input').value || '') + ", " + (document.getElementById('city-input').value || '') + ", " + (document.getElementById('state-input').value || '') + " " + (document.getElementById('zip-input').value || '') + "\nمسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
+            }
+            msg += "--- تفاصيل الوجبات ---\n";
+            for (var j = 0; j < cart.length; j++) {
+                msg += (j + 1) + ". " + cart[j].name + " x" + cart[j].quantity + " = $" + (cart[j].price * cart[j].quantity) + "\n";
+            }
+            msg += "-----------------------\nالمجموع الفرعي: $" + subtotal.toFixed(2) + "\n";
+            if (deliveryMode === 'delivery') { msg += "التوصيل: " + (deliveryFee === 0 ? "مجاني" : "$" + deliveryFee.toFixed(2)) + "\n"; }
+            msg += "الإجمالي النهائي: $" + total.toFixed(2);
+            window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
+        }
+
+        // تشغيل مباشر لإبراز الأطباق
+        renderProducts();
+        window.onload = function() {
+            renderProducts();
+        };
+    </script>
+</body>
+</html>
