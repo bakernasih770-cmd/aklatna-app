@@ -96,7 +96,6 @@
             <h3 class="text-xl font-bold text-amber-400 border-b border-gray-800 pb-2 inline-block">قائمة الأطباق المتوفرة</h3>
         </div>
 
-        <!-- شبكة الأطباق ثابتة ومضمونة الظهور بشكل كامل -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
             
             <div onclick="openProductModal('الدولمة', 45, 'dolma.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
@@ -267,4 +266,84 @@
             <div onclick="openProductModal('خبز عراقي (تنور)', 1.5, 'khubz-tannour.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950">
                     <img src="khubz-tannour.jpg" alt="خبز عراقي (تنور)" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';">
-                    <span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-
+                    <span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$1.50</span>
+                </div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
+                    <h3 class="font-extrabold text-base text-white mb-1">خبز عراقي (تنور)</h3>
+                    <span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>
+                </div>
+            </div>
+
+            <div onclick="openProductModal('خبز عروك', 3, 'orook.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950">
+                    <img src="orook.jpg" alt="خبز عروك" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';">
+                    <span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span>
+                </div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
+                    <h3 class="font-extrabold text-base text-white mb-1">خبز عروك</h3>
+                    <span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>
+                </div>
+            </div>
+
+            <div onclick="openProductModal('خبز بربري', 2, 'uzbek-bread.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950">
+                    <img src="uzbek-bread.jpg" alt="خبز بربري" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';">
+                    <span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.00</span>
+                </div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
+                    <h3 class="font-extrabold text-base text-white mb-1">خبز بربري</h3>
+                    <span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>
+                </div>
+            </div>
+
+            <div onclick="openProductModal('الكليچة', 12, 'kleacha.png')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950">
+                    <img src="kleacha.png" alt="الكليچة" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';">
+                    <span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$12.00</span>
+                </div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
+                    <h3 class="font-extrabold text-base text-white mb-1">الكليچة</h3>
+                    <span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>
+                </div>
+            </div>
+
+            <div onclick="openProductModal('ساندويچ فلافل', 8, 'falafel-plate.jpg')" class="product-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950">
+                    <img src="falafel-plate.jpg" alt="ساندويچ فلافل" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';">
+                    <span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$8.00</span>
+                </div>
+                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
+                    <h3 class="font-extrabold text-base text-white mb-1">ساندويچ فلافل</h3>
+                    <span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- نافذة تفاصيل الطبق -->
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
+        <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
+            <div class="relative h-64 bg-gray-950 flex items-center justify-center">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';">
+                
+                <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/80 hover:bg-black text-amber-400 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg border border-amber-500/30 transition-all z-10">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>العودة للقائمة</span>
+                </button>
+                
+                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-10"></span>
+            </div>
+            <div class="p-6 space-y-4">
+                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
+                
+                <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+                    <span class="text-xs text-gray-400 font-bold">الكمية المطلوب طلبها:</span>
+                    <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
+                        <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
+                        <span id="modal-qty" class="text-sm font-extrabold w-6 text-center text-amber-400">1</span>
+                        <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
+                    </div>
+                </div>
+
+                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded
