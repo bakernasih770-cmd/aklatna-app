@@ -346,4 +346,385 @@
                     </div>
                 </div>
 
-                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded
+                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-cart-plus"></i>
+                    <span>أضف إلى الصينية</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة صينية الطلبات -->
+    <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
+        <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة</h2>
+                
+                <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>العودة للقائمة</span>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
+
+            <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
+                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
+                
+                <div class="flex gap-2">
+                    <button onclick="setDelivery('pickup')" id="btn-pickup" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black">استلام من المحل</button>
+                    <button onclick="setDelivery('delivery')" id="btn-delivery" class="flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400">توصيل للمنزل</button>
+                </div>
+
+                <div id="delivery-options" class="hidden space-y-2 text-xs relative bg-gray-900 p-3 rounded-lg border border-gray-800">
+                    <p class="text-amber-300 font-bold mb-1">عنوان التوصيل:</p>
+                    
+                    <div class="relative">
+                        <input type="text" id="street-input" placeholder="رقم المبنى واسم الشارع (مثل: 1828 Micknight Mill Rd)" oninput="searchAddress()" class="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
+                        <div id="suggestions" class="suggestions-list hidden"></div>
+                    </div>
+
+                    <input type="text" id="city-input" value="Greensboro" placeholder="المدينة" oninput="searchAddress()" class="w-full p-2 bg-gray-950 border border-gray-700 rounded text-white" />
+
+                    <div class="flex gap-2">
+                        <input type="text" id="state-input" value="NC" placeholder="الولاية" oninput="searchAddress()" class="w-1/3 p-2 bg-gray-950 border border-gray-700 rounded text-white text-center font-bold" />
+                        <input type="text" id="zip-input" placeholder="Zip Code (مثل: 27405)" oninput="searchAddress()" class="w-2/3 p-2 bg-gray-950 border border-gray-700 rounded text-white" />
+                    </div>
+
+                    <p id="delivery-text" class="text-amber-400 font-bold mt-1">الرجاء إدخال واختيار العنوان من القائمة لحساب المسافة...</p>
+                </div>
+
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>إرسال الطلب عبر الواتساب</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var heroImages = [
+            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
+            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
+            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
+            "gallery-13.jpg", "gallery-14.jpg"
+        ];
+        
+        var currentImgIndex = 0;
+        var isLayerOneActive = true;
+
+        function smoothChangeHeroBackground() {
+            var layer1 = document.getElementById('bg-layer-1');
+            var layer2 = document.getElementById('bg-layer-2');
+            if (!layer1 || !layer2) return;
+
+            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+            var nextImage = heroImages[currentImgIndex];
+
+            if (isLayerOneActive) {
+                layer2.style.backgroundImage = "url('" + nextImage + "')";
+                layer1.classList.remove('active');
+                layer2.classList.add('active');
+            } else {
+                layer1.style.backgroundImage = "url('" + nextImage + "')";
+                layer2.classList.remove('active');
+                layer1.classList.add('active');
+            }
+            isLayerOneActive = !isLayerOneActive;
+        }
+
+        setInterval(smoothChangeHeroBackground, 4500);
+
+        var cart = [];
+        var deliveryMode = 'pickup';
+        var calculatedMiles = -1;
+        var currentActiveName = "";
+        var currentActivePrice = 0;
+        var currentActiveImage = "";
+        var currentModalQty = 1;
+        var originLat = 36.0468;
+        var originLon = -79.8833;
+
+        function filterSearch() {
+            var query = document.getElementById('search-input').value.toLowerCase().trim();
+            var cards = document.getElementsByClassName('product-card');
+            for (var i = 0; i < cards.length; i++) {
+                var title = cards[i].querySelector('h3').innerText.toLowerCase();
+                if (query === '' || title.indexOf(query) !== -1) {
+                    cards[i].style.display = 'flex';
+                } else {
+                    cards[i].style.display = 'none';
+                }
+            }
+        }
+
+        function openProductModal(name, price, image) {
+            currentActiveName = name;
+            currentActivePrice = price;
+            currentActiveImage = image;
+            currentModalQty = 1;
+
+            var modalImg = document.getElementById('modal-img');
+            modalImg.src = image ? image : 'gallery-1.jpg';
+            
+            document.getElementById('modal-title').innerText = name;
+            document.getElementById('modal-price').innerText = '$' + (price * currentModalQty).toFixed(2);
+            document.getElementById('modal-qty').innerText = currentModalQty;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function changeModalQty(delta) {
+            currentModalQty += delta;
+            if (currentModalQty < 1) currentModalQty = 1;
+            document.getElementById('modal-qty').innerText = currentModalQty;
+            document.getElementById('modal-price').innerText = '$' + (currentActivePrice * currentModalQty).toFixed(2);
+        }
+
+        function confirmAddToCart() {
+            var found = false;
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].name === currentActiveName) {
+                    cart[i].quantity += currentModalQty;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                cart.push({
+                    name: currentActiveName,
+                    price: currentActivePrice,
+                    image: currentActiveImage,
+                    quantity: currentModalQty
+                });
+            }
+            closeProductModal();
+            updateCartUI();
+        }
+
+        function updateQuantity(index, delta) {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        var searchTimeout;
+        function searchAddress() {
+            clearTimeout(searchTimeout);
+            var streetVal = document.getElementById('street-input').value;
+            var cityVal = document.getElementById('city-input').value;
+            var stateVal = document.getElementById('state-input').value;
+            var zipVal = document.getElementById('zip-input').value;
+            var sugBox = document.getElementById('suggestions');
+
+            if (streetVal.length < 3) {
+                sugBox.classList.add('hidden');
+                return;
+            }
+            searchTimeout = setTimeout(function() {
+                var queryStr = streetVal + ', ' + (cityVal || 'Greensboro') + ', ' + (stateVal || 'NC') + (zipVal ? ' ' + zipVal : '');
+                var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(queryStr) + '&limit=5';
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        var html = '';
+                        for (var i = 0; i < data.length; i++) {
+                            var name = data[i].display_name;
+                            html += '<div class="suggestion-item" onclick="selectAddress(\'' + name.replace(/'/g, "") + '\', ' + data[i].lat + ', ' + data[i].lon + ')">' + name + '</div>';
+                        }
+                        if (html) {
+                            sugBox.innerHTML = html;
+                            sugBox.classList.remove('hidden');
+                        } else {
+                            sugBox.classList.add('hidden');
+                        }
+                    }).catch(err => console.log(err));
+            }, 300);
+        }
+
+        function selectAddress(addressText, lat, lon) {
+            document.getElementById('street-input').value = addressText;
+            document.getElementById('suggestions').classList.add('hidden');
+            if (addressText.toLowerCase().indexOf('chaucer') !== -1) {
+                calculatedMiles = 0.0;
+                updateCartUI();
+                return;
+            }
+            document.getElementById('delivery-text').innerText = 'جاري حساب مسافة القيادة الفعلية...';
+            var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + originLon + ',' + originLat + ';' + lon + ',' + lat + '?overview=false';
+            fetch(osrmUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        var meters = data.routes[0].distance;
+                        var miles = meters / 1609.344;
+                        calculatedMiles = parseFloat(miles.toFixed(1));
+                        if (calculatedMiles < 0.3) calculatedMiles = 0.0;
+                        updateCartUI();
+                    } else {
+                        fallbackDirectDistance(lat, lon);
+                    }
+                }).catch(err => fallbackDirectDistance(lat, lon));
+        }
+
+        function fallbackDirectDistance(lat, lon) {
+            var R = 3958.8;
+            var dLat = (lat - originLat) * Math.PI / 180;
+            var dLon = (lon - originLon) * Math.PI / 180;
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(originLat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            calculatedMiles = parseFloat((R * c * 1.25).toFixed(1));
+            if (calculatedMiles < 0.3) calculatedMiles = 0.0;
+            updateCartUI();
+        }
+
+        function calculateDeliveryFee(subtotal) {
+            if (deliveryMode === 'pickup') return 0;
+            if (calculatedMiles < 0) return 0;
+            if (calculatedMiles > 30) return -1;
+            if (calculatedMiles <= 15) {
+                return (subtotal >= 70) ? 0 : 5;
+            }
+            var baseFee = (subtotal >= 70) ? 0 : 5;
+            return baseFee + (calculatedMiles - 15) * 1;
+        }
+
+        function updateCartUI() {
+            var badge = document.getElementById('cart-badge');
+            var totalQty = 0;
+            for (var i = 0; i < cart.length; i++) { totalQty += cart[i].quantity; }
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            var container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-16">صينية الطلبات فارغة حالياً</p>';
+                document.getElementById('cart-footer').style.display = 'none';
+                return;
+            }
+            document.getElementById('cart-footer').style.display = 'block';
+
+            var subtotal = 0;
+            var html = '';
+            for (var j = 0; j < cart.length; j++) {
+                var item = cart[j];
+                subtotal += (item.price * item.quantity);
+                var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-amber-400 text-center">طبق</div>';
+
+                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
+                    itemImg +
+                    '<div class="flex-1">' +
+                        '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
+                        '<p class="text-xs text-amber-400 font-bold mt-1">$' + (item.price * item.quantity).toFixed(2) + ' <span class="text-[10px] text-gray-400">($' + item.price + ' للوجبة)</span></p>' +
+                    '</div>' +
+                    '<div class="flex items-center gap-2">' +
+                        '<div class="flex items-center gap-1 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
+                            '<button onclick="updateQuantity(' + j + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold">-</button>' +
+                            '<span class="text-xs font-bold w-4 text-center">' + item.quantity + '</span>' +
+                            '<button onclick="updateQuantity(' + j + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold">+</button>' +
+                        '</div>' +
+                        '<button onclick="removeCartItem(' + j + ')" title="حذف الطبق" class="w-8 h-8 bg-red-600/80 hover:bg-red-600 text-white rounded-lg flex items-center justify-center text-xs transition-all shadow">' +
+                            '<i class="fa-solid fa-trash-can"></i>' +
+                        '</button>' +
+                    '</div>' +
+                '</div>';
+            }
+
+            var deliveryFee = calculateDeliveryFee(subtotal);
+            var deliveryTextElem = document.getElementById('delivery-text');
+            if (deliveryMode === 'delivery') {
+                if (calculatedMiles >= 0) {
+                    if (deliveryFee === -1) {
+                        deliveryTextElem.innerText = 'مسافة القيادة: ' + calculatedMiles + ' ميل (عذراً، التوصيل غير متاح لأكثر من 30 ميل)';
+                        deliveryTextElem.className = 'text-red-400 font-bold';
+                    } else {
+                        var feeStr = deliveryFee === 0 ? 'مجاني 🎁' : '$' + deliveryFee.toFixed(2);
+                        deliveryTextElem.innerText = 'مسافة القيادة الفعلية: ' + calculatedMiles + ' ميل (التوصيل: ' + feeStr + ')';
+                        deliveryTextElem.className = 'text-amber-400 font-bold';
+                    }
+                } else {
+                    deliveryTextElem.innerText = 'الرجاء إدخال واختيار العنوان من القائمة لحساب المسافة';
+                    deliveryTextElem.className = 'text-amber-400 font-bold';
+                }
+            }
+
+            var finalTotal = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
+            html += '<div class="bg-gray-950 p-3 rounded-xl text-xs space-y-1.5 mt-3 border border-gray-800">' +
+                '<div class="flex justify-between text-gray-400"><span>المجموع الفرعي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
+                (deliveryMode === 'delivery' && deliveryFee !== -1 && calculatedMiles >= 0 ? '<div class="flex justify-between text-amber-400"><span>رسوم التوصيل:</span><span>' + (deliveryFee === 0 ? 'مجاني' : '$' + deliveryFee.toFixed(2)) + '</span></div>' : '') +
+                '<div class="flex justify-between font-bold text-white text-sm pt-1.5 border-t border-gray-800"><span>الإجمالي النهائي:</span><span class="text-amber-400">$' + (deliveryFee === -1 ? subtotal.toFixed(2) : finalTotal.toFixed(2)) + '</span></div>' +
+            '</div>';
+            container.innerHTML = html;
+        }
+
+        function openCart() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+            updateCartUI();
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function setDelivery(mode) {
+            deliveryMode = mode;
+            var btnPickup = document.getElementById('btn-pickup');
+            var btnDelivery = document.getElementById('btn-delivery');
+            var options = document.getElementById('delivery-options');
+            if (mode === 'pickup') {
+                btnPickup.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black";
+                btnDelivery.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400";
+                options.classList.add('hidden');
+                calculatedMiles = -1;
+            } else {
+                btnDelivery.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-amber-500 text-black";
+                btnPickup.className = "flex-1 p-2 border rounded-lg text-xs font-bold bg-gray-900 text-gray-400";
+                options.classList.remove('hidden');
+            }
+            updateCartUI();
+        }
+
+        function sendWhatsAppOrder() {
+            var name = document.getElementById('customer-name').value;
+            if (!name) {
+                alert("يرجى إدخال اسمك الكريم لتأكيد الطلب.");
+                return;
+            }
+            var subtotal = 0;
+            for (var i = 0; i < cart.length; i++) { subtotal += (cart[i].price * cart[i].quantity); }
+            var deliveryFee = calculateDeliveryFee(subtotal);
+            if (deliveryMode === 'delivery' && (calculatedMiles < 0 || deliveryFee === -1)) {
+                alert("يرجى إدخال واختيار عنوان صحيح ضمن نطاق 30 ميلاً.");
+                return;
+            }
+            var total = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
+            var msg = "طلب جديد من صينية أكلاتنا 🥘\nالاسم: " + name + "\nنوع الطلب: " + (deliveryMode === 'delivery' ? "توصيل للمنزل" : "استلام من المحل") + "\n";
+            if (deliveryMode === 'delivery') {
+                msg += "إلى العنوان: " + (document.getElementById('street-input').value || '') + ", " + (document.getElementById('city-input').value || '') + ", " + (document.getElementById('state-input').value || '') + " " + (document.getElementById('zip-input').value || '') + "\nمسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
+            }
+            msg += "--- تفاصيل الوجبات ---\n";
+            for (var j = 0; j < cart.length; j++) {
+                msg += (j + 1) + ". " + cart[j].name + " x" + cart[j].quantity + " = $" + (cart[j].price * cart[j].quantity) + "\n";
+            }
+            msg += "-----------------------\nالمجموع الفرعي: $" + subtotal.toFixed(2) + "\n";
+            if (deliveryMode === 'delivery') { msg += "التوصيل: " + (deliveryFee === 0 ? "مجاني" : "$" + deliveryFee.toFixed(2)) + "\n"; }
+            msg += "الإجمالي النهائي: $" + total.toFixed(2);
+            window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
+        }
+    </script>
+</body>
+</html>
