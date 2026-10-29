@@ -264,7 +264,6 @@
         var originLat = 36.0468;
         var originLon = -79.8833;
 
-        // دالة عرض الأطباق المحمية ضد أي أخطاء
         function renderProducts() {
             try {
                 var grid = document.getElementById('products-grid');
@@ -581,9 +580,9 @@
             if (deliveryMode === 'delivery') {
                 msg += "إلى العنوان: " + (document.getElementById('street-input').value || '') + ", " + (document.getElementById('city-input').value || '') + ", " + (document.getElementById('state-input').value || '') + " " + (document.getElementById('zip-input').value || '') + "\nمسافة القيادة الفعلية: " + calculatedMiles + " ميل\n";
             }
-            msg += "--- تفاصيل الوجبات ---\n";
+            msg += "--- تفاصيل الوجبات والمخبوزات ---\n";
             for (var j = 0; j < cart.length; j++) {
-                msg += (j + 1) + ". " + cart[j].name + " x" + cart[j].quantity + " = $" + (cart[j].price * cart[j].quantity) + "\n";
+                msg += (j + 1) + ". " + cart[j].name + " (الكمية: " + cart[j].quantity + ") = $" + (cart[j].price * cart[j].quantity).toFixed(2) + "\n";
             }
             msg += "-----------------------\nالمجموع الفرعي: $" + subtotal.toFixed(2) + "\n";
             if (deliveryMode === 'delivery') { msg += "التوصيل: " + (deliveryFee === 0 ? "مجاني" : "$" + deliveryFee.toFixed(2)) + "\n"; }
@@ -591,12 +590,10 @@
             window.open("https://wa.me/13369448034?text=" + encodeURIComponent(msg), '_blank');
         }
 
-        // تشغيل فوري وآمن لضمان ظهور الأطباق مباشرة
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', renderProducts);
-        } else {
+        // تشغيل عرض الأطباق عند تحميل الصفحة
+        window.onload = function() {
             renderProducts();
-        }
+        };
     </script>
 </body>
 </html>
