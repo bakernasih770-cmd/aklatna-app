@@ -41,6 +41,7 @@
                     </svg>
                 </div>
                 <div>
+                    <h1 class="text-xl md:text-2xl font-black text-amber-400 tracking-wider">اكلاتنا</h1>
                     <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
                 </div>
             </div>
@@ -59,7 +60,7 @@
         <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto pb-6">
-            <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
+            <h2 class="text-6xl md:text-8xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">اكلاتنا</h2>
             <p class="text-xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
             
             <input 
@@ -92,12 +93,6 @@
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-        <!-- رسالة تطمين توضيحية للزبائن -->
-        <div class="bg-emerald-950/60 border border-emerald-500/40 p-4 rounded-xl mb-8 text-center text-xs md:text-sm text-emerald-300 font-bold shadow-lg">
-            <i class="fa-solid fa-circle-info ml-2 text-emerald-400"></i>
-            ملاحظة للزبائن: شروط الحد الأدنى للمخبوزات أدناه للطلبات المستقلة فقط. إذا كنت تطلب أطباقاً رئيسية، يمكنك إضافة أي عدد تحتاجه من الخبز أو الصمون بحرية تامة!
-        </div>
-
         <!-- أزرار التبويبات المباشرة -->
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
             <button onclick="switchCategory('all', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950 shadow">الكل</button>
@@ -124,9 +119,4 @@
             </div>
 
             <div data-category="main" onclick="openModal('القوزي', 70, 'qoozi.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
-                <div class="relative h-60 bg-gray-950"><img src="qoozi.jpg" alt="القوزي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$70.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">القوزي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
-            </div>
-
-            <div data-category="main" onclick="openModal('دجاج مع طبق رز اصفر', 25, 'chicken with rice.png', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
-                <div class="relative h-60 bg-gray-950"><img src="chicken with rice.png" alt="دجاج مع طبق رز اصفر" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-
+                <div class="relative h-60 bg-gray-950"><img src="qoozi.jpg" alt="القوزي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold
