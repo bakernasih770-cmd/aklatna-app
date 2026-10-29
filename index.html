@@ -212,7 +212,6 @@
             { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "gallery-13.jpg", minLimit: 1, unit: "قطعة" },
             { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "gallery-14.jpg", minLimit: 1, unit: "قطعة" },
             
-            // المخبوزات والخبز (بالقواعد الدقيقة المعتمدة)
             { id: 25, name: "صمون عراقي", category: "bakery", price: 20, image: "samoon.jpg", minLimit: 2, unit: "ربطة", note: "20$ لربطتين (كل ربطة 10 قطع، الحد الأدنى ربطتان، والزيادة بربطة)." },
             { id: 26, name: "الخبز العراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", minLimit: 4, unit: "ربطة", note: "20$ لـ 4 ربطات (كل ربطة 5 أرغفة، الحد الأدنى 4 ربطات، والزيادة بربطة)." },
             { id: 27, name: "خبز عروك (لحم مثروم)", category: "bakery", price: 20, image: "orook.jpg", minLimit: 2, unit: "ربطة", note: "20$ لربطتين (حد أدنى وزيادة بربطة)." },
@@ -487,4 +486,52 @@
                         if (calculatedMiles < 0.3) calculatedMiles = 0.0;
                         updateCartUI();
                     } else {
-                        fallbackDirectDistance(
+                        fallbackDirectDistance(lat, lon);
+                    }
+                }).catch(err => fallbackDirectDistance(lat, lon));
+        }
+
+        function fallbackDirectDistance(lat, lon) {
+            var R = 3958.8;
+            var dLat = (lat - originLat) * Math.PI / 180;
+            var dLon = (lon - originLon) * Math.PI / 180;
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(originLat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            calculatedMiles = parseFloat((R * c * 1.25).toFixed(1));
+            if (calculatedMiles < 0.3) calculatedMiles = 0.0;
+            updateCartUI();
+        }
+
+        function calculateDeliveryFee(subtotal) {
+            if (deliveryMode === 'pickup') return 0;
+            if (calculatedMiles < 0) return 0;
+            if (calculatedMiles > 30) return -1;
+            if (calculatedMiles <= 15) {
+                return (subtotal >= 70) ? 0 : 5;
+            }
+            var baseFee = (subtotal >= 70) ? 0 : 5;
+            return baseFee + (calculatedMiles - 15) * 1;
+        }
+
+        function updateCartUI() {
+            var badge = document.getElementById('cart-badge');
+            var totalQty = 0;
+            for (var i = 0; i < cart.length; i++) { totalQty += cart[i].quantity; }
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            var container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-16">صينية الطلبات فارغة حالياً</p>';
+                document.getElementById('cart-footer').style.display = 'none';
+                return;
+            }
+            document.getElementById('cart-footer').style.display = 'block';
+
+            var subtotal = 0;
+            var html = '';
+            for (var j = 0; j < cart.length
