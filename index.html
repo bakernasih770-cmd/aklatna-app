@@ -190,19 +190,19 @@
             { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg", minLimit: 1, unit: "وجبة" },
             { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg", minLimit: 1, unit: "وجبة" },
             { id: 3, name: "القوزي", category: "main", price: 70, image: "qoozi.jpg", minLimit: 1, unit: "وجبة" },
-            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", minLimit: 1, unit: "وجبة" },
+            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "gallery-1.jpg", minLimit: 1, unit: "وجبة" },
             { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "gallery-2.jpg", minLimit: 1, unit: "وجبة" },
             { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "gallery-3.jpg", minLimit: 1, unit: "وجبة" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", minLimit: 1, unit: "وجبة" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", minLimit: 1, unit: "وجبة" },
+            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "gallery-4.jpg", minLimit: 1, unit: "وجبة" },
+            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "gallery-5.jpg", minLimit: 1, unit: "وجبة" },
             { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg", minLimit: 1, unit: "وجبة" },
             { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", minLimit: 1, unit: "وجبة" },
-            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "tekka meat.png", minLimit: 1, unit: "وجبة" },
+            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "gallery-6.jpg", minLimit: 1, unit: "وجبة" },
             { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "gallery-7.jpg", minLimit: 1, unit: "وجبة" },
             { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", minLimit: 1, unit: "وجبة" },
             { id: 14, name: "السمك المقلي مع الرز الاحمر", category: "fish", price: 32, image: "fried-fish.jpg", minLimit: 1, unit: "وجبة" },
             { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg", minLimit: 1, unit: "قطعة" },
-            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png", minLimit: 1, unit: "قطعة" },
+            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba-gereash.png", minLimit: 1, unit: "قطعة" },
             { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "gallery-8.jpg", minLimit: 1, unit: "قطعة" },
             { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "gallery-9.jpg", minLimit: 1, unit: "قطعة" },
             { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "gallery-10.jpg", minLimit: 1, unit: "قطعة" },
@@ -557,25 +557,4 @@
             }
 
             var deliveryFee = calculateDeliveryFee(subtotal);
-            var deliveryTextElem = document.getElementById('delivery-text');
-            if (deliveryMode === 'delivery') {
-                if (calculatedMiles >= 0) {
-                    if (deliveryFee === -1) {
-                        deliveryTextElem.innerText = 'مسافة القيادة: ' + calculatedMiles + ' ميل (عذراً، التوصيل غير متاح لأكثر من 30 ميل)';
-                        deliveryTextElem.className = 'text-red-400 font-bold';
-                    } else {
-                        var feeStr = deliveryFee === 0 ? 'مجاني 🎁' : '$' + deliveryFee.toFixed(2);
-                        deliveryTextElem.innerText = 'مسافة القيادة الفعلية: ' + calculatedMiles + ' ميل (التوصيل: ' + feeStr + ')';
-                        deliveryTextElem.className = 'text-amber-400 font-bold';
-                    }
-                } else {
-                    deliveryTextElem.innerText = 'الرجاء إدخال واختيار العنوان لحساب المسافة';
-                    deliveryTextElem.className = 'text-amber-400 font-bold';
-                }
-            }
-
-            var finalTotal = subtotal + (deliveryMode === 'delivery' && deliveryFee > 0 ? deliveryFee : 0);
-            html += '<div class="bg-gray-950 p-3 rounded-xl text-xs space-y-1.5 mt-3 border border-gray-800">' +
-                '<div class="flex justify-between text-gray-400"><span>المجموع الفرعي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
-                (deliveryMode === 'delivery' && deliveryFee !== -1 && calculatedMiles >= 0 ? '<div class="flex justify-between text-amber-400"><span>رسوم التوصيل:</span><span>' + (deliveryFee === 0 ? 'مجاني' : '$' + deliveryFee.toFixed(2)) + '</span></div>' : '') +
-                '<div class="flex justify-between font-bold text-white text-sm pt-1.5 border-t border-gray-800"><span>الإجمالي النهائي:</span><span class="text-amber-
+            var deliveryTextElem = document.getElementById('
