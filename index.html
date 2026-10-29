@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3 space-x-reverse">
-                <button onclick="openCart()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all relative">
+                <button id="cart-btn" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all relative">
                     <i class="fa-solid fa-utensils"></i>
                     <span>الصينية</span>
                     <span id="cart-badge" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
@@ -67,7 +67,6 @@
                 type="text" 
                 id="search-input"
                 placeholder="ابحث عن طبقك المفضّل..." 
-                oninput="filterCards()"
                 class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
             />
         </div>
@@ -95,144 +94,144 @@
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
         <!-- أزرار التبويبات -->
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
-            <button onclick="switchCategory('all', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950 shadow">الكل</button>
-            <button onclick="switchCategory('main', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأطباق الرئيسية</button>
-            <button onclick="switchCategory('grills', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المشويات</button>
-            <button onclick="switchCategory('fish', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأسماك</button>
-            <button onclick="switchCategory('appetizers', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المعجنات والمقبلات</button>
-            <button onclick="switchCategory('bakery', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المخبوزات والخبز</button>
-            <button onclick="switchCategory('sandwiches', this)" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">السندويتشات</button>
+            <button data-cat="all" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950 shadow">الكل</button>
+            <button data-cat="main" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأطباق الرئيسية</button>
+            <button data-cat="grills" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المشويات</button>
+            <button data-cat="fish" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">الأسماك</button>
+            <button data-cat="appetizers" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المعجنات والمقبلات</button>
+            <button data-cat="bakery" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">المخبوزات والخبز</button>
+            <button data-cat="sandwiches" class="tab-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400 hover:bg-gray-700">السندويتشات</button>
         </div>
 
-        <!-- شبكة الأطباق -->
+        <!-- شبكة الأطباق (الـ 36 نوع) -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
             
             <!-- الأطباق الرئيسية -->
-            <div data-category="main" onclick="openModal('الدولمة', 45, 'dolma.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="الدولمة" data-price="45" data-img="dolma.jpg" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="dolma.jpg" alt="الدولمة" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$45.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">الدولمة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('الباچة', 60, 'pacha.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="الباچة" data-price="60" data-img="pacha.jpg" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="pacha.jpg" alt="الباچة" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$60.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">الباچة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('القوزي', 70, 'qoozi.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="القوزي" data-price="70" data-img="qoozi.jpg" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="qoozi.jpg" alt="القوزي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$70.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">القوزي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('دجاج مع طبق رز اصفر', 25, 'chicken with rice.png', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="دجاج مع طبق رز اصفر" data-price="25" data-img="chicken with rice.png" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="chicken with rice.png" alt="دجاج مع طبق رز اصفر" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$25.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">دجاج مع طبق رز اصفر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('دجاج مع طبق رز احمر', 25, '', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="دجاج مع طبق رز احمر" data-price="25" data-img="" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$25.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">دجاج مع طبق رز احمر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('القيمة مع الرز', 20, '', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="القيمة مع الرز" data-price="20" data-img="" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$20.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">القيمة مع الرز</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('البرياني بالدجاج', 28, 'byriani chicken.png', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="البرياني بالدجاج" data-price="28" data-img="byriani chicken.png" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="byriani chicken.png" alt="البرياني بالدجاج" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$28.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">البرياني بالدجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('البرياني باللحم', 32, 'byriani meat.png', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="البرياني باللحم" data-price="32" data-img="byriani meat.png" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="byriani meat.png" alt="البرياني باللحم" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$32.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">البرياني باللحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="main" onclick="openModal('باقلاء بالدهن', 18, 'baqla-dehn.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="main" data-name="باقلاء بالدهن" data-price="18" data-img="baqla-dehn.jpg" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="baqla-dehn.jpg" alt="باقلاء بالدهن" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$18.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">باقلاء بالدهن</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- المشويات -->
-            <div data-category="grills" onclick="openModal('كباب شوي', 30, 'kebab.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="grills" data-name="كباب شوي" data-price="30" data-img="kebab.jpg" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="kebab.jpg" alt="كباب شوي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$30.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">كباب شوي</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="grills" onclick="openModal('تكة لحم', 35, 'tekka meat.png', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="grills" data-name="تكة لحم" data-price="35" data-img="tekka meat.png" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="tekka meat.png" alt="تكة لحم" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$35.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">تكة لحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="grills" onclick="openModal('تكة دجاج', 25, '', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="grills" data-name="تكة دجاج" data-price="25" data-img="" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$25.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">تكة دجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- الأسماك -->
-            <div data-category="fish" onclick="openModal('السمك المشوي Tilapia', 28, 'masgouf.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="fish" data-name="السمك المشوي Tilapia" data-price="28" data-img="masgouf.jpg" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="masgouf.jpg" alt="السمك المشوي Tilapia" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$28.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">السمك المشوي Tilapia</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="fish" onclick="openModal('السمك المقلي مع الرز الاحمر', 32, 'fried-fish.jpg', 1, 1, 'وجبة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="fish" data-name="السمك المقلي مع الرز الاحمر" data-price="32" data-img="fried-fish.jpg" data-min="1" data-step="1" data-unit="وجبة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="fried-fish.jpg" alt="السمك المقلي مع الرز الاحمر" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$32.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">السمك المقلي مع الرز الاحمر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- المعجنات والمقبلات -->
-            <div data-category="appetizers" onclick="openModal('كبة حلب', 3, 'kibbeh-halab.jpg', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="كبة حلب" data-price="3" data-img="kibbeh-halab.jpg" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="kibbeh-halab.jpg" alt="كبة حلب" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">كبة حلب</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('كبة الجريش', 3.5, 'cuba gereash.png', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="كبة الجريش" data-price="3.5" data-img="cuba gereash.png" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="cuba gereash.png" alt="كبة الجريش" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.50</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">كبة الجريش</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('بتيتة چاب', 3, '', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="بتيتة چاب" data-price="3" data-img="" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">بتيتة چاب</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('بورك اللحم', 2.5, '', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="بورك اللحم" data-price="2.5" data-img="" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.50</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">بورك اللحم</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('بورك الجبن', 2.5, '', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="بورك الجبن" data-price="2.5" data-img="" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.50</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">بورك الجبن</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('لحم بعجين', 4, 'lahm-bajin.jpg', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="لحم بعجين" data-price="4" data-img="lahm-bajin.jpg" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="lahm-bajin.jpg" alt="لحم بعجين" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$4.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">لحم بعجين</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('فطائر الجبن بالنعناع', 3, '', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="فطائر الجبن بالنعناع" data-price="3" data-img="" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">فطائر الجبن بالنعناع</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('فطائر الزعتر', 2.5, '', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="فطائر الزعتر" data-price="2.5" data-img="" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.50</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">فطائر الزعتر</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('فطائر صدر الدجاج', 3.5, '', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="فطائر صدر الدجاج" data-price="3.5" data-img="" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$3.50</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">فطائر صدر الدجاج</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
-            <div data-category="appetizers" onclick="openModal('فليفلة', 2, '', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="appetizers" data-name="فليفلة" data-price="2" data-img="" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950 flex items-center justify-center text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.00</span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900"><h3 class="card-title font-extrabold text-base text-white mb-1">فليفلة</h3><span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span></div>
             </div>
 
             <!-- المخبوزات والخبز -->
-            <div data-category="bakery" onclick="openModal('خبز عراقي (تنور)', 20, 'khubz-tannour.jpg', 4, 4, 'ربطة (5 أرغفة)')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="bakery" data-name="خبز عراقي (تنور)" data-price="20" data-img="khubz-tannour.jpg" data-min="4" data-step="4" data-unit="ربطة (5 أرغفة)" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="khubz-tannour.jpg" alt="خبز عراقي (تنور)" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$20.00 <span class="text-[10px] text-gray-300">(4 ربطات)</span></span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
                     <h3 class="card-title font-extrabold text-base text-white mb-1">خبز عراقي (تنور)</h3>
@@ -241,7 +240,7 @@
                 </div>
             </div>
 
-            <div data-category="bakery" onclick="openModal('صمون عراقي', 10, 'samoon.jpg', 2, 2, 'ربطة (10 صمونات)')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+            <div data-category="bakery" data-name="صمون عراقي" data-price="10" data-img="samoon.jpg" data-min="2" data-step="2" data-unit="ربطة (10 صمونات)" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
                 <div class="relative h-60 bg-gray-950"><img src="samoon.jpg" alt="صمون عراقي" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$10.00 <span class="text-[10px] text-gray-300">(ربطتين)</span></span></div>
                 <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
                     <h3 class="card-title font-extrabold text-base text-white mb-1">صمون عراقي</h3>
@@ -250,14 +249,5 @@
                 </div>
             </div>
 
-            <div data-category="bakery" onclick="openModal('خبز عروك (لحم مثروم)', 2, 'orook.jpg', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
-                <div class="relative h-60 bg-gray-950"><img src="orook.jpg" alt="خبز عروك لحم مثروم" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='gallery-1.jpg';"><span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">$2.00</span></div>
-                <div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">
-                    <h3 class="card-title font-extrabold text-base text-white mb-1">خبز عروك (لحم مثروم)</h3>
-                    <p class="text-[11px] text-emerald-400 font-semibold leading-relaxed mb-1">💡 يمكنك طلب أي عدد تحتاجه بحرية تامة!</p>
-                    <span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>
-                </div>
-            </div>
-
-            <div data-category="bakery" onclick="openModal('خبز عروك (لحم صحاح)', 3, 'orook.jpg', 1, 1, 'قطعة')" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
-                <div class="relative h-60 bg-gray-950"><img src="orook.jpg" alt="خبز عروك لحم صحاح" class="w-full h-full object-cover" onerror="this.onerror=null;
+            <div data-category="bakery" data-name="خبز عروك (لحم مثروم)" data-price="2" data-img="orook.jpg" data-min="1" data-step="1" data-unit="قطعة" class="food-card bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">
+                <div class="relative h-60 bg-gray-950"><img
