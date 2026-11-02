@@ -428,19 +428,21 @@
                 subtotal += itemTotalPrice;
                 var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-amber-400 text-center">طبق</div>';
 
-                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3 relative">' +
-                    itemImg +
-                    '<div class="flex-1">' +
-                        '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
-                        '<p class="text-xs text-amber-400 font-bold mt-1">$' + itemTotalPrice.toFixed(2) + ' <span class="text-[10px] text-gray-400">(' + item.quantity + ' ' + (item.unitLabel || '') + ')</span></p>' +
+                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
+                    '<div class="flex items-center gap-3 flex-1">' +
+                        itemImg +
+                        '<div>' +
+                            '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
+                            '<p class="text-xs text-amber-400 font-bold mt-1">$' + itemTotalPrice.toFixed(2) + ' <span class="text-[10px] text-gray-400">(' + item.quantity + ' ' + (item.unitLabel || '') + ')</span></p>' +
+                        '</div>' +
                     '</div>' +
-                    '<div class="flex items-center gap-2">' +
-                        '<div class="flex items-center gap-1 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
+                    '<div class="flex items-center gap-3">' +
+                        '<div class="flex items-center gap-1.5 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
                             '<button onclick="updateQuantity(' + item.id + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>' +
-                            '<span class="text-xs font-bold px-1 text-center text-amber-300">' + item.quantity + '</span>' +
+                            '<span class="text-xs font-bold px-1.5 text-center text-amber-300 min-w-[20px]">' + item.quantity + '</span>' +
                             '<button onclick="updateQuantity(' + item.id + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>' +
                         '</div>' +
-                        '<button onclick="removeItemFromCart(' + item.id + ')" class="w-7 h-7 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30" title="حذف الطبق">' +
+                        '<button onclick="removeItemFromCart(' + item.id + ')" class="w-8 h-8 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30 shadow" title="حذف الطبق">' +
                             '<i class="fa-solid fa-xmark"></i>' +
                         '</button>' +
                     '</div>' +
@@ -484,7 +486,8 @@
 
             msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
 
-            var phone = "13369876543"; // استبدل برقم الهاتف الخاص بك
+            // رقم الهاتف الخاص بك للواتساب (يمكنك تغييره مستقبلاً هنا بكل سهولة)
+            var phone = "13366867948"; 
             var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
             window.open(url, '_blank');
         }
