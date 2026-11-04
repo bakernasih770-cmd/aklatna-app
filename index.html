@@ -218,7 +218,7 @@
     </div>
 
     <script>
-        var isKitchenOpen = true; // التحكم بالزخم (false لإيقاف الطلبات مؤقتاً)
+        var isKitchenOpen = true;
 
         var products = [
             { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "gallery-1.jpg", note: "دولمة عراقية أصيلة طازجة" },
@@ -296,4 +296,86 @@
                 var html = '';
                 var foundAny = false;
                 
-                for (var i =
+                for (var i = 0; i < products.length; i++) {
+                    var p = products[i];
+                    var matchCat = (currentCategory === 'all' || p.category === currentCategory);
+                    var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
+                    
+                    if (matchCat && matchQuery) {
+                        foundAny = true;
+                        var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.price ? '$' + p.price.toFixed(2) : '');
+                        html += '<div onclick="openProductModal(' + p.id + ')" class="product-card">' +
+                            '<div class="product-img-box">' +
+                                '<img src="' + p.image + '" alt="' + p.name + '" class="product-img" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' +
+                                '<span class="product-price-tag">' + priceDisplay + '</span>' +
+                            '</div>' +
+                            '<div class="product-info">' +
+                                '<div>' +
+                                    '<h3 class="product-title">' + p.name + '</h3>' +
+                                    (p.note ? '<p class="product-note">' + p.note + '</p>' : '') +
+                                '</div>' +
+                                '<span class="product-action">اضغط للتفاصيل 🔍</span>' +
+                            '</div>' +
+                        '</div>';
+                    }
+                }
+                if (!foundAny) {
+                    html = '<div style="grid-column: 1/-1; text-align: center; color: #9ca3af; padding: 48px 0; font-size: 14px; font-weight: bold;">عذراً، لم يتم العثور على أطباق تطابق بحثك</div>';
+                }
+                grid.innerHTML = html;
+            } catch (e) {
+                console.error("Render error:", e);
+            }
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            var buttons = document.querySelectorAll('.cat-btn');
+            for (var i = 0; i < buttons.length; i++) buttons[i].className = "cat-btn";
+            if (btn) btn.className = "cat-btn active";
+            renderProducts();
+        }
+
+        function openProductModal(id) {
+            for (var j = 0; j < products.length; j++) {
+                if (products[j].id === id) { currentActiveProduct = products[j]; break; }
+            }
+            if (!currentActiveProduct) return;
+            currentModalQty = currentActiveProduct.minQty || 1;
+            dolmaSelectedSize = 'small';
+            extraBreadQty = 0;
+            extraSamoonQty = 0;
+            document.getElementById('extra-bread-qty').innerText = 0;
+            document.getElementById('extra-samoon-qty').innerText = 0;
+            document.getElementById('item-custom-note').value = '';
+            
+            document.getElementById('modal-img-container').innerHTML = '<img src="' + currentActiveProduct.image + '" style="width:100%; height:100%; object-fit:cover;" onerror="this.src=\'gallery-1.jpg\'">';
+            document.getElementById('modal-title').innerText = currentActiveProduct.name;
+            
+            var noteEl = document.getElementById('modal-note');
+            if (currentActiveProduct.note) { noteEl.innerText = "📌 " + currentActiveProduct.note; noteEl.style.display = 'block'; } else { noteEl.style.display = 'none'; }
+
+            var dolmaSec = document.getElementById('dolma-size-section');
+            var normalQty = document.getElementById('normal-qty-wrapper');
+            var extraSec = document.getElementById('extra-bread-section');
+
+            if (currentActiveProduct.isDolmaBased) {
+                dolmaSec.style.display = 'flex';
+                normalQty.style.display = 'none';
+                updateDolmaSizeUIButtons();
+            } else {
+                dolmaSec.style.display = 'none';
+                normalQty.style.display = 'flex';
+            }
+
+            if (currentActiveProduct.category === 'main' || currentActiveProduct.category === 'grills') {
+                extraSec.style.display = 'flex';
+            } else {
+                extraSec.style.display = 'none';
+            }
+
+            updateModalPriceUI();
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() { document.getElementById('product-modal').classList.add('hidden'); }
