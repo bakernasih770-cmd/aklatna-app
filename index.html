@@ -40,7 +40,13 @@
                     <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-3 space-x-reverse">
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <!-- زر الأرشيف والسجل الخاص بالإدارة فقط -->
+                <button onclick="openArchive()" class="bg-gray-800 hover:bg-gray-700 text-amber-400 border border-amber-500/40 font-bold px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow transition-all">
+                    <i class="fa-solid fa-box-archive"></i>
+                    <span>الأرشيف والسجل</span>
+                </button>
+                <!-- زر الصينية -->
                 <button onclick="openCart()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all relative">
                     <i class="fa-solid fa-utensils"></i>
                     <span>الصينية</span>
@@ -115,7 +121,6 @@
                 <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
                 <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2 rounded-lg border border-gray-800 hidden"></p>
                 
-                <!-- خيار اختيار حجم قدر الدولمة -->
                 <div id="dolma-size-section" class="space-y-2 hidden">
                     <label class="text-xs text-gray-400 font-bold block">اختر حجم القدر:</label>
                     <div class="grid grid-cols-3 gap-2">
@@ -136,7 +141,6 @@
 
                 <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
-                <!-- خيارات إضافية للخبز والصمون -->
                 <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
                     <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
                     <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
@@ -187,6 +191,11 @@
             <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
                 <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
 
+                <div class="space-y-1">
+                    <label class="text-xs text-gray-400 font-bold block">تاريخ الاستلام المطلوب (قبل 24 ساعة):</label>
+                    <input type="date" id="order-date" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
+                </div>
+
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-lg"></i>
                     <span>إرسال الطلب عبر الواتساب</span>
@@ -195,7 +204,23 @@
         </div>
     </div>
 
+    <!-- Modal الأرشيف وسجل الطلبات -->
+    <div id="archive-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
+        <div class="w-full max-w-2xl bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-box-archive ml-2"></i> أرشيف وسجل الطلبات السابقة</h2>
+                <button onclick="closeArchive()" class="text-amber-400 bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl text-xs font-bold">إغلاق</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="archive-items-container"></div>
+            <div class="p-3 bg-gray-950 border-t border-gray-800 text-center">
+                <button onclick="clearArchive()" class="text-xs text-red-400 hover:text-red-300 font-bold">إفراغ السجل والأرشيف</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        var isKitchenOpen = true; // التحكم بالزخم (اجعلها false لإيقاف استقبال الطلبات مؤقتاً)
+
         var products = [
             { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
             { id: 2, name: "الباچة", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" },
@@ -608,39 +633,47 @@
             document.getElementById('cart-modal').classList.add('hidden');
         }
 
+        // إرسال الطلب بتنسيق جدول مرتب عبر الواتساب مع الحفظ التلقائي في الأرشيف
         function sendWhatsAppOrder() {
-            var name = document.getElementById('customer-name').value.trim();
-            if (!name) {
-                alert('يرجى كتابة الاسم الكريم قبل إرسال الطلب.');
+            if (!isKitchenOpen) {
+                alert('عذراً، لقد وصلنا إلى الحد الأقصى من الطلبات ولا يمكن استقبال طلبات جديدة حالياً لضمان جودة التحضير.');
                 return;
             }
-            var subtotal = 0;
-            
-            var msg = "مرحباً، أود تقديم طلب جديد:\n\n";
-            msg += "👤 الاسم: " + name + "\n\n";
 
-            msg += "📋 تفاصيل الأطباق:\n";
-            for (var j = 0; j < cart.length; j++) {
-                subtotal += cart[j].price;
-                msg += "- " + cart[j].name + " (" + cart[j].quantityText + ")";
-                if (cart[j].customNote) {
-                    msg += " [ملاحظة: " + cart[j].customNote + "]";
-                }
-                msg += " - $" + cart[j].price.toFixed(2) + "\n";
+            var name = document.getElementById('customer-name').value.trim();
+            var orderDate = document.getElementById('order-date').value;
+
+            if (!name) {
+                alert('يرجى كتابة الاسم الكريم.');
+                return;
+            }
+            if (!orderDate) {
+                alert('يرجى تحديد تاريخ استلام الطلب.');
+                return;
             }
 
-            msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
+            var subtotal = 0;
+            var msg = "مرحباً، أود تقديم طلب جديد:\n\n";
+            msg += "👤 الاسم: " + name + "\n";
+            msg += "📅 تاريخ الاستلام: " + orderDate + "\n\n";
+            msg += "-----------------------------------\n";
+            msg += "| الطبق والكمية         | السعر   |\n";
+            msg += "-----------------------------------\n";
+
+            for (var j = 0; j < cart.length; j++) {
+                subtotal += cart[j].price;
+                var lineItem = "- " + cart[j].name + " (" + cart[j].quantityText + ")";
+                if (cart[j].customNote) {
+                    lineItem += " [" + cart[j].customNote + "]";
+                }
+                msg += lineItem + " | $" + cart[j].price.toFixed(2) + "\n";
+            }
+
+            msg += "-----------------------------------\n";
+            msg += "💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
+
+            // حفظ الطلب في الأرشيف الخاص بالمطعم
+            saveToArchive(name, orderDate, [...cart], subtotal);
 
             var phone = "3366867948"; 
-            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
-            window.open(url, '_blank');
-        }
-
-        // تشغيل عرض الأطباق مباشرة عند التحميل
-        document.addEventListener('DOMContentLoaded', function() {
-            renderProducts();
-        });
-        renderProducts();
-    </script>
-</body>
-</html>
+            var
