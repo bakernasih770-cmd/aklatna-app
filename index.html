@@ -4,172 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أكلاتنا - طبخ بيتي عراقي في جرينزبورو</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Cairo', sans-serif; background-color: #0b0f19; color: #f3f4f6; min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 40px; }
-        header { background-color: #111827; border-bottom: 1px solid #1f2937; position: sticky; top: 0; z-index: 30; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
-        .header-container { max-width: 1200px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
-        .logo-box { width: 48px; height: 48px; border-radius: 50%; background-color: #059669; border: 2px solid #34d399; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .btn-base { font-weight: bold; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; transition: 0.2s; }
-        .cart-btn { background-color: #f59e0b; color: #030712; position: relative; }
-        .archive-btn { background-color: #1f2937; color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background-color: #dc2626; color: white; font-size: 11px; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .hidden { display: none !important; }
-
-        .hero { position: relative; padding: 80px 16px; text-align: center; background-color: #030712; min-height: 400px; display: flex; flex-direction: column; justify-content: flex-end; border-bottom: 1px solid #1f2937; overflow: hidden; }
-        .hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 2.5s ease-in-out; opacity: 0; z-index: 1; }
-        .hero-bg.active { opacity: 1; }
-        .hero-content { position: relative; z-index: 10; max-width: 800px; margin: 0 auto; padding-bottom: 20px; }
-        .search-input { width: 100%; max-width: 500px; background-color: rgba(3,7,18,0.9); border: 1px solid rgba(245,158,11,0.6); border-radius: 12px; padding: 12px 20px; color: white; font-size: 14px; outline: none; margin-top: 16px; }
-
-        .info-bar { background-color: #111827; border-bottom: 1px solid rgba(245,158,11,0.3); padding: 12px 16px; text-align: center; }
-        .info-content { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 24px; font-size: 13px; font-weight: bold; color: #fde68a; }
-
-        main { max-width: 1200px; margin: 0 auto; padding: 32px 16px; width: 100%; flex-grow: 1; }
-        .categories { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 32px; justify-content: center; flex-wrap: wrap; }
-        .cat-btn { padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 12px; cursor: pointer; border: none; background-color: #1f2937; color: #9ca3af; }
-        .cat-btn.active { background-color: #fbbf24; color: #030712; font-weight: bold; }
-
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; width: 100%; }
-        .product-card { background-color: #111827; border: 1px solid #1f2937; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .product-card:hover { border-color: rgba(245,158,11,0.5); }
-        .product-img-box { position: relative; height: 220px; background-color: #030712; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .product-img { width: 100%; height: 100%; object-fit: cover; }
-        .product-price-tag { position: absolute; top: 12px; left: 12px; background-color: rgba(0,0,0,0.8); padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: bold; color: #fbbf24; z-index: 10; }
-        .product-info { padding: 16px; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-title { font-weight: 800; font-size: 16px; color: white; margin-bottom: 4px; }
-        .product-note { font-size: 11px; color: #fde68a; margin-bottom: 8px; font-weight: bold; }
-        .product-action { font-size: 12px; color: #fbbf24; font-weight: bold; }
-
-        .modal-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.85); padding: 16px; }
-        .modal-content { width: 100%; max-width: 440px; background-color: #111827; color: white; border-radius: 16px; overflow: hidden; border: 1px solid #1f2937; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); }
-        .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-        .modal-btn-main { width: 100%; background-color: #fbbf24; color: #030712; font-weight: 800; padding: 12px; border-radius: 12px; border: none; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .cart-drawer { position: fixed; inset: 0; z-index: 50; display: flex; justify-content: flex-end; background-color: rgba(0,0,0,0.85); }
-        .cart-panel { width: 100%; max-width: 480px; background-color: #111827; color: white; height: 100%; display: flex; flex-direction: column; }
+        body { font-family: 'Cairo', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 2.5s ease-in-out, transform 8s ease-out;
+            opacity: 0;
+            z-index: 1;
+            transform: scale(1);
+        }
+        .hero-bg.active {
+            opacity: 1;
+            transform: scale(1.05);
+        }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col pb-10">
 
-    <header>
-        <div class="header-container">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div class="logo-box">
-                    <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; padding: 4px;">
+    <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg bg-emerald-600 border-2 border-emerald-400">
+                    <svg viewBox="0 0 100 100" class="w-full h-full p-1">
                         <circle cx="50" cy="50" r="44" fill="none" stroke="#ffffff" stroke-width="3" />
-                        <text x="50" y="48" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">حلال</text>
-                        <text x="50" y="68" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="1">HALAL</text>
+                        <text x="50" y="48" font-family="'Cairo', sans-serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">حلال</text>
+                        <text x="50" y="68" font-family="sans-serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="1">HALAL</text>
                     </svg>
                 </div>
                 <div>
-                    <p style="font-size: 12px; color: #9ca3af;">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
+                    <p class="text-xs text-gray-400">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
                 </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <button onclick="openArchive()" class="btn-base archive-btn">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <button onclick="openArchive()" class="bg-gray-800 hover:bg-gray-700 text-amber-400 border border-amber-500/40 font-bold px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow transition-all">
                     <i class="fa-solid fa-box-archive"></i>
-                    <span>الأرشيف والسجل</span>
+                    <span>أرشيف وسجل الطلبات</span>
                 </button>
-                <button onclick="openCart()" class="btn-base cart-btn">
+                <button onclick="openCart()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all relative">
                     <i class="fa-solid fa-utensils"></i>
                     <span>الصينية</span>
-                    <span id="cart-badge" class="cart-badge hidden">0</span>
+                    <span id="cart-badge" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <section class="hero">
+    <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
         <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
         <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
-        <div class="hero-content">
-            <h2 style="font-size: clamp(3rem, 7vw, 5rem); font-weight: 900; color: #fbbf24; margin-bottom: 4px; text-shadow: 0 4px 6px rgba(0,0,0,0.9);">أكلاتنا</h2>
-            <p style="font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.9);">أطباق عراقية طازجة</p>
-            <input type="text" id="search-input" placeholder="ابحث عن طبقك المفضّل..." oninput="renderProducts()" class="search-input"/>
+
+        <div class="relative z-10 max-w-4xl mx-auto pb-6">
+            <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
+            <p class="text-xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
+            
+            <input 
+                type="text" 
+                id="search-input"
+                placeholder="ابحث عن طبقك المفضّل..." 
+                oninput="renderProducts()"
+                class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
+            />
         </div>
     </section>
 
-    <div class="info-bar">
-        <div class="info-content">
-            <div style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-circle-check" style="color: #4ade80;"></i><span>جميع اللحوم المستخدمة حلال 100%</span></div>
-            <span style="color: #4b5563;">|</span>
-            <div style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-clock" style="color: #fbbf24;"></i><span>يرجى إتمام الطلب قبل 24 ساعة</span></div>
+    <div class="bg-gray-900 border-y border-amber-500/30 py-3 px-4 shadow-inner">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-6 text-xs md:text-sm font-bold text-amber-300 text-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-green-400"></i>
+                <span>جميع اللحوم المستخدمة حلال 100%</span>
+            </div>
+            <div class="hidden md:inline text-gray-600">|</div>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-clock text-amber-400"></i>
+                <span>يرجى إتمام الطلب قبل 24 ساعة</span>
+            </div>
         </div>
     </div>
 
-    <main>
-        <div class="categories" id="categories-container">
-            <button onclick="filterCategory('all', this)" class="cat-btn active">الكل</button>
-            <button onclick="filterCategory('main', this)" class="cat-btn">الأطباق الرئيسية</button>
-            <button onclick="filterCategory('grills', this)" class="cat-btn">المشويات</button>
-            <button onclick="filterCategory('fish', this)" class="cat-btn">الأسماك</button>
-            <button onclick="filterCategory('appetizers', this)" class="cat-btn">المعجنات والمقبلات</button>
-            <button onclick="filterCategory('bakery', this)" class="cat-btn">المخبوزات والخبز</button>
-            <button onclick="filterCategory('sandwiches', this)" class="cat-btn">السندويتشات</button>
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
+            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
+            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
+            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
+            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
+            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
+            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
+            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
         </div>
 
-        <div class="products-grid" id="products-grid"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
     <!-- Modal عرض المنتج -->
-    <div id="product-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div style="position: relative; height: 240px; background-color: #030712; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                <div id="modal-img-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;"></div>
-                <button onclick="closeProductModal()" style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.8); color: #fbbf24; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; border: 1px solid rgba(245,158,11,0.3); cursor: pointer;">العودة</button>
-                <span id="modal-price" style="position: absolute; bottom: 12px; left: 12px; background: #fbbf24; color: #030712; padding: 4px 12px; border-radius: 9999px; font-size: 14px; font-weight: 900;"></span>
-            </div>
-            <div class="modal-body">
-                <h3 id="modal-title" style="font-size: 18px; font-weight: 800; color: #fbbf24;"></h3>
-                <p id="modal-note" style="font-size: 12px; color: #fde68a; background: #030712; padding: 8px; border-radius: 8px; display: none;"></p>
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
+        <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
+            <div class="relative h-64 bg-gray-950 flex items-center justify-center overflow-hidden">
+                <div id="modal-img-container" class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 font-bold relative">
+                    <span>طبق بيتي عراقي 🍲</span>
+                </div>
                 
-                <div id="dolma-size-section" style="display: none; flex-direction: column; gap: 8px;">
-                    <label style="font-size: 12px; color: #9ca3af; font-weight: bold;">اختر حجم القدر:</label>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                        <button type="button" onclick="setDolmaSize('small')" id="size-small-btn" style="padding: 8px; border-radius: 8px; border: 1px solid #374151; background: #030712; font-size: 12px; font-weight: bold; color: #d1d5db; cursor: pointer;">قدر صغير ($60)</button>
-                        <button type="button" onclick="setDolmaSize('medium')" id="size-medium-btn" style="padding: 8px; border-radius: 8px; border: 1px solid #374151; background: #030712; font-size: 12px; font-weight: bold; color: #d1d5db; cursor: pointer;">قدر وسط ($80)</button>
-                        <button type="button" onclick="setDolmaSize('large')" id="size-large-btn" style="padding: 8px; border-radius: 8px; border: 1px solid #374151; background: #030712; font-size: 12px; font-weight: bold; color: #d1d5db; cursor: pointer;">قدر كبير ($100)</button>
+                <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/80 hover:bg-black text-amber-400 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg border border-amber-500/30 transition-all z-30">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>العودة للقائمة</span>
+                </button>
+                
+                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-30"></span>
+            </div>
+            <div class="p-6 space-y-4">
+                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
+                <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2 rounded-lg border border-gray-800 hidden"></p>
+                
+                <div id="dolma-size-section" class="space-y-2 hidden">
+                    <label class="text-xs text-gray-400 font-bold block">اختر حجم القدر:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="setDolmaSize('small')" id="size-small-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر صغير ($60)</button>
+                        <button type="button" onclick="setDolmaSize('medium')" id="size-medium-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر وسط ($80)</button>
+                        <button type="button" onclick="setDolmaSize('large')" id="size-large-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر كبير ($100)</button>
                     </div>
                 </div>
 
-                <div id="normal-qty-wrapper" style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #1f2937; padding-top: 12px;">
-                    <span style="font-size: 12px; color: #9ca3af; font-weight: bold;">الكمية المطلوبة:</span>
-                    <div style="display: flex; align-items: center; gap: 12px; background: #030712; padding: 6px 12px; border-radius: 8px; border: 1px solid #374151;">
-                        <button onclick="changeModalQty(-1)" style="width: 26px; height: 26px; background: #1f2937; color: white; border-radius: 6px; border: none; cursor: pointer; font-weight: bold;">-</button>
-                        <span id="modal-qty" style="font-size: 13px; font-weight: 800; width: 100px; text-align: center; color: #fbbf24;">1</span>
-                        <button onclick="changeModalQty(1)" style="width: 26px; height: 26px; background: #1f2937; color: white; border-radius: 6px; border: none; cursor: pointer; font-weight: bold;">+</button>
+                <div class="flex items-center justify-between pt-2 border-t border-gray-800" id="normal-qty-wrapper">
+                    <span class="text-xs text-gray-400 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
+                    <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
+                        <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
+                        <span id="modal-qty" class="text-sm font-extrabold w-36 text-center text-amber-400">1</span>
+                        <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
                     </div>
                 </div>
 
-                <div id="dynamic-serving-info" style="font-size: 12px; text-align: center; font-weight: bold; color: #4ade80; background: rgba(6,78,59,0.4); padding: 8px; border-radius: 8px; display: none;"></div>
+                <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
-                <div id="extra-bread-section" style="display: none; flex-direction: column; gap: 8px; border-top: 1px solid #1f2937; padding-top: 12px;">
-                    <p style="font-size: 12px; color: #fbbf24; font-weight: bold;">إضافات اختيارية:</p>
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: #030712; padding: 8px; border-radius: 8px;">
-                        <span style="font-size: 12px; color: #d1d5db;">رغيف خبز إضافي ($1.00)</span>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <button onclick="changeExtra('extraBread', -1)" style="width: 24px; height: 24px; background: #1f2937; color: white; border-radius: 4px; border: none; cursor: pointer;">-</button>
-                            <span id="extra-bread-qty" style="font-size: 12px; font-weight: bold; width: 20px; text-align: center; color: #fbbf24;">0</span>
-                            <button onclick="changeExtra('extraBread', 1)" style="width: 24px; height: 24px; background: #1f2937; color: white; border-radius: 4px; border: none; cursor: pointer;">+</button>
+                <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
+                    <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
+                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-xs text-gray-300">رغيف خبز إضافي ($1.00)</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeExtra('extraBread', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="extra-bread-qty" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeExtra('extraBread', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: #030712; padding: 8px; border-radius: 8px;">
-                        <span style="font-size: 12px; color: #d1d5db;">قطعة صمون إضافية ($1.00)</span>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <button onclick="changeExtra('extraSamoon', -1)" style="width: 24px; height: 24px; background: #1f2937; color: white; border-radius: 4px; border: none; cursor: pointer;">-</button>
-                            <span id="extra-samoon-qty" style="font-size: 12px; font-weight: bold; width: 20px; text-align: center; color: #fbbf24;">0</span>
-                            <button onclick="changeExtra('extraSamoon', 1)" style="width: 24px; height: 24px; background: #1f2937; color: white; border-radius: 4px; border: none; cursor: pointer;">+</button>
+                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-xs text-gray-300">قطعة صمون إضافية ($1.00)</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeExtra('extraSamoon', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="extra-samoon-qty" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeExtra('extraSamoon', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
                         </div>
                     </div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 12px; color: #9ca3af; font-weight: bold;">ملاحظات على الطبق (اختياري):</label>
-                    <input type="text" id="item-custom-note" style="width: 100%; padding: 10px; background: #030712; border: 1px solid #374151; border-radius: 8px; color: white; font-size: 12px; outline: none;" />
+                <div class="space-y-1">
+                    <label class="text-xs text-gray-400 font-bold block">ملاحظات على الطبق (اختياري):</label>
+                    <input type="text" id="item-custom-note" value="" placeholder="" class="w-full p-2.5 bg-gray-950 border border-gray-700 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none" />
                 </div>
 
-                <button onclick="confirmAddToCart()" class="modal-btn-main">
+                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cart-plus"></i>
                     <span>أضف إلى الصينية</span>
                 </button>
@@ -178,25 +173,29 @@
     </div>
 
     <!-- Modal الصينية -->
-    <div id="cart-modal" class="cart-drawer hidden">
-        <div class="cart-panel">
-            <div style="padding: 16px; background: #030712; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="font-weight: bold; color: #fbbf24; font-size: 15px;"><i class="fa-solid fa-utensils" style="margin-left: 6px;"></i> صينية الطلبات الشاملة</h2>
-                <button onclick="closeCart()" class="btn-base archive-btn" style="padding: 6px 12px; font-size: 11px;">إغلاق</button>
+    <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
+        <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة</h2>
+                
+                <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>العودة للقائمة</span>
+                </button>
             </div>
             
-            <div id="cart-items" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;"></div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
 
-            <div id="cart-footer" style="padding: 16px; background: #030712; border-top: 1px solid #1f2937; display: flex; flex-direction: column; gap: 12px;">
-                <input type="text" id="customer-name" placeholder="الاسم الكريم" style="width: 100%; padding: 10px; background: #111827; border: 1px solid #374151; border-radius: 8px; color: white; font-size: 12px; outline: none;" />
+            <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
+                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
                 
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 11px; color: #9ca3af; font-weight: bold;">تاريخ الاستلام (قبل 24 ساعة):</label>
-                    <input type="date" id="order-date" style="width: 100%; padding: 10px; background: #111827; border: 1px solid #374151; border-radius: 8px; color: white; font-size: 12px; outline: none;" />
+                <div class="space-y-1">
+                    <label class="text-[11px] text-gray-400 font-bold block">تاريخ استلام الطلب (قبل 24 ساعة):</label>
+                    <input type="date" id="order-date" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
                 </div>
 
-                <button onclick="sendWhatsAppOrder()" style="width: 100%; background: #16a34a; color: white; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i>
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
                     <span>إرسال الطلب عبر الواتساب</span>
                 </button>
             </div>
@@ -204,7 +203,82 @@
     </div>
 
     <!-- Modal الأرشيف وسجل الطلبات -->
-    <div id="archive-modal" class="modal-overlay hidden">
-        <div class="modal-content" style="max-width: 600px; max-height: 85vh;">
-            <div style="padding: 16px; background: #030712; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="font-weight: bold;
+    <div id="archive-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
+        <div class="w-full max-w-2xl bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-box-archive ml-2"></i> أرشيف وسجل الطلبات السابقة</h2>
+                <button onclick="closeArchive()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>إغلاق</span>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="archive-items-container"></div>
+            <div class="p-3 bg-gray-950 border-t border-gray-800 text-center">
+                <button onclick="clearArchive()" class="text-red-400 hover:text-red-300 text-xs font-bold">إفراغ السجل والأرشيف بالكامل</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // متغير التحكم بالزخم (اجعله false لإيقاف استقبال الطلبات مؤقتاً)
+        var isKitchenOpen = true;
+
+        var products = [
+            { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
+            { id: 2, name: "الباچة", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" },
+            { id: 3, name: "القوزي العراقي", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" },
+            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", note: "" },
+            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "grilled chicken.png", note: "" },
+            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "meet with daugh.jpg", note: "" },
+            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", note: "" },
+            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", note: "" },
+            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg", note: "" },
+            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
+            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "meat tecca.jpg", note: "" },
+            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "chicken tecca.jpg", note: "" },
+            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", note: "" },
+            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg", note: "" },
+            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg", note: "" },
+            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png", note: "" },
+            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "kibbeh-jareesh.jpg", note: "" },
+            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "bourak meat .jpg", note: "" },
+            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "bourak cheese.jpg", note: "" },
+            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
+            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
+            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "manakesh zaatar.jpg", note: "" },
+            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
+            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg", note: "" },
+            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
+            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
+            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
+            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
+            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
+            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
+            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera 1.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
+            { id: 31, name: "الكليچة", category: "bakery", price: 20, image: "kleacha.png", unitPrice: 20, minQty: 1, stepQty: 1, unitLabel: "باوند", note: "20$ / 1 باوند (الحد الأدنى)" },
+            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg", note: "" },
+            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "chicken tecca.jpg", note: "" },
+            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "meat tecca.jpg", note: "" },
+            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg", note: "" }
+        ];
+
+        var heroImages = [
+            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
+            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
+            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
+            "gallery-13.jpg", "gallery-14.jpg"
+        ];
+        
+        var currentImgIndex = 0;
+        var isLayerOneActive = true;
+
+        function smoothChangeHeroBackground() {
+            var layer1 = document.getElementById('bg-layer-1');
+            var layer2 = document.getElementById('bg-layer-2');
+            if (!layer1 || !layer2) return;
+
+            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+            var nextImage = heroImages[currentImgIndex];
+
+            if (isLayerOneActive) {
+                layer2.style.backgroundImage = "url('"
