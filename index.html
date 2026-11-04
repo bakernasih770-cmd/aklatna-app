@@ -305,7 +305,6 @@
             var queryInput = document.getElementById('search-input');
             var query = (queryInput && queryInput.value) ? queryInput.value.toLowerCase().trim() : '';
             var html = '';
-            var foundAny = false;
             
             for (var i = 0; i < products.length; i++) {
                 var p = products[i];
@@ -313,15 +312,11 @@
                 var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
                 
                 if (matchCat && matchQuery) {
-                    foundAny = true;
-                    var imgContent = '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
-                                     '<div class="w-full h-full items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
-
                     var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.price ? '$' + p.price.toFixed(2) : '');
 
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
-                            imgContent +
+                            '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' +
                             '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">' + priceDisplay + '</span>' +
                         '</div>' +
                         '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
@@ -333,7 +328,7 @@
                 }
             }
 
-            if (!foundAny) {
+            if (html === '') {
                 html = '<div class="col-span-full text-center text-gray-400 py-16 text-sm font-bold">عذراً، لم يتم العثور على أطباق تطابق بحثك</div>';
             }
 
@@ -358,3 +353,326 @@
                     currentActiveProduct = products[j];
                     break;
                 }
+            }
+            if (!currentActiveProduct) return;
+            
+            currentModalQty = currentActiveProduct.minQty || 1;
+            dolmaSelectedSize = 'small';
+            extraBreadQty = 0;
+            extraSamoonQty = 0;
+            document.getElementById('extra-bread-qty').innerText = 0;
+            document.getElementById('extra-samoon-qty').innerText = 0;
+            document.getElementById('item-custom-note').value = '';
+            
+            var modalContainer = document.getElementById('modal-img-container');
+            
+            // إضافة دخان متحرك كثيف وواضح للدولمة والباجة والقوزي
+            var steamHtml = '';
+            if (currentActiveProduct.isDolmaBased || currentActiveProduct.isPachaBased || currentActiveProduct.isPoundBased) {
+                steamHtml = '<div class="steam-container">' +
+                    '<div class="steam-particle" style="left: 15px; width: 22px; height: 50px; animation-delay: 0s;"></div>' +
+                    '<div class="steam-particle" style="left: 45px; width: 30px; height: 70px; animation-delay: 0.6s;"></div>' +
+                    '<div class="steam-particle" style="left: 75px; width: 25px; height: 60px; animation-delay: 1.2s;"></div>' +
+                    '<div class="steam-particle" style="left: 105px; width: 20px; height: 45px; animation-delay: 1.8s;"></div>' +
+                '</div>';
+            }
+
+            modalContainer.innerHTML = '<img src="' + (currentActiveProduct.image || 'gallery-1.jpg') + '" alt="" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' +
+                                       steamHtml;
+            
+            document.getElementById('modal-title').innerText = currentActiveProduct.name;
+            
+            var modalNote = document.getElementById('modal-note');
+            if (currentActiveProduct.note) {
+                modalNote.innerText = "📌 " + currentActiveProduct.note;
+                modalNote.classList.remove('hidden');
+            } else {
+                modalNote.classList.add('hidden');
+            }
+
+            var dolmaSection = document.getElementById('dolma-size-section');
+            var normalQtyWrapper = document.getElementById('normal-qty-wrapper');
+            var extraSection = document.getElementById('extra-bread-section');
+
+            if (currentActiveProduct.isDolmaBased) {
+                dolmaSection.classList.remove('hidden');
+                normalQtyWrapper.classList.add('hidden');
+                updateDolmaSizeUIButtons();
+            } else {
+                dolmaSection.classList.add('hidden');
+                normalQtyWrapper.classList.remove('hidden');
+            }
+
+            if (currentActiveProduct.category === 'main' || currentActiveProduct.category === 'grills') {
+                extraSection.classList.remove('hidden');
+            } else {
+                extraSection.classList.add('hidden');
+            }
+
+            updateModalPriceUI();
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function setDolmaSize(size) {
+            dolmaSelectedSize = size;
+            updateDolmaSizeUIButtons();
+            updateModalPriceUI();
+        }
+
+        function updateDolmaSizeUIButtons() {
+            var btnS = document.getElementById('size-small-btn');
+            var btnM = document.getElementById('size-medium-btn');
+            var btnL = document.getElementById('size-large-btn');
+
+            btnS.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'small' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+            btnM.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'medium' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+            btnL.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'large' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+        }
+
+        function changeModalQty(dir) {
+            var step = currentActiveProduct.stepQty || 1;
+            var min = currentActiveProduct.minQty || 1;
+
+            currentModalQty += (dir * step);
+            if (currentModalQty < min) currentModalQty = min;
+
+            updateModalPriceUI();
+        }
+
+        function changeExtra(type, dir) {
+            if (type === 'extraBread') {
+                extraBreadQty += dir;
+                if (extraBreadQty < 0) extraBreadQty = 0;
+                document.getElementById('extra-bread-qty').innerText = extraBreadQty;
+            } else if (type === 'extraSamoon') {
+                extraSamoonQty += dir;
+                if (extraSamoonQty < 0) extraSamoonQty = 0;
+                document.getElementById('extra-samoon-qty').innerText = extraSamoonQty;
+            }
+            updateModalPriceUI();
+        }
+
+        function updateModalPriceUI() {
+            if (!currentActiveProduct) return;
+            
+            var basePrice = 0;
+            var dynInfo = document.getElementById('dynamic-serving-info');
+
+            if (currentActiveProduct.isDolmaBased) {
+                var servingText = "";
+                if (dolmaSelectedSize === 'small') {
+                    basePrice = 60;
+                    servingText = "👥 تكفي قدر صغير (4 أشخاص) • معها (4 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'medium') {
+                    basePrice = 80;
+                    servingText = "👥 تكفي قدر وسط (6 أشخاص) • معها (6 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'large') {
+                    basePrice = 100;
+                    servingText = "👥 تكفي قدر كبير (8 أشخاص) • معها (8 أرغفة خبز)";
+                }
+
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = 'قدر ' + (dolmaSelectedSize === 'small' ? 'صغير' : dolmaSelectedSize === 'medium' ? 'وسط' : 'كبير');
+            } else if (currentActiveProduct.isPoundBased) {
+                if (currentModalQty === 3) {
+                    basePrice = 70;
+                } else if (currentModalQty === 4) {
+                    basePrice = 93;
+                } else if (currentModalQty === 5) {
+                    basePrice = 116;
+                } else {
+                    basePrice = 70 + ((currentModalQty - 3) * 23.33);
+                }
+
+                var extraPounds = currentModalQty - 3;
+                var calcMin = 3 + (extraPounds * 2);
+                var calcMax = 5 + (extraPounds * 2);
+                var calcBread = 5 + (extraPounds * 2);
+
+                var servingText = "👥 تكفي تقريباً (" + calcMin + " إلى " + calcMax + " شخصاً) • معها (" + calcBread + " رغيف خبز)";
+
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isPachaBased) {
+                if (currentModalQty === 1) {
+                    basePrice = 70;
+                } else {
+                    basePrice = 70 + ((currentModalQty - 1) * 30);
+                }
+
+                var calcPeople = currentModalQty * 2; 
+                var calcBread = 3 + ((currentModalQty - 1) * 2); 
+
+                var pachaText = "👥 تكفي تقريباً (" + calcPeople + " أشخاص) • معها (" + calcBread + " رغيف خبز)";
+                if (dynInfo) {
+                    dynInfo.innerText = pachaText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else {
+                var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
+                basePrice = unitPrice * currentModalQty;
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' ' + currentActiveProduct.unitLabel : '');
+            }
+
+            var extrasTotal = (extraBreadQty * 1) + (extraSamoonQty * 1);
+            var totalPrice = basePrice + extrasTotal;
+
+            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
+            currentActiveProduct.calculatedPrice = totalPrice;
+        }
+
+        function confirmAddToCart() {
+            if (!currentActiveProduct) return;
+            
+            var customNote = document.getElementById('item-custom-note').value.trim();
+            var extrasDesc = [];
+            if (extraBreadQty > 0) extrasDesc.push(extraBreadQty + " رغيف خبز إضافي");
+            if (extraSamoonQty > 0) extrasDesc.push(extraSamoonQty + " صمون إضافي");
+            
+            if (extrasDesc.length > 0) {
+                var extrasString = "إضافات: " + extrasDesc.join('، ');
+                customNote = customNote ? customNote + " | " + extrasString : extrasString;
+            }
+
+            var finalItemPrice = currentActiveProduct.calculatedPrice;
+            var itemName = currentActiveProduct.name;
+            var itemQtyLabel = "";
+
+            if (currentActiveProduct.isDolmaBased) {
+                var sizeArabic = dolmaSelectedSize === 'small' ? 'قدر صغير (يكفي 4 أشخاص • 4 أرغفة خبز)' : dolmaSelectedSize === 'medium' ? 'قدر وسط (يكفي 6 أشخاص • 6 أرغفة خبز)' : 'قدر كبير (يكفي 8 أشخاص • 8 أرغفة خبز)';
+                itemQtyLabel = sizeArabic;
+            } else if (currentActiveProduct.isPoundBased || currentActiveProduct.isPachaBased) {
+                itemQtyLabel = currentModalQty + " " + currentActiveProduct.unitLabel;
+            } else {
+                itemQtyLabel = currentModalQty + (currentActiveProduct.unitLabel ? " " + currentActiveProduct.unitLabel : "");
+            }
+
+            cart.push({
+                id: currentActiveProduct.id,
+                name: itemName,
+                price: finalItemPrice,
+                image: currentActiveProduct.image || '',
+                quantityText: itemQtyLabel,
+                customNote: customNote
+            });
+
+            closeProductModal();
+            updateCartUI();
+        }
+
+        function removeItemFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            var badge = document.getElementById('cart-badge');
+            var totalItemsCount = cart.length;
+            if (totalItemsCount > 0) {
+                badge.innerText = totalItemsCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            var container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-16">صينية الطلبات فارغة حالياً</p>';
+                document.getElementById('cart-footer').style.display = 'none';
+                return;
+            }
+            document.getElementById('cart-footer').style.display = 'block';
+
+            var subtotal = 0;
+            var html = '';
+            for (var j = 0; j < cart.length; j++) {
+                var item = cart[j];
+                subtotal += item.price;
+
+                var itemImg = '<img src="' + (item.image || '') + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' +
+                              '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[9px] text-amber-400 text-center">طبق</div>';
+
+                var noteHtml = item.customNote ? '<p class="text-[11px] text-amber-300 mt-0.5">ملاحظة: ' + item.customNote + '</p>' : '';
+
+                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
+                    '<div class="flex items-center gap-3 flex-1 relative overflow-hidden">' +
+                        itemImg +
+                        '<div>' +
+                            '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
+                            noteHtml +
+                            '<p class="text-xs text-amber-400 font-bold mt-1">$' + item.price.toFixed(2) + ' <span class="text-[10px] text-gray-400">(' + item.quantityText + ')</span></p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="flex items-center gap-3">' +
+                        '<button onclick="removeItemFromCart(' + j + ')" class="w-8 h-8 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30 shadow" title="حذف الطبق">' +
+                            '<i class="fa-solid fa-xmark"></i>' +
+                        '</button>' +
+                    '</div>' +
+                '</div>';
+            }
+
+            html += '<div class="bg-gray-950 p-3 rounded-xl text-xs space-y-1.5 mt-3 border border-gray-800">' +
+                '<div class="flex justify-between font-extrabold text-sm text-amber-400 pt-1"><span>المجموع الكلي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
+            '</div>';
+
+            container.innerHTML = html;
+        }
+
+        function openCart() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+            updateCartUI();
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function sendWhatsAppOrder() {
+            var name = document.getElementById('customer-name').value.trim();
+            if (!name) {
+                alert('يرجى كتابة الاسم الكريم قبل إرسال الطلب.');
+                return;
+            }
+            var subtotal = 0;
+            
+            var msg = "مرحباً، أود تقديم طلب جديد:\n\n";
+            msg += "👤 الاسم: " + name + "\n\n";
+
+            msg += "📋 تفاصيل الأطباق:\n";
+            for (var j = 0; j < cart.length; j++) {
+                subtotal += cart[j].price;
+                msg += "- " + cart[j].name + " (" + cart[j].quantityText + ")";
+                if (cart[j].customNote) {
+                    msg += " [ملاحظة: " + cart[j].customNote + "]";
+                }
+                msg += " - $" + cart[j].price.toFixed(2) + "\n";
+            }
+
+            msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
+
+            var phone = "3366867948"; 
+            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+            window.open(url, '_blank');
+        }
+
+        // تشغيل عرض الأطباق مباشرة فور جاهزية الصفحة لمنع أي اختفاء
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderProducts);
+        } else {
+            renderProducts();
+        }
+    </script>
+</body>
+</html>
