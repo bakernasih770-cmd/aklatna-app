@@ -188,15 +188,15 @@
             { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg" },
             { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg" },
 
-            // المخبوزات والخبز
-            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين كمينيموم (كل ربطة 10 قطع)" },
-            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات كمينيموم (كل ربطة 5 أرغفة)" },
-            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين كمينيموم" },
-            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين كمينيموم" },
-            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع كمينيموم" },
-            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة كمينيموم" },
-            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera 1.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة كمينيموم" },
-            { id: 31, name: "الكليچة", category: "bakery", price: 20, image: "kleacha.png", unitPrice: 20, minQty: 1, stepQty: 1, unitLabel: "باوند", note: "20$ / 1 باوند كمينيموم" },
+            // المخبوزات والخبز (تم استبدال كمينيموم بالحد الأدنى)
+            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
+            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
+            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
+            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
+            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
+            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
+            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera 1.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
+            { id: 31, name: "الكليچة", category: "bakery", price: 20, image: "kleacha.png", unitPrice: 20, minQty: 1, stepQty: 1, unitLabel: "باوند", note: "20$ / 1 باوند (الحد الأدنى)" },
 
             // السندويتشات
             { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg" },
@@ -303,7 +303,7 @@
             if (!currentActiveProduct) return;
             
             currentModalQty = currentActiveProduct.minQty || 1;
-            document.getElementById('item-custom-note').value = ''; // تفريغ حقل الملاحظات عند فتح كل طبق
+            document.getElementById('item-custom-note').value = '';
             
             var modalImg = document.getElementById('modal-img');
             modalImg.src = currentActiveProduct.image || 'gallery-1.jpg';
@@ -355,7 +355,6 @@
             var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
             var customNote = document.getElementById('item-custom-note').value.trim();
 
-            // إضافة العنصر للصينية (حتى لو تكرر الطبق، إذا كانت الملاحظات مختلفة نعتبرها صنفاً مستقلاً أو ندمجها حسب الرغبة)
             var foundIndex = -1;
             for (var i = 0; i < cart.length; i++) {
                 if (cart[i].id === currentActiveProduct.id && cart[i].customNote === customNote) {
