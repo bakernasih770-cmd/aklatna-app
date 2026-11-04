@@ -119,14 +119,14 @@
                     <span class="text-xs text-gray-400 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
                     <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
                         <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
-                        <span id="modal-qty" class="text-sm font-extrabold w-28 text-center text-amber-400">1</span>
+                        <span id="modal-qty" class="text-sm font-extrabold w-36 text-center text-amber-400">1</span>
                         <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
                     </div>
                 </div>
 
                 <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
-                <!-- خيارات إضافية للخبز والصمون (تظهر فقط للقوزي أو الأطباق الرئيسية) -->
+                <!-- خيارات إضافية للخبز والصمون -->
                 <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
                     <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
                     <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
@@ -188,7 +188,20 @@
     <script>
         var products = [
             { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg", note: "حارة" },
-            { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg", note: "رأس خروف مع 4 ارجل (كراع)" },
+            
+            // الباجة بخصائص ديناميكية (تُكفي شخصين مع 5 أرغفة خبز بـ 70$)
+            { 
+                id: 2, 
+                name: "الباچة", 
+                category: "main", 
+                price: 70, 
+                isPachaBased: true,     
+                minQty: 1,              
+                stepQty: 1,             
+                unitLabel: "وجبة باچة مطبوخة",  
+                image: "pacha.jpg", 
+                note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (5 أرغفة خبز) (تكفي لشخصين)" 
+            },
             
             { 
                 id: 3, 
@@ -355,7 +368,6 @@
                 modalNote.classList.add('hidden');
             }
 
-            // إظهار خانة الخبز والصمون الإضافي للأطباق الرئيسية والقوزي والمشويات
             var extraSection = document.getElementById('extra-bread-section');
             if (currentActiveProduct.category === 'main' || currentActiveProduct.category === 'grills') {
                 extraSection.classList.remove('hidden');
@@ -426,13 +438,24 @@
                     dynInfo.innerText = servingText;
                     dynInfo.classList.remove('hidden');
                 }
+            } else if (currentActiveProduct.isPachaBased) {
+                // الباجة: الوجبة بـ 70$ وتتضاعف طردياً (كل وجبة تكفي شخصين مع 5 أرغفة)
+                basePrice = 70 * currentModalQty;
+
+                var calcPeople = currentModalQty * 2; 
+                var calcBread = currentModalQty * 5;  
+
+                var pachaText = "👥 تكفي تقريباً (" + calcPeople + " أشخاص) • معها (" + calcBread + " رغيف خبز)";
+                if (dynInfo) {
+                    dynInfo.innerText = pachaText;
+                    dynInfo.classList.remove('hidden');
+                }
             } else {
                 var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
                 basePrice = unitPrice * currentModalQty;
                 if (dynInfo) dynInfo.classList.add('hidden');
             }
 
-            // إضافة سعر الخبز والصمون الإضافي ($1 لكل قطعة)
             var extrasTotal = (extraBreadQty * 1) + (extraSamoonQty * 1);
             var totalPrice = basePrice + extrasTotal;
 
@@ -464,7 +487,8 @@
                 quantity: currentModalQty,
                 unitLabel: currentActiveProduct.unitLabel || '',
                 customNote: customNote,
-                isPoundBased: currentActiveProduct.isPoundBased || false
+                isPoundBased: currentActiveProduct.isPoundBased || false,
+                isPachaBased: currentActiveProduct.isPachaBased || false
             });
 
             closeProductModal();
@@ -474,10 +498,11 @@
         function updateQuantity(index, dir) {
             var item = cart[index];
             if (dir > 0) {
-                item.quantity += (item.isPoundBased ? 1 : 1);
+                item.quantity += 1;
             } else {
-                item.quantity -= (item.isPoundBased ? 1 : 1);
-                if (item.quantity < (item.isPoundBased ? 3 : 1)) {
+                item.quantity -= 1;
+                var minLimit = item.isPoundBased ? 3 : (item.isPachaBased ? 1 : 1);
+                if (item.quantity < minLimit) {
                     cart.splice(index, 1);
                 }
             }
@@ -511,7 +536,7 @@
             var html = '';
             for (var j = 0; j < cart.length; j++) {
                 var item = cart[j];
-                var itemTotalPrice = item.price; // السعر محسوب كاملاً مع الإضافات في الـ modal
+                var itemTotalPrice = item.price;
 
                 subtotal += itemTotalPrice;
                 var itemImg = '<img src="' + (item.image || '') + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.style.display=\'none\';">' +
@@ -526,6 +551,10 @@
                     var calcMax = 5 + (extraPounds * 2);
                     var calcBread = 5 + (extraPounds * 2);
                     cartServingDesc = " (تكفي " + calcMin + "-" + calcMax + " أشخاص • " + calcBread + " رغيف خبز)";
+                } else if (item.isPachaBased) {
+                    var calcPeople = item.quantity * 2;
+                    var calcBread = item.quantity * 5;
+                    cartServingDesc = " (تكفي " + calcPeople + " أشخاص • " + calcBread + " رغيف خبز)";
                 }
 
                 html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
@@ -583,6 +612,10 @@
                     var calcMax = 5 + (extraPounds * 2);
                     var calcBread = 5 + (extraPounds * 2);
                     servingDesc = " [تكفي " + calcMin + "-" + calcMax + " أشخاص • " + calcBread + " رغيف خبز]";
+                } else if (cart[j].isPachaBased) {
+                    var calcPeople = cart[j].quantity * 2;
+                    var calcBread = cart[j].quantity * 5;
+                    servingDesc = " [تكفي " + calcPeople + " أشخاص • " + calcBread + " رغيف خبز]";
                 }
 
                 msg += "- " + cart[j].name + " (الكمية: " + cart[j].quantity + " " + (cart[j].unitLabel || '') + ")" + servingDesc;
