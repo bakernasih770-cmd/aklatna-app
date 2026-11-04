@@ -115,7 +115,17 @@
                 <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
                 <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2 rounded-lg border border-gray-800 hidden"></p>
                 
-                <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+                <!-- خيار اختيار حجم قدر الدولمة (يظهر للدولمة فقط) -->
+                <div id="dolma-size-section" class="space-y-2 hidden">
+                    <label class="text-xs text-gray-400 font-bold block">اختر حجم القدر:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="setDolmaSize('small')" id="size-small-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر صغير ($60)</button>
+                        <button type="button" onclick="setDolmaSize('medium')" id="size-medium-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر وسط ($80)</button>
+                        <button type="button" onclick="setDolmaSize('large')" id="size-large-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر كبير ($100)</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2 border-t border-gray-800" id="normal-qty-wrapper">
                     <span class="text-xs text-gray-400 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
                     <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
                         <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
@@ -187,9 +197,21 @@
 
     <script>
         var products = [
-            { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg", note: "" },
+            // الدولمة بأحجام ديناميكية (صغير 60$، وسط 80$، كبير 100$)
+            { 
+                id: 1, 
+                name: "الدولمة العراقية", 
+                category: "main", 
+                price: 60, 
+                isDolmaBased: true,
+                minQty: 1,
+                stepQty: 1,
+                unitLabel: "قدر دولمة",
+                image: "dolma.jpg", 
+                note: "دولمة عراقية أصيلة طازجة" 
+            },
             
-            // الباجة: 70$ للوجبة الأولى (تغطي رأس و4 أرجل شخصين)، وكل وجبة إضافية بـ 30$ وتضيف شخصين ورغيفين خبز بدون حد أقصى
+            // الباجة
             { 
                 id: 2, 
                 name: "الباچة", 
@@ -200,9 +222,10 @@
                 stepQty: 1,             
                 unitLabel: "وجبة باچة مطبوخة",  
                 image: "pacha.jpg", 
-                note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) و سلطة مكونة من الطماطة والبصل والطرشي " 
+                note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" 
             },
             
+            // القوزي
             { 
                 id: 3, 
                 name: "القوزي العراقي", 
@@ -289,6 +312,7 @@
         var currentCategory = 'all';
         var currentActiveProduct = null;
         var currentModalQty = 1;
+        var dolmaSelectedSize = 'small'; // الحجم الافتراضي للدولمة
         var extraBreadQty = 0;
         var extraSamoonQty = 0;
 
@@ -308,7 +332,7 @@
                     var imgContent = '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
                                      '<div class="w-full h-full items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
 
-                    var priceDisplay = p.price ? '$' + p.price.toFixed(2) : '';
+                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.price ? '$' + p.price.toFixed(2) : '');
 
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
@@ -348,6 +372,7 @@
             if (!currentActiveProduct) return;
             
             currentModalQty = currentActiveProduct.minQty || 1;
+            dolmaSelectedSize = 'small';
             extraBreadQty = 0;
             extraSamoonQty = 0;
             document.getElementById('extra-bread-qty').innerText = 0;
@@ -368,7 +393,19 @@
                 modalNote.classList.add('hidden');
             }
 
+            var dolmaSection = document.getElementById('dolma-size-section');
+            var normalQtyWrapper = document.getElementById('normal-qty-wrapper');
             var extraSection = document.getElementById('extra-bread-section');
+
+            if (currentActiveProduct.isDolmaBased) {
+                dolmaSection.classList.remove('hidden');
+                normalQtyWrapper.classList.add('hidden');
+                updateDolmaSizeUIButtons();
+            } else {
+                dolmaSection.classList.add('hidden');
+                normalQtyWrapper.classList.remove('hidden');
+            }
+
             if (currentActiveProduct.category === 'main' || currentActiveProduct.category === 'grills') {
                 extraSection.classList.remove('hidden');
             } else {
@@ -381,6 +418,22 @@
 
         function closeProductModal() {
             document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function setDolmaSize(size) {
+            dolmaSelectedSize = size;
+            updateDolmaSizeUIButtons();
+            updateModalPriceUI();
+        }
+
+        function updateDolmaSizeUIButtons() {
+            var btnS = document.getElementById('size-small-btn');
+            var btnM = document.getElementById('size-medium-btn');
+            var btnL = document.getElementById('size-large-btn');
+
+            btnS.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'small' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+            btnM.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'medium' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+            btnL.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'large' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
         }
 
         function changeModalQty(dir) {
@@ -412,7 +465,25 @@
             var basePrice = 0;
             var dynInfo = document.getElementById('dynamic-serving-info');
 
-            if (currentActiveProduct.isPoundBased) {
+            if (currentActiveProduct.isDolmaBased) {
+                var servingText = "";
+                if (dolmaSelectedSize === 'small') {
+                    basePrice = 60;
+                    servingText = "👥 تكفي قدر صغير (4 أشخاص) • معها (4 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'medium') {
+                    basePrice = 80;
+                    servingText = "👥 تكفي قدر وسط (6 أشخاص) • معها (6 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'large') {
+                    basePrice = 100;
+                    servingText = "👥 تكفي قدر كبير (8 أشخاص) • معها (8 أرغفة خبز)";
+                }
+
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = 'قدر ' + (dolmaSelectedSize === 'small' ? 'صغير' : dolmaSelectedSize === 'medium' ? 'وسط' : 'كبير');
+            } else if (currentActiveProduct.isPoundBased) {
                 if (currentModalQty === 3) {
                     basePrice = 70;
                 } else if (currentModalQty === 4) {
@@ -434,32 +505,33 @@
                     dynInfo.innerText = servingText;
                     dynInfo.classList.remove('hidden');
                 }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.isPachaBased) {
-                // الباجة: الوجبة الأولى بـ 70$، وكل وجبة إضافية بـ 30$ وبدون حد أقصى
                 if (currentModalQty === 1) {
                     basePrice = 70;
                 } else {
                     basePrice = 70 + ((currentModalQty - 1) * 30);
                 }
 
-                var calcPeople = currentModalQty * 2; // تكفي شخصين لكل وجبة
-                var calcBread = 3 + ((currentModalQty - 1) * 2); // 3 أرغفة للوجبة الأولى وكل وجبة إضافية تزود رغيفين
+                var calcPeople = currentModalQty * 2; 
+                var calcBread = 3 + ((currentModalQty - 1) * 2); 
 
                 var pachaText = "👥 تكفي تقريباً (" + calcPeople + " أشخاص) • معها (" + calcBread + " رغيف خبز)";
                 if (dynInfo) {
                     dynInfo.innerText = pachaText;
                     dynInfo.classList.remove('hidden');
                 }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else {
                 var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
                 basePrice = unitPrice * currentModalQty;
                 if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' ' + currentActiveProduct.unitLabel : '');
             }
 
             var extrasTotal = (extraBreadQty * 1) + (extraSamoonQty * 1);
             var totalPrice = basePrice + extrasTotal;
 
-            document.getElementById('modal-qty').innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' ' + currentActiveProduct.unitLabel : '');
             document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
             currentActiveProduct.calculatedPrice = totalPrice;
         }
@@ -478,163 +550,4 @@
             }
 
             var finalItemPrice = currentActiveProduct.calculatedPrice;
-
-            cart.push({
-                id: currentActiveProduct.id,
-                name: currentActiveProduct.name,
-                price: finalItemPrice,
-                image: currentActiveProduct.image || '',
-                quantity: currentModalQty,
-                unitLabel: currentActiveProduct.unitLabel || '',
-                customNote: customNote,
-                isPoundBased: currentActiveProduct.isPoundBased || false,
-                isPachaBased: currentActiveProduct.isPachaBased || false
-            });
-
-            closeProductModal();
-            updateCartUI();
-        }
-
-        function updateQuantity(index, dir) {
-            var item = cart[index];
-            if (dir > 0) {
-                item.quantity += 1;
-            } else {
-                item.quantity -= 1;
-                var minLimit = item.isPoundBased ? 3 : (item.isPachaBased ? 1 : 1);
-                if (item.quantity < minLimit) {
-                    cart.splice(index, 1);
-                }
-            }
-            updateCartUI();
-        }
-
-        function removeItemFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            var badge = document.getElementById('cart-badge');
-            var totalItemsCount = cart.length;
-            if (totalItemsCount > 0) {
-                badge.innerText = totalItemsCount;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-
-            var container = document.getElementById('cart-items');
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-16">صينية الطلبات فارغة حالياً</p>';
-                document.getElementById('cart-footer').style.display = 'none';
-                return;
-            }
-            document.getElementById('cart-footer').style.display = 'block';
-
-            var subtotal = 0;
-            var html = '';
-            for (var j = 0; j < cart.length; j++) {
-                var item = cart[j];
-                var itemTotalPrice = item.price;
-
-                subtotal += itemTotalPrice;
-                var itemImg = '<img src="' + (item.image || '') + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.style.display=\'none\';">' +
-                              '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[9px] text-amber-400 text-center">طبق</div>';
-
-                var noteHtml = item.customNote ? '<p class="text-[11px] text-amber-300 mt-0.5">ملاحظة: ' + item.customNote + '</p>' : '';
-
-                var cartServingDesc = "";
-                if (item.isPoundBased) {
-                    var extraPounds = item.quantity - 3;
-                    var calcMin = 3 + (extraPounds * 2);
-                    var calcMax = 5 + (extraPounds * 2);
-                    var calcBread = 5 + (extraPounds * 2);
-                    cartServingDesc = " (تكفي " + calcMin + "-" + calcMax + " أشخاص • " + calcBread + " رغيف خبز)";
-                } else if (item.isPachaBased) {
-                    var calcPeople = item.quantity * 2;
-                    var calcBread = 3 + ((item.quantity - 1) * 2);
-                    cartServingDesc = " (تكفي " + calcPeople + " أشخاص • " + calcBread + " رغيف خبز)";
-                }
-
-                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
-                    '<div class="flex items-center gap-3 flex-1 relative overflow-hidden">' +
-                        itemImg +
-                        '<div>' +
-                            '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
-                            noteHtml +
-                            '<p class="text-xs text-amber-400 font-bold mt-1">$' + itemTotalPrice.toFixed(2) + ' <span class="text-[10px] text-gray-400">(' + item.quantity + ' ' + (item.unitLabel || '') + cartServingDesc + ')</span></p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="flex items-center gap-3">' +
-                        '<button onclick="removeItemFromCart(' + j + ')" class="w-8 h-8 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30 shadow" title="حذف الطبق">' +
-                            '<i class="fa-solid fa-xmark"></i>' +
-                        '</button>' +
-                    '</div>' +
-                '</div>';
-            }
-
-            html += '<div class="bg-gray-950 p-3 rounded-xl text-xs space-y-1.5 mt-3 border border-gray-800">' +
-                '<div class="flex justify-between font-extrabold text-sm text-amber-400 pt-1"><span>المجموع الكلي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
-            '</div>';
-
-            container.innerHTML = html;
-        }
-
-        function openCart() {
-            document.getElementById('cart-modal').classList.remove('hidden');
-            updateCartUI();
-        }
-
-        function closeCart() {
-            document.getElementById('cart-modal').classList.add('hidden');
-        }
-
-        function sendWhatsAppOrder() {
-            var name = document.getElementById('customer-name').value.trim();
-            if (!name) {
-                alert('يرجى كتابة الاسم الكريم قبل إرسال الطلب.');
-                return;
-            }
-            var subtotal = 0;
-            
-            var msg = "مرحباً، أود تقديم طلب جديد:\n\n";
-            msg += "👤 الاسم: " + name + "\n\n";
-
-            msg += "📋 تفاصيل الأطباق:\n";
-            for (var j = 0; j < cart.length; j++) {
-                subtotal += cart[j].price;
-
-                var servingDesc = "";
-                if (cart[j].isPoundBased) {
-                    var extraPounds = cart[j].quantity - 3;
-                    var calcMin = 3 + (extraPounds * 2);
-                    var calcMax = 5 + (extraPounds * 2);
-                    var calcBread = 5 + (extraPounds * 2);
-                    servingDesc = " [تكفي " + calcMin + "-" + calcMax + " أشخاص • " + calcBread + " رغيف خبز]";
-                } else if (cart[j].isPachaBased) {
-                    var calcPeople = cart[j].quantity * 2;
-                    var calcBread = 3 + ((cart[j].quantity - 1) * 2);
-                    servingDesc = " [تكفي " + calcPeople + " أشخاص • " + calcBread + " رغيف خبز]";
-                }
-
-                msg += "- " + cart[j].name + " (الكمية: " + cart[j].quantity + " " + (cart[j].unitLabel || '') + ")" + servingDesc;
-                if (cart[j].customNote) {
-                    msg += " [ملاحظة: " + cart[j].customNote + "]";
-                }
-                msg += " - $" + cart[j].price.toFixed(2) + "\n";
-            }
-
-            msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
-
-            var phone = "3366867948"; 
-            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
-            window.open(url, '_blank');
-        }
-
-        window.onload = function() {
-            renderProducts();
-        };
-    </script>
-</body>
-</html>
+            var itemName = currentActive
