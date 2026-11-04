@@ -125,7 +125,7 @@
                 <!-- نص توضيحي ديناميكي لعدد الأشخاص والأرغفة حسب الوزن -->
                 <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
-                <!-- خانة ملاحظات الزبون (فارغة ونظيفة) -->
+                <!-- خانة ملاحظات الزبون -->
                 <div class="space-y-1">
                     <label class="text-xs text-gray-400 font-bold block">ملاحظات على الطبق (اختياري):</label>
                     <input type="text" id="item-custom-note" value="" placeholder="" class="w-full p-2.5 bg-gray-950 border border-gray-700 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none" />
@@ -204,7 +204,6 @@
             { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
             { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg", note: "" },
 
-            // المخبوزات والخبز
             { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
             { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
             { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
@@ -214,7 +213,6 @@
             { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera 1.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
             { id: 31, name: "الكليچة", category: "bakery", price: 20, image: "kleacha.png", unitPrice: 20, minQty: 1, stepQty: 1, unitLabel: "باوند", note: "20$ / 1 باوند (الحد الأدنى)" },
 
-            // السندويتشات
             { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg", note: "" },
             { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "chicken tecca.jpg", note: "" },
             { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "meat tecca.jpg", note: "" },
@@ -327,119 +325,4 @@
             document.getElementById('modal-title').innerText = currentActiveProduct.name;
             
             var modalNote = document.getElementById('modal-note');
-            if (currentActiveProduct.note) {
-                modalNote.innerText = "📌 " + currentActiveProduct.note;
-                modalNote.classList.remove('hidden');
-            } else {
-                modalNote.classList.add('hidden');
-            }
-
-            updateModalPriceUI();
-            document.getElementById('product-modal').classList.remove('hidden');
-        }
-
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
-        }
-
-        function changeModalQty(dir) {
-            var step = currentActiveProduct.stepQty || 1;
-            var min = currentActiveProduct.minQty || 1;
-
-            if (dir > 0) {
-                currentModalQty += step;
-            } else if (dir < 0) {
-                currentModalQty -= step;
-                if (currentModalQty < min) currentModalQty = min;
-            }
-
-            updateModalPriceUI();
-        }
-
-        function updateModalPriceUI() {
-            if (!currentActiveProduct) return;
-            
-            var totalPrice = 0;
-            var dynInfo = document.getElementById('dynamic-serving-info');
-
-            if (currentActiveProduct.isPoundBased) {
-                if (currentModalQty === 3) {
-                    totalPrice = 70;
-                } else if (currentModalQty === 4) {
-                    totalPrice = 93;
-                } else if (currentModalQty === 5) {
-                    totalPrice = 116;
-                } else {
-                    totalPrice = 70 + ((currentModalQty - 3) * 23.33);
-                }
-
-                // حساب عدد الأشخاص وأرغفة الخبز تصاعدياً بانتظام بلا توقف
-                // 3 باوندات = 3-5 أشخاص و 5 أرغفة
-                var extraPounds = currentModalQty - 3;
-                var calcMinPeople = 3 + (extraPounds * 2);
-                var calcMaxPeople = 5 + (extraPounds * 2);
-                var calcBread = 5 + (extraPounds * 2); // رغيفين إضافيين لكل باوند إضافي
-
-                var servingText = "👥 تكفي تقريباً (" + calcMinPeople + " إلى " + calcMaxPeople + " شخصاً) • معها (" + calcBread + " رغيف خبز)";
-
-                if (dynInfo) {
-                    dynInfo.innerText = servingText;
-                    dynInfo.classList.remove('hidden');
-                }
-            } else {
-                var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
-                totalPrice = unitPrice * currentModalQty;
-                if (dynInfo) dynInfo.classList.add('hidden');
-            }
-
-            document.getElementById('modal-qty').innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' ' + currentActiveProduct.unitLabel : '');
-            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
-            currentActiveProduct.calculatedPrice = totalPrice;
-        }
-
-        function confirmAddToCart() {
-            if (!currentActiveProduct) return;
-            
-            var finalItemPrice = currentActiveProduct.isPoundBased ? (currentActiveProduct.calculatedPrice / currentModalQty) : (currentActiveProduct.unitPrice || currentActiveProduct.price);
-            var customNote = document.getElementById('item-custom-note').value.trim();
-
-            var foundIndex = -1;
-            for (var i = 0; i < cart.length; i++) {
-                if (cart[i].id === currentActiveProduct.id && cart[i].customNote === customNote && !currentActiveProduct.isPoundBased) {
-                    foundIndex = i;
-                    break;
-                }
-            }
-
-            if (foundIndex !== -1) {
-                cart[foundIndex].quantity += currentModalQty;
-            } else {
-                cart.push({
-                    id: currentActiveProduct.id,
-                    name: currentActiveProduct.name,
-                    price: finalItemPrice,
-                    image: currentActiveProduct.image || '',
-                    quantity: currentModalQty,
-                    stepQty: currentActiveProduct.stepQty || 1,
-                    minQty: currentActiveProduct.minQty || 1,
-                    unitLabel: currentActiveProduct.unitLabel || '',
-                    customNote: customNote,
-                    isPoundBased: currentActiveProduct.isPoundBased || false
-                });
-            }
-
-            closeProductModal();
-            updateCartUI();
-        }
-
-        function updateQuantity(index, dir) {
-            var item = cart[index];
-            var step = item.stepQty || 1;
-            var min = item.minQty || 1;
-
-            if (dir > 0) {
-                item.quantity += step;
-            } else if (dir < 0) {
-                item.quantity -= step;
-                if (item.quantity < min) {
-                    cart.splice(index,
+            if (currentActiveProduct.note)
