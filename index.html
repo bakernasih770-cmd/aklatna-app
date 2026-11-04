@@ -122,6 +122,12 @@
                     </div>
                 </div>
 
+                <!-- خانة إضافة ملاحظات للطبق -->
+                <div class="space-y-1">
+                    <label class="text-xs text-gray-400 font-bold block">ملاحظات على الطبق (اختياري):</label>
+                    <input type="text" id="item-custom-note" placeholder="مثال: بدون بصل، زيادة حار..." class="w-full p-2.5 bg-gray-950 border border-gray-700 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none" />
+                </div>
+
                 <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cart-plus"></i>
                     <span>أضف إلى الصينية</span>
@@ -297,6 +303,7 @@
             if (!currentActiveProduct) return;
             
             currentModalQty = currentActiveProduct.minQty || 1;
+            document.getElementById('item-custom-note').value = ''; // تفريغ حقل الملاحظات عند فتح كل طبق
             
             var modalImg = document.getElementById('modal-img');
             modalImg.src = currentActiveProduct.image || 'gallery-1.jpg';
@@ -345,17 +352,21 @@
 
         function confirmAddToCart() {
             if (!currentActiveProduct) return;
-            var found = false;
             var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
+            var customNote = document.getElementById('item-custom-note').value.trim();
 
+            // إضافة العنصر للصينية (حتى لو تكرر الطبق، إذا كانت الملاحظات مختلفة نعتبرها صنفاً مستقلاً أو ندمجها حسب الرغبة)
+            var foundIndex = -1;
             for (var i = 0; i < cart.length; i++) {
-                if (cart[i].id === currentActiveProduct.id) {
-                    cart[i].quantity += currentModalQty;
-                    found = true;
+                if (cart[i].id === currentActiveProduct.id && cart[i].customNote === customNote) {
+                    foundIndex = i;
                     break;
                 }
             }
-            if (!found) {
+
+            if (foundIndex !== -1) {
+                cart[foundIndex].quantity += currentModalQty;
+            } else {
                 cart.push({
                     id: currentActiveProduct.id,
                     name: currentActiveProduct.name,
@@ -364,49 +375,41 @@
                     quantity: currentModalQty,
                     stepQty: currentActiveProduct.stepQty || 1,
                     minQty: currentActiveProduct.minQty || 1,
-                    unitLabel: currentActiveProduct.unitLabel || ''
+                    unitLabel: currentActiveProduct.unitLabel || '',
+                    customNote: customNote
                 });
             }
+
             closeProductModal();
             updateCartUI();
         }
 
-        function updateQuantity(id, dir) {
-            for (var i = 0; i < cart.length; i++) {
-                if (cart[i].id === id) {
-                    var step = cart[i].stepQty || 1;
-                    var min = cart[i].minQty || 1;
+        function updateQuantity(index, dir) {
+            var item = cart[index];
+            var step = item.stepQty || 1;
+            var min = item.minQty || 1;
 
-                    if (dir > 0) {
-                        cart[i].quantity += step;
-                    } else if (dir < 0) {
-                        cart[i].quantity -= step;
-                        if (cart[i].quantity < min) {
-                            cart.splice(i, 1);
-                        }
-                    }
-                    break;
+            if (dir > 0) {
+                item.quantity += step;
+            } else if (dir < 0) {
+                item.quantity -= step;
+                if (item.quantity < min) {
+                    cart.splice(index, 1);
                 }
             }
             updateCartUI();
         }
 
-        function removeItemFromCart(id) {
-            for (var i = 0; i < cart.length; i++) {
-                if (cart[i].id === id) {
-                    cart.splice(i, 1);
-                    break;
-                }
-            }
+        function removeItemFromCart(index) {
+            cart.splice(index, 1);
             updateCartUI();
         }
 
         function updateCartUI() {
             var badge = document.getElementById('cart-badge');
-            var totalQty = 0;
-            for (var i = 0; i < cart.length; i++) { totalQty += 1; }
-            if (totalQty > 0) {
-                badge.innerText = totalQty;
+            var totalItemsCount = cart.length;
+            if (totalItemsCount > 0) {
+                badge.innerText = totalItemsCount;
                 badge.classList.remove('hidden');
             } else {
                 badge.classList.add('hidden');
@@ -428,21 +431,24 @@
                 subtotal += itemTotalPrice;
                 var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-amber-400 text-center">طبق</div>';
 
+                var noteHtml = item.customNote ? '<p class="text-[11px] text-amber-300 mt-0.5">ملاحظة: ' + item.customNote + '</p>' : '';
+
                 html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
                     '<div class="flex items-center gap-3 flex-1">' +
                         itemImg +
                         '<div>' +
                             '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
+                            noteHtml +
                             '<p class="text-xs text-amber-400 font-bold mt-1">$' + itemTotalPrice.toFixed(2) + ' <span class="text-[10px] text-gray-400">(' + item.quantity + ' ' + (item.unitLabel || '') + ')</span></p>' +
                         '</div>' +
                     '</div>' +
                     '<div class="flex items-center gap-3">' +
                         '<div class="flex items-center gap-1.5 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
-                            '<button onclick="updateQuantity(' + item.id + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>' +
+                            '<button onclick="updateQuantity(' + j + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>' +
                             '<span class="text-xs font-bold px-1.5 text-center text-amber-300 min-w-[20px]">' + item.quantity + '</span>' +
-                            '<button onclick="updateQuantity(' + item.id + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>' +
+                            '<button onclick="updateQuantity(' + j + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>' +
                         '</div>' +
-                        '<button onclick="removeItemFromCart(' + item.id + ')" class="w-8 h-8 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30 shadow" title="حذف الطبق">' +
+                        '<button onclick="removeItemFromCart(' + j + ')" class="w-8 h-8 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30 shadow" title="حذف الطبق">' +
                             '<i class="fa-solid fa-xmark"></i>' +
                         '</button>' +
                     '</div>' +
@@ -481,7 +487,11 @@
 
             msg += "📋 تفاصيل الأطباق:\n";
             for (var j = 0; j < cart.length; j++) {
-                msg += "- " + cart[j].name + " (الكمية: " + cart[j].quantity + " " + (cart[j].unitLabel || '') + ") - $" + (cart[j].price * cart[j].quantity).toFixed(2) + "\n";
+                msg += "- " + cart[j].name + " (الكمية: " + cart[j].quantity + " " + (cart[j].unitLabel || '') + ")";
+                if (cart[j].customNote) {
+                    msg += " [ملاحظة: " + cart[j].customNote + "]";
+                }
+                msg += " - $" + (cart[j].price * cart[j].quantity).toFixed(2) + "\n";
             }
 
             msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
