@@ -122,7 +122,7 @@
                     </div>
                 </div>
 
-                <!-- نص توضيحي ديناميكي لعدد الأشخاص حسب الوزن (خاص بالقوزي وغيره) -->
+                <!-- نص توضيحي ديناميكي لعدد الأشخاص والأرغفة حسب الوزن -->
                 <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
                 <!-- خانة ملاحظات الزبون (فارغة ونظيفة) -->
@@ -169,18 +169,17 @@
             { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg", note: "" },
             { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg", note: "" },
             
-            /* تم تحديث القوزي ليدعم نظام الباوند وعدد الأشخاص الديناميكي */
             { 
                 id: 3, 
                 name: "القوزي العراقي", 
                 category: "main", 
-                price: 70,              // سعر الحد الأدنى (3 باوندات)
-                isPoundBased: true,     // مفتاح خاص لتفعيل نظام الباوند
-                minQty: 3,              // الحد الأدنى 3 باوندات
-                stepQty: 1,             // الزيادة باوند واحد
-                unitLabel: "باوند لحم",  // تسمية الوحدة
+                price: 70,              
+                isPoundBased: true,     
+                minQty: 3,              
+                stepQty: 1,             
+                unitLabel: "باوند لحم",  
                 image: "qoozi.jpg", 
-                note: "لحم غنم مع الرز والشعرية والمكسرات و 5 ارغفة خبز (الحد الأدنى 3 باوندات)" 
+                note: "لحم غنم مع الرز والشعيرية والمكسرات و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" 
             },
 
             { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", note: "" },
@@ -363,7 +362,6 @@
             var totalPrice = 0;
             var dynInfo = document.getElementById('dynamic-serving-info');
 
-            // حساب السعر الخاص بالقوزي (نظام الباوند المتدرج)
             if (currentActiveProduct.isPoundBased) {
                 if (currentModalQty === 3) {
                     totalPrice = 70;
@@ -371,26 +369,24 @@
                     totalPrice = 93;
                 } else if (currentModalQty === 5) {
                     totalPrice = 116;
-                } else if (currentModalQty >= 6) {
-                    // لكل باوند إضافي بعد الـ 3 باوندات الأولى
-                    totalPrice = 70 + ((currentModalQty - 3) * 23.33);
                 } else {
-                    totalPrice = currentActiveProduct.price;
+                    totalPrice = 70 + ((currentModalQty - 3) * 23.33);
                 }
 
-                // عرض عدد الأشخاص ديناميكياً حسب الباوندات
-                var servingText = "";
-                if (currentModalQty === 3) servingText = "👥 تكفي تقريباً (3 إلى 5 أشخاص)";
-                else if (currentModalQty === 4) servingText = "👥 تكفي تقريباً (6 إلى 7 أشخاص)";
-                else if (currentModalQty === 5) servingText = "👥 تكفي تقريباً (8 إلى 9 أشخاص)";
-                else if (currentModalQty >= 6) servingText = "👥 تكفي تقريباً (10 إلى 12 شخصاً أو أكثر)";
+                // حساب عدد الأشخاص وأرغفة الخبز تصاعدياً بانتظام بلا توقف
+                // 3 باوندات = 3-5 أشخاص و 5 أرغفة
+                var extraPounds = currentModalQty - 3;
+                var calcMinPeople = 3 + (extraPounds * 2);
+                var calcMaxPeople = 5 + (extraPounds * 2);
+                var calcBread = 5 + (extraPounds * 2); // رغيفين إضافيين لكل باوند إضافي
+
+                var servingText = "👥 تكفي تقريباً (" + calcMinPeople + " إلى " + calcMaxPeople + " شخصاً) • معها (" + calcBread + " رغيف خبز)";
 
                 if (dynInfo) {
                     dynInfo.innerText = servingText;
                     dynInfo.classList.remove('hidden');
                 }
             } else {
-                // الحساب العادي لبقية الأطباق
                 var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
                 totalPrice = unitPrice * currentModalQty;
                 if (dynInfo) dynInfo.classList.add('hidden');
@@ -398,14 +394,12 @@
 
             document.getElementById('modal-qty').innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' ' + currentActiveProduct.unitLabel : '');
             document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
-            // حفظ السعر المحسوب مؤقتاً للاستخدام عند الإضافة للصينية
             currentActiveProduct.calculatedPrice = totalPrice;
         }
 
         function confirmAddToCart() {
             if (!currentActiveProduct) return;
             
-            // اعتماد السعر المحسوب (سواء كان ثابتاً أو محسوباً بالباوند)
             var finalItemPrice = currentActiveProduct.isPoundBased ? (currentActiveProduct.calculatedPrice / currentModalQty) : (currentActiveProduct.unitPrice || currentActiveProduct.price);
             var customNote = document.getElementById('item-custom-note').value.trim();
 
@@ -448,151 +442,4 @@
             } else if (dir < 0) {
                 item.quantity -= step;
                 if (item.quantity < min) {
-                    cart.splice(index, 1);
-                }
-            }
-            updateCartUI();
-        }
-
-        function removeItemFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            var badge = document.getElementById('cart-badge');
-            var totalItemsCount = cart.length;
-            if (totalItemsCount > 0) {
-                badge.innerText = totalItemsCount;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-
-            var container = document.getElementById('cart-items');
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center text-xs py-16">صينية الطلبات فارغة حالياً</p>';
-                document.getElementById('cart-footer').style.display = 'none';
-                return;
-            }
-            document.getElementById('cart-footer').style.display = 'block';
-
-            var subtotal = 0;
-            var html = '';
-            for (var j = 0; j < cart.length; j++) {
-                var item = cart[j];
-                var itemTotalPrice = 0;
-
-                if (item.isPoundBased) {
-                    if (item.quantity === 3) itemTotalPrice = 70;
-                    else if (item.quantity === 4) itemTotalPrice = 93;
-                    else if (item.quantity === 5) itemTotalPrice = 116;
-                    else itemTotalPrice = 70 + ((item.quantity - 3) * 23.33);
-                } else {
-                    itemTotalPrice = item.price * item.quantity;
-                }
-
-                subtotal += itemTotalPrice;
-                var itemImg = item.image ? '<img src="' + item.image + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' : '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[10px] text-amber-400 text-center">طبق</div>';
-
-                var noteHtml = item.customNote ? '<p class="text-[11px] text-amber-300 mt-0.5">ملاحظة: ' + item.customNote + '</p>' : '';
-
-                // إضافة نص توضيحي لعدد الأشخاص في الصينية للقوزي
-                var cartServingDesc = "";
-                if (item.isPoundBased) {
-                    if (item.quantity === 3) cartServingDesc = " (تكفي 3-5 أشخاص)";
-                    else if (item.quantity === 4) cartServingDesc = " (تكفي 6-7 أشخاص)";
-                    else if (item.quantity === 5) cartServingDesc = " (تكفي 8-9 أشخاص)";
-                    else if (item.quantity >= 6) cartServingDesc = " (تكفي 10-12 شخصاً)";
-                }
-
-                html += '<div class="flex items-center justify-between bg-gray-800 p-3 rounded-xl border border-gray-700 gap-3">' +
-                    '<div class="flex items-center gap-3 flex-1">' +
-                        itemImg +
-                        '<div>' +
-                            '<h4 class="font-bold text-sm text-white">' + item.name + '</h4>' +
-                            noteHtml +
-                            '<p class="text-xs text-amber-400 font-bold mt-1">$' + itemTotalPrice.toFixed(2) + ' <span class="text-[10px] text-gray-300">(' + item.quantity + ' ' + (item.unitLabel || '') + cartServingDesc + ')</span></p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="flex items-center gap-3">' +
-                        '<div class="flex items-center gap-1.5 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
-                            '<button onclick="updateQuantity(' + j + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>' +
-                            '<span class="text-xs font-bold px-1.5 text-center text-amber-300 min-w-[20px]">' + item.quantity + '</span>' +
-                            '<button onclick="updateQuantity(' + j + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>' +
-                        '</div>' +
-                        '<button onclick="removeItemFromCart(' + j + ')" class="w-8 h-8 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30 shadow" title="حذف الطبق">' +
-                            '<i class="fa-solid fa-xmark"></i>' +
-                        '</button>' +
-                    '</div>' +
-                '</div>';
-            }
-
-            html += '<div class="bg-gray-950 p-3 rounded-xl text-xs space-y-1.5 mt-3 border border-gray-800">' +
-                '<div class="flex justify-between font-extrabold text-sm text-amber-400 pt-1"><span>المجموع الكلي:</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
-            '</div>';
-
-            container.innerHTML = html;
-        }
-
-        function openCart() {
-            document.getElementById('cart-modal').classList.remove('hidden');
-            updateCartUI();
-        }
-
-        function closeCart() {
-            document.getElementById('cart-modal').classList.add('hidden');
-        }
-
-        function sendWhatsAppOrder() {
-            var name = document.getElementById('customer-name').value.trim();
-            if (!name) {
-                alert('يرجى كتابة الاسم الكريم قبل إرسال الطلب.');
-                return;
-            }
-            var subtotal = 0;
-            
-            var msg = "مرحباً، أود تقديم طلب جديد:\n\n";
-            msg += "👤 الاسم: " + name + "\n\n";
-
-            msg += "📋 تفاصيل الأطباق:\n";
-            for (var j = 0; j < cart.length; j++) {
-                var itemTotalPrice = 0;
-                if (cart[j].isPoundBased) {
-                    if (cart[j].quantity === 3) itemTotalPrice = 70;
-                    else if (cart[j].quantity === 4) itemTotalPrice = 93;
-                    else if (cart[j].quantity === 5) itemTotalPrice = 116;
-                    else itemTotalPrice = 70 + ((cart[j].quantity - 3) * 23.33);
-                } else {
-                    itemTotalPrice = cart[j].price * cart[j].quantity;
-                }
-                subtotal += itemTotalPrice;
-
-                var servingDesc = "";
-                if (cart[j].isPoundBased) {
-                    if (cart[j].quantity === 3) servingDesc = " [تكفي 3-5 أشخاص]";
-                    else if (cart[j].quantity === 4) servingDesc = " [تكفي 6-7 أشخاص]";
-                    else if (cart[j].quantity === 5) servingDesc = " [تكفي 8-9 أشخاص]";
-                    else if (cart[j].quantity >= 6) servingDesc = " [تكفي 10-12 شخصاً]";
-                }
-
-                msg += "- " + cart[j].name + " (الكمية: " + cart[j].quantity + " " + (cart[j].unitLabel || '') + ")" + servingDesc;
-                if (cart[j].customNote) {
-                    msg += " [ملاحظة: " + cart[j].customNote + "]";
-                }
-                msg += " - $" + itemTotalPrice.toFixed(2) + "\n";
-            }
-
-            msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
-
-            var phone = "13366867948"; 
-            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
-            window.open(url, '_blank');
-        }
-
-        window.onload = function() {
-            renderProducts();
-        };
-    </script>
-</body>
-</html>
+                    cart.splice(index,
