@@ -117,15 +117,15 @@
                     <span class="text-xs text-gray-400 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
                     <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
                         <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
-                        <span id="modal-qty" class="text-sm font-extrabold w-16 text-center text-amber-400">1</span>
+                        <span id="modal-qty" class="text-sm font-extrabold w-24 text-center text-amber-400">1</span>
                         <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
                     </div>
                 </div>
 
-                <!-- نص توضيحي ديناميكي لعدد الأشخاص والأرغفة حسب الوزن -->
+                <!-- نص توضيحي ديناميكي لعدد الأشخاص والأرغفة للقوزي -->
                 <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
-                <!-- خانة ملاحظات الزبون -->
+                <!-- خانة ملاحظات الزبون (فارغة ونظيفة) -->
                 <div class="space-y-1">
                     <label class="text-xs text-gray-400 font-bold block">ملاحظات على الطبق (اختياري):</label>
                     <input type="text" id="item-custom-note" value="" placeholder="" class="w-full p-2.5 bg-gray-950 border border-gray-700 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none" />
@@ -159,170 +159,4 @@
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-lg"></i>
                     <span>إرسال الطلب عبر الواتساب</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        var products = [
-            { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg", note: "" },
-            { id: 2, name: "الباچة", category: "main", price: 60, image: "pacha.jpg", note: "" },
-            
-            { 
-                id: 3, 
-                name: "القوزي العراقي", 
-                category: "main", 
-                price: 70,              
-                isPoundBased: true,     
-                minQty: 3,              
-                stepQty: 1,             
-                unitLabel: "باوند لحم",  
-                image: "qoozi.jpg", 
-                note: "لحم غنم مع الرز والشعيرية والمكسرات و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" 
-            },
-
-            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", note: "" },
-            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "grilled chicken.png", note: "" },
-            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "meet with daugh.jpg", note: "" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", note: "" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", note: "" },
-            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg", note: "" },
-            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 أرغفة خبز" },
-            { id: 11, name: "تكة لحم", category: "grills", price: 35, image: "meat tecca.jpg", note: "" },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "chicken tecca.jpg", note: "" },
-            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", note: "" },
-            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg", note: "" },
-            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg", note: "" },
-            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png", note: "" },
-            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "kibbeh-jareesh.jpg", note: "" },
-            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "bourak meat .jpg", note: "" },
-            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "bourak cheese.jpg", note: "" },
-            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
-            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
-            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "manakesh zaatar.jpg", note: "" },
-            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
-            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg", note: "" },
-
-            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
-            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
-            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
-            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
-            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
-            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera 1.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 31, name: "الكليچة", category: "bakery", price: 20, image: "kleacha.png", unitPrice: 20, minQty: 1, stepQty: 1, unitLabel: "باوند", note: "20$ / 1 باوند (الحد الأدنى)" },
-
-            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg", note: "" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "chicken tecca.jpg", note: "" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "meat tecca.jpg", note: "" },
-            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg", note: "" }
-        ];
-
-        var heroImages = [
-            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
-            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
-            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
-            "gallery-13.jpg", "gallery-14.jpg"
-        ];
-        
-        var currentImgIndex = 0;
-        var isLayerOneActive = true;
-
-        function smoothChangeHeroBackground() {
-            var layer1 = document.getElementById('bg-layer-1');
-            var layer2 = document.getElementById('bg-layer-2');
-            if (!layer1 || !layer2) return;
-
-            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
-            var nextImage = heroImages[currentImgIndex];
-
-            if (isLayerOneActive) {
-                layer2.style.backgroundImage = "url('" + nextImage + "')";
-                layer1.classList.remove('active');
-                layer2.classList.add('active');
-            } else {
-                layer1.style.backgroundImage = "url('" + nextImage + "')";
-                layer2.classList.remove('active');
-                layer1.classList.add('active');
-            }
-            isLayerOneActive = !isLayerOneActive;
-        }
-
-        setInterval(smoothChangeHeroBackground, 4500);
-
-        var cart = [];
-        var currentCategory = 'all';
-        var currentActiveProduct = null;
-        var currentModalQty = 1;
-
-        function renderProducts() {
-            try {
-                var grid = document.getElementById('products-grid');
-                if (!grid) return;
-                var queryInput = document.getElementById('search-input');
-                var query = (queryInput && queryInput.value) ? queryInput.value.toLowerCase().trim() : '';
-                var html = '';
-                
-                for (var i = 0; i < products.length; i++) {
-                    var p = products[i];
-                    var matchCat = (currentCategory === 'all' || p.category === currentCategory);
-                    var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
-                    
-                    if (matchCat && matchQuery) {
-                        var imgContent = p.image ? 
-                            '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' :
-                            '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold">طبق بيتي طازج 🍲</div>';
-
-                        var priceDisplay = p.price ? '$' + p.price.toFixed(2) : '';
-
-                        html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
-                            '<div class="relative h-60 bg-gray-950">' +
-                                imgContent +
-                                '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400">' + priceDisplay + '</span>' +
-                            '</div>' +
-                            '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
-                                '<h3 class="font-extrabold text-base text-white mb-1">' + p.name + '</h3>' +
-                                (p.note ? '<p class="text-[11px] text-amber-300/90 mb-2 font-bold">' + p.note + '</p>' : '') +
-                                '<span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>' +
-                            '</div>' +
-                        '</div>';
-                    }
-                }
-                grid.innerHTML = html;
-            } catch (err) {
-                console.error("Render Error: ", err);
-            }
-        }
-
-        function filterCategory(cat, btn) {
-            currentCategory = cat;
-            var buttons = document.querySelectorAll('.cat-btn');
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
-            }
-            if (btn) {
-                btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
-            }
-            renderProducts();
-        }
-
-        function openProductModal(id) {
-            for (var j = 0; j < products.length; j++) {
-                if (products[j].id === id) {
-                    currentActiveProduct = products[j];
-                    break;
-                }
-            }
-            if (!currentActiveProduct) return;
-            
-            currentModalQty = currentActiveProduct.minQty || 1;
-            document.getElementById('item-custom-note').value = '';
-            
-            var modalImg = document.getElementById('modal-img');
-            modalImg.src = currentActiveProduct.image || 'gallery-1.jpg';
-            
-            document.getElementById('modal-title').innerText = currentActiveProduct.name;
-            
-            var modalNote = document.getElementById('modal-note');
-            if (currentActiveProduct.note)
+                </button
