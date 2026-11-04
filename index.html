@@ -189,7 +189,7 @@
         var products = [
             { id: 1, name: "الدولمة", category: "main", price: 45, image: "dolma.jpg", note: "حارة" },
             
-            // الباجة بخصائص ديناميكية (تُكفي شخصين مع 5 أرغفة خبز بـ 70$)
+            // الباجة: 70$ للوجبة الأولى (تغطي رأس و4 أرجل و3 أرغفة وتكفي شخصين)، وكل وجبة إضافية بـ 30$ وتضيف شخصين ورغيفين خبز بدون حد أقصى
             { 
                 id: 2, 
                 name: "الباچة", 
@@ -200,7 +200,7 @@
                 stepQty: 1,             
                 unitLabel: "وجبة باچة مطبوخة",  
                 image: "pacha.jpg", 
-                note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع 5 أرغفة خبز تكفي لشخصين)" 
+                note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" 
             },
             
             { 
@@ -387,12 +387,8 @@
             var step = currentActiveProduct.stepQty || 1;
             var min = currentActiveProduct.minQty || 1;
 
-            if (dir > 0) {
-                currentModalQty += step;
-            } else if (dir < 0) {
-                currentModalQty -= step;
-                if (currentModalQty < min) currentModalQty = min;
-            }
+            currentModalQty += (dir * step);
+            if (currentModalQty < min) currentModalQty = min;
 
             updateModalPriceUI();
         }
@@ -439,11 +435,15 @@
                     dynInfo.classList.remove('hidden');
                 }
             } else if (currentActiveProduct.isPachaBased) {
-                // الباجة: الوجبة بـ 70$ وتتضاعف طردياً (كل وجبة تكفي شخصين مع 5 أرغفة)
-                basePrice = 70 * currentModalQty;
+                // الباجة: الوجبة الأولى بـ 70$، وكل وجبة إضافية بـ 30$ وبدون حد أقصى
+                if (currentModalQty === 1) {
+                    basePrice = 70;
+                } else {
+                    basePrice = 70 + ((currentModalQty - 1) * 30);
+                }
 
-                var calcPeople = currentModalQty * 2; 
-                var calcBread = currentModalQty * 5;  
+                var calcPeople = currentModalQty * 2; // تكفي شخصين لكل وجبة
+                var calcBread = 3 + ((currentModalQty - 1) * 2); // 3 أرغفة للوجبة الأولى وكل وجبة إضافية تزود رغيفين
 
                 var pachaText = "👥 تكفي تقريباً (" + calcPeople + " أشخاص) • معها (" + calcBread + " رغيف خبز)";
                 if (dynInfo) {
@@ -553,7 +553,7 @@
                     cartServingDesc = " (تكفي " + calcMin + "-" + calcMax + " أشخاص • " + calcBread + " رغيف خبز)";
                 } else if (item.isPachaBased) {
                     var calcPeople = item.quantity * 2;
-                    var calcBread = item.quantity * 5;
+                    var calcBread = 3 + ((item.quantity - 1) * 2);
                     cartServingDesc = " (تكفي " + calcPeople + " أشخاص • " + calcBread + " رغيف خبز)";
                 }
 
@@ -614,7 +614,7 @@
                     servingDesc = " [تكفي " + calcMin + "-" + calcMax + " أشخاص • " + calcBread + " رغيف خبز]";
                 } else if (cart[j].isPachaBased) {
                     var calcPeople = cart[j].quantity * 2;
-                    var calcBread = cart[j].quantity * 5;
+                    var calcBread = 3 + ((cart[j].quantity - 1) * 2);
                     servingDesc = " [تكفي " + calcPeople + " أشخاص • " + calcBread + " رغيف خبز]";
                 }
 
@@ -627,7 +627,7 @@
 
             msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
 
-            var phone = "13366867948"; 
+            var phone = "3366867948"; 
             var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
             window.open(url, '_blank');
         }
