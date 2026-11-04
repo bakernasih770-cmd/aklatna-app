@@ -22,30 +22,6 @@
             opacity: 1;
             transform: scale(1.05);
         }
-        /* تأثير الدخان المتحرك للأطباق الساخنة */
-        .steam-container {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 120px;
-            pointer-events: none;
-            z-index: 20;
-            opacity: 0.75;
-        }
-        .steam-particle {
-            position: absolute;
-            bottom: 0;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
-            animation: riseSteam 3s infinite ease-in-out;
-        }
-        @keyframes riseSteam {
-            0% { transform: translateY(0) scale(0.4); opacity: 0; }
-            50% { opacity: 0.6; }
-            100% { transform: translateY(-90px) scale(2.2); opacity: 0; }
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -370,20 +346,8 @@
             document.getElementById('item-custom-note').value = '';
             
             var modalContainer = document.getElementById('modal-img-container');
-            
-            // إضافة تأثير الدخان الساخن للدولمة والباجة والقوزي
-            var steamHtml = '';
-            if (currentActiveProduct.isDolmaBased || currentActiveProduct.isPachaBased || currentActiveProduct.isPoundBased) {
-                steamHtml = '<div class="steam-container">' +
-                    '<div class="steam-particle" style="left: 20px; width: 15px; height: 35px; animation-delay: 0s;"></div>' +
-                    '<div class="steam-particle" style="left: 45px; width: 20px; height: 45px; animation-delay: 1s;"></div>' +
-                    '<div class="steam-particle" style="left: 70px; width: 14px; height: 30px; animation-delay: 2s;"></div>' +
-                '</div>';
-            }
-
             modalContainer.innerHTML = '<img src="' + (currentActiveProduct.image || 'gallery-1.jpg') + '" alt="" class="w-full h-full object-cover" onerror="this.style.display=\'none\';">' +
-                                       '<span class="absolute text-amber-400 text-xs font-bold">🍲 طبق بيتي طازج</span>' +
-                                       steamHtml;
+                                       '<span class="absolute text-amber-400 text-xs font-bold">🍲 طبق بيتي طازج</span>';
             
             document.getElementById('modal-title').innerText = currentActiveProduct.name;
             
@@ -606,7 +570,7 @@
                 var item = cart[j];
                 subtotal += item.price;
 
-                var itemImg = '<img src="' + (item.image || '') + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.style.display=\'none\';">' +
+                var itemImg = '<img src="' + (item.image || '') + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' +
                               '<div class="w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 flex items-center justify-center text-[9px] text-amber-400 text-center">طبق</div>';
 
                 var noteHtml = item.customNote ? '<p class="text-[11px] text-amber-300 mt-0.5">ملاحظة: ' + item.customNote + '</p>' : '';
@@ -672,10 +636,11 @@
             window.open(url, '_blank');
         }
 
-        // ضمان استدعاء عرض المنتجات بمجرد تحميل الصفحة بالكامل
-        window.addEventListener('DOMContentLoaded', function() {
+        // تشغيل عرض الأطباق مباشرة عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
             renderProducts();
         });
+        renderProducts();
     </script>
 </body>
 </html>
