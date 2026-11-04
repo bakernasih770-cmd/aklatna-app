@@ -126,6 +126,27 @@
 
                 <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
+                <!-- خيارات إضافية للخبز والصمون (تظهر فقط للقوزي أو الأطباق الرئيسية) -->
+                <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
+                    <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
+                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-xs text-gray-300">رغيف خبز إضافي ($1.00)</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeExtra('extraBread', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="extra-bread-qty" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeExtra('extraBread', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-xs text-gray-300">قطعة صمون إضافية ($1.00)</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeExtra('extraSamoon', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="extra-samoon-qty" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeExtra('extraSamoon', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="space-y-1">
                     <label class="text-xs text-gray-400 font-bold block">ملاحظات على الطبق (اختياري):</label>
                     <input type="text" id="item-custom-note" value="" placeholder="" class="w-full p-2.5 bg-gray-950 border border-gray-700 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none" />
@@ -255,6 +276,8 @@
         var currentCategory = 'all';
         var currentActiveProduct = null;
         var currentModalQty = 1;
+        var extraBreadQty = 0;
+        var extraSamoonQty = 0;
 
         function renderProducts() {
             var grid = document.getElementById('products-grid');
@@ -312,6 +335,10 @@
             if (!currentActiveProduct) return;
             
             currentModalQty = currentActiveProduct.minQty || 1;
+            extraBreadQty = 0;
+            extraSamoonQty = 0;
+            document.getElementById('extra-bread-qty').innerText = 0;
+            document.getElementById('extra-samoon-qty').innerText = 0;
             document.getElementById('item-custom-note').value = '';
             
             var modalContainer = document.getElementById('modal-img-container');
@@ -326,6 +353,14 @@
                 modalNote.classList.remove('hidden');
             } else {
                 modalNote.classList.add('hidden');
+            }
+
+            // إظهار خانة الخبز والصمون الإضافي للأطباق الرئيسية والقوزي والمشويات
+            var extraSection = document.getElementById('extra-bread-section');
+            if (currentActiveProduct.category === 'main' || currentActiveProduct.category === 'grills') {
+                extraSection.classList.remove('hidden');
+            } else {
+                extraSection.classList.add('hidden');
             }
 
             updateModalPriceUI();
@@ -350,21 +385,34 @@
             updateModalPriceUI();
         }
 
+        function changeExtra(type, dir) {
+            if (type === 'extraBread') {
+                extraBreadQty += dir;
+                if (extraBreadQty < 0) extraBreadQty = 0;
+                document.getElementById('extra-bread-qty').innerText = extraBreadQty;
+            } else if (type === 'extraSamoon') {
+                extraSamoonQty += dir;
+                if (extraSamoonQty < 0) extraSamoonQty = 0;
+                document.getElementById('extra-samoon-qty').innerText = extraSamoonQty;
+            }
+            updateModalPriceUI();
+        }
+
         function updateModalPriceUI() {
             if (!currentActiveProduct) return;
             
-            var totalPrice = 0;
+            var basePrice = 0;
             var dynInfo = document.getElementById('dynamic-serving-info');
 
             if (currentActiveProduct.isPoundBased) {
                 if (currentModalQty === 3) {
-                    totalPrice = 70;
+                    basePrice = 70;
                 } else if (currentModalQty === 4) {
-                    totalPrice = 93;
+                    basePrice = 93;
                 } else if (currentModalQty === 5) {
-                    totalPrice = 116;
+                    basePrice = 116;
                 } else {
-                    totalPrice = 70 + ((currentModalQty - 3) * 23.33);
+                    basePrice = 70 + ((currentModalQty - 3) * 23.33);
                 }
 
                 var extraPounds = currentModalQty - 3;
@@ -380,9 +428,13 @@
                 }
             } else {
                 var unitPrice = currentActiveProduct.unitPrice || currentActiveProduct.price;
-                totalPrice = unitPrice * currentModalQty;
+                basePrice = unitPrice * currentModalQty;
                 if (dynInfo) dynInfo.classList.add('hidden');
             }
+
+            // إضافة سعر الخبز والصمون الإضافي ($1 لكل قطعة)
+            var extrasTotal = (extraBreadQty * 1) + (extraSamoonQty * 1);
+            var totalPrice = basePrice + extrasTotal;
 
             document.getElementById('modal-qty').innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' ' + currentActiveProduct.unitLabel : '');
             document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
@@ -392,33 +444,28 @@
         function confirmAddToCart() {
             if (!currentActiveProduct) return;
             
-            var finalItemPrice = currentActiveProduct.isPoundBased ? (currentActiveProduct.calculatedPrice / currentModalQty) : (currentActiveProduct.unitPrice || currentActiveProduct.price);
             var customNote = document.getElementById('item-custom-note').value.trim();
-
-            var foundIndex = -1;
-            for (var i = 0; i < cart.length; i++) {
-                if (cart[i].id === currentActiveProduct.id && cart[i].customNote === customNote && !currentActiveProduct.isPoundBased) {
-                    foundIndex = i;
-                    break;
-                }
+            var extrasDesc = [];
+            if (extraBreadQty > 0) extrasDesc.push(extraBreadQty + " رغيف خبز إضافي");
+            if (extraSamoonQty > 0) extrasDesc.push(extraSamoonQty + " صمون إضافي");
+            
+            if (extrasDesc.length > 0) {
+                var extrasString = "إضافات: " + extrasDesc.join('، ');
+                customNote = customNote ? customNote + " | " + extrasString : extrasString;
             }
 
-            if (foundIndex !== -1) {
-                cart[foundIndex].quantity += currentModalQty;
-            } else {
-                cart.push({
-                    id: currentActiveProduct.id,
-                    name: currentActiveProduct.name,
-                    price: finalItemPrice,
-                    image: currentActiveProduct.image || '',
-                    quantity: currentModalQty,
-                    stepQty: currentActiveProduct.stepQty || 1,
-                    minQty: currentActiveProduct.minQty || 1,
-                    unitLabel: currentActiveProduct.unitLabel || '',
-                    customNote: customNote,
-                    isPoundBased: currentActiveProduct.isPoundBased || false
-                });
-            }
+            var finalItemPrice = currentActiveProduct.calculatedPrice;
+
+            cart.push({
+                id: currentActiveProduct.id,
+                name: currentActiveProduct.name,
+                price: finalItemPrice,
+                image: currentActiveProduct.image || '',
+                quantity: currentModalQty,
+                unitLabel: currentActiveProduct.unitLabel || '',
+                customNote: customNote,
+                isPoundBased: currentActiveProduct.isPoundBased || false
+            });
 
             closeProductModal();
             updateCartUI();
@@ -426,14 +473,11 @@
 
         function updateQuantity(index, dir) {
             var item = cart[index];
-            var step = item.stepQty || 1;
-            var min = item.minQty || 1;
-
             if (dir > 0) {
-                item.quantity += step;
-            } else if (dir < 0) {
-                item.quantity -= step;
-                if (item.quantity < min) {
+                item.quantity += (item.isPoundBased ? 1 : 1);
+            } else {
+                item.quantity -= (item.isPoundBased ? 1 : 1);
+                if (item.quantity < (item.isPoundBased ? 3 : 1)) {
                     cart.splice(index, 1);
                 }
             }
@@ -467,16 +511,7 @@
             var html = '';
             for (var j = 0; j < cart.length; j++) {
                 var item = cart[j];
-                var itemTotalPrice = 0;
-
-                if (item.isPoundBased) {
-                    if (item.quantity === 3) itemTotalPrice = 70;
-                    else if (item.quantity === 4) itemTotalPrice = 93;
-                    else if (item.quantity === 5) itemTotalPrice = 116;
-                    else itemTotalPrice = 70 + ((item.quantity - 3) * 23.33);
-                } else {
-                    itemTotalPrice = item.price * item.quantity;
-                }
+                var itemTotalPrice = item.price; // السعر محسوب كاملاً مع الإضافات في الـ modal
 
                 subtotal += itemTotalPrice;
                 var itemImg = '<img src="' + (item.image || '') + '" alt="' + item.name + '" class="w-16 h-16 rounded-lg object-cover border border-amber-500/50" onerror="this.style.display=\'none\';">' +
@@ -503,11 +538,6 @@
                         '</div>' +
                     '</div>' +
                     '<div class="flex items-center gap-3">' +
-                        '<div class="flex items-center gap-1.5 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
-                            '<button onclick="updateQuantity(' + j + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>' +
-                            '<span class="text-xs font-bold px-1.5 text-center text-amber-300 min-w-[20px]">' + item.quantity + '</span>' +
-                            '<button onclick="updateQuantity(' + j + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>' +
-                        '</div>' +
                         '<button onclick="removeItemFromCart(' + j + ')" class="w-8 h-8 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg flex items-center justify-center text-xs font-bold transition-all border border-red-500/30 shadow" title="حذف الطبق">' +
                             '<i class="fa-solid fa-xmark"></i>' +
                         '</button>' +
@@ -544,16 +574,7 @@
 
             msg += "📋 تفاصيل الأطباق:\n";
             for (var j = 0; j < cart.length; j++) {
-                var itemTotalPrice = 0;
-                if (cart[j].isPoundBased) {
-                    if (cart[j].quantity === 3) itemTotalPrice = 70;
-                    else if (cart[j].quantity === 4) itemTotalPrice = 93;
-                    else if (cart[j].quantity === 5) itemTotalPrice = 116;
-                    else itemTotalPrice = 70 + ((cart[j].quantity - 3) * 23.33);
-                } else {
-                    itemTotalPrice = cart[j].price * cart[j].quantity;
-                }
-                subtotal += itemTotalPrice;
+                subtotal += cart[j].price;
 
                 var servingDesc = "";
                 if (cart[j].isPoundBased) {
@@ -568,7 +589,7 @@
                 if (cart[j].customNote) {
                     msg += " [ملاحظة: " + cart[j].customNote + "]";
                 }
-                msg += " - $" + itemTotalPrice.toFixed(2) + "\n";
+                msg += " - $" + cart[j].price.toFixed(2) + "\n";
             }
 
             msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
