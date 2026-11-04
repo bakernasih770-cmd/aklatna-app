@@ -122,10 +122,10 @@
                     </div>
                 </div>
 
-                <!-- خانة إضافة ملاحظات للطبق -->
+                <!-- خانة ملاحظات الزبون (فارغة تماماً ونظيفة) -->
                 <div class="space-y-1">
                     <label class="text-xs text-gray-400 font-bold block">ملاحظات على الطبق (اختياري):</label>
-                    <input type="text" id="item-custom-note" placeholder="مثال: بدون بصل، زيادة حار..." class="w-full p-2.5 bg-gray-950 border border-gray-700 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none" />
+                    <input type="text" id="item-custom-note" value="" placeholder="" class="w-full p-2.5 bg-gray-950 border border-gray-700 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none" />
                 </div>
 
                 <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
@@ -188,7 +188,7 @@
             { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg" },
             { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg" },
 
-            // المخبوزات والخبز (تم استبدال كمينيموم بالحد الأدنى)
+            // المخبوزات والخبز
             { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
             { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
             { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
@@ -495,14 +495,4 @@
 
             msg += "\n💵 المجموع الكلي: $" + subtotal.toFixed(2) + "\n";
 
-            var phone = "13366867948"; 
-            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
-            window.open(url, '_blank');
-        }
-
-        window.onload = function() {
-            renderProducts();
-        };
-    </script>
-</body>
-</html>
+            var phone = "13
