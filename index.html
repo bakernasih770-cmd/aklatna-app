@@ -194,7 +194,7 @@
     </div>
 
     <script>
-        var imgFolder = ""; // إذا كانت صورك في مجلد خاص، اكتب اسمه هنا مثل "images/"
+        var imgFolder = "";
 
         var products = [
             { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
@@ -202,10 +202,8 @@
             { id: 3, name: "القوزي العراقي", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" },
             { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", note: "" },
             { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "grilled chicken.png", note: "" },
-            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "meet with daugh.jpg", note: "" },
             { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", note: "" },
             { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", note: "" },
-            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg", note: "" },
             { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
             { 
                 id: 11, 
@@ -269,13 +267,34 @@
                 image: "kibbeh-jareesh.jpg", 
                 note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
             },
-            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "bourak meat .jpg", note: "" },
-            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "bourak cheese.jpg", note: "" },
+            { 
+                id: 18, 
+                name: "بورك اللحم", 
+                category: "appetizers", 
+                price: 35, 
+                isMeatBourak: true, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "bourak meat .jpg", 
+                note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية" 
+            },
+            { 
+                id: 19, 
+                name: "بورك الجبن", 
+                category: "appetizers", 
+                price: 20, 
+                isCheeseBourak: true, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "bourak cheese.jpg", 
+                note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية" 
+            },
             { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
             { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
             { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "manakesh zaatar.jpg", note: "" },
             { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
-            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg", note: "" },
             { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
             { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
             { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
@@ -296,8 +315,8 @@
                 note: "25$ / 1 باوند (الحد الأدنى) • الزيادة بالباوند" 
             },
             { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "falafel-plate.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "chicken tecca.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "meat tecca.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "chicken tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "meat tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
             { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "kebab.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" }
         ];
 
@@ -357,11 +376,10 @@
                 if (matchCat && matchQuery) {
                     foundAny = true;
                     var imgSrc = encodeURI(imgFolder + p.image);
-                    // نظام تصحيح ذكي يخبرك بمسار الصورة المفقودة على الشاشة لتتأكد من اسم الملف في جيثب
                     var imgContent = '<img src="' + imgSrc + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs\\\'><span>❌ مفقودة:</span><span class=\\\'text-gray-300 text-[10px] mt-1\\\'>' + p.image + '</span></div>\';">' +
                                      '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
 
-                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : '')))));
+                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isMeatBourak ? 'يبدأ من $35' : (p.isCheeseBourak ? 'يبدأ من $20' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : '')))))));
 
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
@@ -553,6 +571,24 @@
 
                 if (dynInfo) dynInfo.classList.add('hidden');
                 document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isMeatBourak) {
+                if (currentModalQty <= 20) {
+                    basePrice = 35;
+                } else {
+                    basePrice = 35 + ((currentModalQty - 20) * 1.75);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isCheeseBourak) {
+                if (currentModalQty <= 20) {
+                    basePrice = 20;
+                } else {
+                    basePrice = 20 + ((currentModalQty - 20) * 1.00);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.isSandwich) {
                 if (currentModalQty <= 5) {
                     basePrice = 35;
@@ -641,6 +677,14 @@
             } else if (currentActiveProduct.isBulkAppetizer) {
                 if (currentModalQty <= 20) itemPrice = 30;
                 else itemPrice = 30 + ((currentModalQty - 20) * 1.5);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isMeatBourak) {
+                if (currentModalQty <= 20) itemPrice = 35;
+                else itemPrice = 35 + ((currentModalQty - 20) * 1.75);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isCheeseBourak) {
+                if (currentModalQty <= 20) itemPrice = 20;
+                else itemPrice = 20 + ((currentModalQty - 20) * 1.00);
                 displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.isSandwich) {
                 if (currentModalQty <= 5) itemPrice = 35;
