@@ -68,7 +68,7 @@
         </div>
     </section>
 
-    <!-- شريط المعلومات والسياسات مع عبارة التوصيل المجاني الواضحة والكبيرة -->
+    <!-- شريط معلومات المحل وعرض التوصيل المجاني بخط واضح وكبير -->
     <div class="bg-gray-900 border-y border-amber-500/30 py-4 px-4 shadow-inner">
         <div class="max-w-7xl mx-auto flex flex-col items-center justify-center gap-3 text-center">
             <div class="flex flex-wrap justify-center items-center gap-6 text-xs md:text-sm font-bold text-amber-300">
@@ -308,6 +308,7 @@
             { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
             { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
             { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
+            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
             { 
                 id: 31, 
                 name: "الكليچة", 
@@ -321,6 +322,183 @@
                 note: "25$ / 1 باوند (الحد الأدنى) • الزيادة بالباوند" 
             },
             { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "falafel-plate.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "chicken tecca.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "meat tecca.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "kebab
+            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "chicken tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "meat tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "kebab.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" }
+        ];
+
+        var heroImages = [
+            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
+            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
+            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
+            "gallery-13.jpg", "gallery-14.jpg"
+        ];
+        
+        var currentImgIndex = 0;
+        var isLayerOneActive = true;
+
+        function smoothChangeHeroBackground() {
+            var layer1 = document.getElementById('bg-layer-1');
+            var layer2 = document.getElementById('bg-layer-2');
+            if (!layer1 || !layer2) return;
+
+            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+            var nextImage = imgFolder + heroImages[currentImgIndex];
+
+            if (isLayerOneActive) {
+                layer2.style.backgroundImage = "url('" + encodeURI(nextImage) + "')";
+                layer1.classList.remove('active');
+                layer2.classList.add('active');
+            } else {
+                layer1.style.backgroundImage = "url('" + encodeURI(nextImage) + "')";
+                layer2.classList.remove('active');
+                layer1.classList.add('active');
+            }
+            isLayerOneActive = !isLayerOneActive;
+        }
+
+        setInterval(smoothChangeHeroBackground, 4500);
+
+        var cart = [];
+        var currentCategory = 'all';
+        var currentActiveProduct = null;
+        var currentModalQty = 1;
+        var dolmaSelectedSize = 'small';
+        var extraBreadQty = 0;
+        var extraSamoonQty = 0;
+
+        function renderProducts() {
+            var grid = document.getElementById('products-grid');
+            if (!grid) return;
+            var queryInput = document.getElementById('search-input');
+            var query = (queryInput && queryInput.value) ? queryInput.value.toLowerCase().trim() : '';
+            var html = '';
+            var foundAny = false;
+            
+            for (var i = 0; i < products.length; i++) {
+                var p = products[i];
+                var matchCat = (currentCategory === 'all' || p.category === currentCategory);
+                var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
+                
+                if (matchCat && matchQuery) {
+                    foundAny = true;
+                    var imgSrc = encodeURI(imgFolder + p.image);
+                    var imgContent = '<img src="' + imgSrc + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs\\\'><span>🍲</span><span class=\\\'text-white text-xs mt-1\\\'>' + p.name + '</span></div>\';">';
+
+                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isMeatBourak ? 'يبدأ من $35' : (p.isCheeseBourak ? 'يبدأ من $20' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : '')))))));
+
+                    html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
+                        '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
+                            imgContent +
+                            '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">' + priceDisplay + '</span>' +
+                        '</div>' +
+                        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
+                            '<h3 class="font-extrabold text-base text-white mb-1">' + p.name + '</h3>' +
+                            (p.note ? '<p class="text-[11px] text-amber-300/90 mb-2 font-bold">' + p.note + '</p>' : '') +
+                            '<span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>' +
+                        '</div>' +
+                    '</div>';
+                }
+            }
+
+            if (!foundAny) {
+                html = '<div class="col-span-full text-center text-gray-400 py-16 text-sm font-bold">عذراً، لم يتم العثور على أطباق تطابق بحثك</div>';
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            var buttons = document.querySelectorAll('.cat-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
+            }
+            if (btn) {
+                btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
+            }
+            renderProducts();
+        }
+
+        function openProductModal(id) {
+            for (var j = 0; j < products.length; j++) {
+                if (products[j].id === id) {
+                    currentActiveProduct = products[j];
+                    break;
+                }
+            }
+            if (!currentActiveProduct) return;
+            
+            currentModalQty = currentActiveProduct.minQty || 1;
+            dolmaSelectedSize = 'small';
+            extraBreadQty = 0;
+            extraSamoonQty = 0;
+            document.getElementById('extra-bread-qty').innerText = 0;
+            document.getElementById('extra-samoon-qty').innerText = 0;
+            document.getElementById('item-custom-note').value = '';
+            
+            var modalContainer = document.getElementById('modal-img-container');
+            var modalImgSrc = encodeURI(imgFolder + (currentActiveProduct.image || 'gallery-1.jpg'));
+            modalContainer.innerHTML = '<img src="' + modalImgSrc + '" alt="" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs\\\'><span>🍲</span><span class=\\\'text-white text-xs mt-1\\\'>' + currentActiveProduct.name + '</span></div>\';">';
+            
+            document.getElementById('modal-title').innerText = currentActiveProduct.name;
+            
+            var modalNote = document.getElementById('modal-note');
+            if (currentActiveProduct.note) {
+                modalNote.innerText = "📌 " + currentActiveProduct.note;
+                modalNote.classList.remove('hidden');
+            } else {
+                modalNote.classList.add('hidden');
+            }
+
+            var dolmaSection = document.getElementById('dolma-size-section');
+            var normalQtyWrapper = document.getElementById('normal-qty-wrapper');
+            var extraSection = document.getElementById('extra-bread-section');
+
+            if (currentActiveProduct.isDolmaBased) {
+                dolmaSection.classList.remove('hidden');
+                normalQtyWrapper.classList.add('hidden');
+                updateDolmaSizeUIButtons();
+            } else {
+                dolmaSection.classList.add('hidden');
+                normalQtyWrapper.classList.remove('hidden');
+            }
+
+            if (currentActiveProduct.category === 'main' || currentActiveProduct.category === 'grills') {
+                extraSection.classList.remove('hidden');
+            } else {
+                extraSection.classList.add('hidden');
+            }
+
+            updateModalPriceUI();
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function setDolmaSize(size) {
+            dolmaSelectedSize = size;
+            updateDolmaSizeUIButtons();
+            updateModalPriceUI();
+        }
+
+        function updateDolmaSizeUIButtons() {
+            var btnS = document.getElementById('size-small-btn');
+            var btnM = document.getElementById('size-medium-btn');
+            var btnL = document.getElementById('size-large-btn');
+
+            btnS.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'small' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+            btnM.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'medium' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+            btnL.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'large' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
+        }
+
+        function changeModalQty(dir) {
+            var step = currentActiveProduct.stepQty || 1;
+            var min = currentActiveProduct.minQty || 1;
+
+            currentModalQty += (dir * step);
+            if (currentModalQty < min) currentModalQty = min;
+
+            updateModalPriceUI
