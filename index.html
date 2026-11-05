@@ -258,7 +258,7 @@
                 minQty: 20, 
                 stepQty: 1, 
                 unitLabel: "قطعة", 
-                image: "cuba gereash.jpg", 
+                image: "kibbeh-jareesh.jpg", 
                 note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
             },
             { 
@@ -297,7 +297,19 @@
                 image: "bourak cheese.jpg", 
                 note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية" 
             },
-            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
+            { 
+                id: 20, 
+                name: "لحم بعجين", 
+                category: "appetizers", 
+                price: 35, 
+                isLahmBajin: true, 
+                unitPrice: 1.75, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "lahm-bajin.jpg", 
+                note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية" 
+            },
             { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
             { 
                 id: 22, 
@@ -397,7 +409,7 @@
                     var imgContent = '<img src="' + imgSrc + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs\\\'><span>❌ مفقودة:</span><span class=\\\'text-gray-300 text-[10px] mt-1\\\'>' + p.image + '</span></div>\';">' +
                                      '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
 
-                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isMeatBourak ? 'يبدأ من $35' : (p.isCheeseBourak ? 'يبدأ من $20' : (p.isZaatarPastry ? 'يبدأ من $25' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : ''))))))));
+                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isMeatBourak ? 'يبدأ من $35' : (p.isCheeseBourak ? 'يبدأ من $20' : (p.isZaatarPastry ? 'يبدأ من $25' : (p.isLahmBajin ? 'يبدأ من $35' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : '')))))))));
 
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
@@ -543,7 +555,7 @@
                 else if (dolmaSelectedSize === 'large') totalPrice = 100;
             } else if (p.isPachaBased) {
                 totalPrice = p.price * currentModalQty;
-            } else if (p.isPoundBased || p.isMeatTikkaBased || p.isChickenTikkaBased || p.isBulkAppetizer || p.isMeatBourak || p.isCheeseBourak || p.isZaatarPastry || p.isSandwich) {
+            } else if (p.isPoundBased || p.isMeatTikkaBased || p.isChickenTikkaBased || p.isBulkAppetizer || p.isMeatBourak || p.isCheeseBourak || p.isZaatarPastry || p.isLahmBajin || p.isSandwich) {
                 var basePrice = p.price;
                 var min = p.minQty;
                 if (currentModalQty <= min) {
@@ -561,6 +573,8 @@
                         extraUnitRate = 1.00;
                     } else if (p.isZaatarPastry) {
                         extraUnitRate = 1.00;
+                    } else if (p.isLahmBajin) {
+                        extraUnitRate = 1.75;
                     } else if (p.isSandwich) {
                         extraUnitRate = 7.00;
                     } else if (p.isPoundBased) {
