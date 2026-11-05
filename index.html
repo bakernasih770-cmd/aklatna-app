@@ -55,8 +55,8 @@
     </header>
 
     <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
-        <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
-        <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
+        <div id="bg-layer-1" class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=80');"></div>
+        <div id="bg-layer-2" class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80');"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto pb-6">
             <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
@@ -104,9 +104,7 @@
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
         <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
             <div class="relative h-64 bg-gray-950 flex items-center justify-center overflow-hidden">
-                <div id="modal-img-container" class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 font-bold relative">
-                    <span>طبق بيتي عراقي 🍲</span>
-                </div>
+                <div id="modal-img-container" class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 font-bold relative"></div>
                 
                 <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/80 hover:bg-black text-amber-400 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg border border-amber-500/30 transition-all z-30">
                     <i class="fa-solid fa-arrow-right"></i>
@@ -119,7 +117,6 @@
                 <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
                 <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2 rounded-lg border border-gray-800 hidden"></p>
                 
-                <!-- خيار اختيار حجم قدر الدولمة -->
                 <div id="dolma-size-section" class="space-y-2 hidden">
                     <label class="text-xs text-gray-400 font-bold block">اختر حجم القدر:</label>
                     <div class="grid grid-cols-3 gap-2">
@@ -140,7 +137,6 @@
 
                 <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
-                <!-- خيارات إضافية للخبز والصمون -->
                 <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
                     <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
                     <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
@@ -168,157 +164,3 @@
 
                 <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cart-plus"></i>
-                    <span>أضف إلى الصينية</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal الصينية -->
-    <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
-        <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
-            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات الشاملة</h2>
-                
-                <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <span>العودة للقائمة</span>
-                </button>
-            </div>
-            
-            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
-
-            <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
-                <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400 font-bold block">تاريخ استلام الطلب (قبل 24 ساعة):</label>
-                    <input type="date" id="order-date" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
-                </div>
-
-                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span>إرسال الطلب عبر الواتساب</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal الأرشيف وسجل الطلبات -->
-    <div id="archive-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
-        <div class="w-full max-w-2xl bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col max-h-[85vh]">
-            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-box-archive ml-2"></i> أرشيف وسجل الطلبات السابقة</h2>
-                <button onclick="closeArchive()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <span>إغلاق</span>
-                </button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="archive-items-container"></div>
-            <div class="p-3 bg-gray-950 border-t border-gray-800 text-center">
-                <button onclick="clearArchive()" class="text-red-400 hover:text-red-300 text-xs font-bold">إفراغ السجل والأرشيف بالكامل</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        var isKitchenOpen = true;
-
-        var products = [
-            { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
-            { id: 2, name: "الباچة", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" },
-            { id: 3, name: "القوزي العراقي", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" },
-            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", note: "" },
-            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "grilled chicken.png", note: "" },
-            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "meet with daugh.jpg", note: "" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", note: "" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", note: "" },
-            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg", note: "" },
-            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
-            { id: 11, name: "تكة لحم", category: "grills", price: 28, isMeatTecca: true, minQty: 4, stepQty: 1, unitLabel: "سيخ", image: "meat tecca.jpg", note: "الحد الأدنى 4 أسياخ (28$) - معها رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 20, isChickenTecca: true, minQty: 4, stepQty: 1, unitLabel: "سيخ", image: "chicken tecca.jpg", note: "الحد الأدنى 4 أسياخ (20$) - معها رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" },
-            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", note: "" },
-            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg", note: "" },
-            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg", note: "" },
-            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png", note: "" },
-            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "kibbeh-jareesh.jpg", note: "" },
-            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "bourak meat .jpg", note: "" },
-            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "bourak cheese.jpg", note: "" },
-            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
-            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
-            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "manakesh zaatar.jpg", note: "" },
-            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
-            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg", note: "" },
-            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
-            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
-            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
-            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
-            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
-            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera 1.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 31, name: "الكليچة", category: "bakery", price: 20, image: "kleacha.png", unitPrice: 20, minQty: 1, stepQty: 1, unitLabel: "باوند", note: "20$ / 1 باوند (الحد الأدنى)" },
-            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg", note: "" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "chicken tecca.jpg", note: "" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "meat tecca.jpg", note: "" },
-            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg", note: "" }
-        ];
-
-        var heroImages = [
-            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
-            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
-            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
-            "gallery-13.jpg", "gallery-14.jpg"
-        ];
-        
-        var currentImgIndex = 0;
-        var isLayerOneActive = true;
-
-        function smoothChangeHeroBackground() {
-            var layer1 = document.getElementById('bg-layer-1');
-            var layer2 = document.getElementById('bg-layer-2');
-            if (!layer1 || !layer2) return;
-
-            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
-            var nextImage = heroImages[currentImgIndex];
-
-            if (isLayerOneActive) {
-                layer2.style.backgroundImage = "url('" + nextImage + "')";
-                layer1.classList.remove('active');
-                layer2.classList.add('active');
-            } else {
-                layer1.style.backgroundImage = "url('" + nextImage + "')";
-                layer2.classList.remove('active');
-                layer1.classList.add('active');
-            }
-            isLayerOneActive = !isLayerOneActive;
-        }
-
-        setInterval(smoothChangeHeroBackground, 4500);
-
-        var cart = [];
-        var currentCategory = 'all';
-        var currentActiveProduct = null;
-        var currentModalQty = 1;
-        var dolmaSelectedSize = 'small';
-        var extraBreadQty = 0;
-        var extraSamoonQty = 0;
-
-        function renderProducts() {
-            var grid = document.getElementById('products-grid');
-            if (!grid) return;
-            var queryInput = document.getElementById('search-input');
-            var query = (queryInput && queryInput.value) ? queryInput.value.toLowerCase().trim() : '';
-            var html = '';
-            var foundAny = false;
-            
-            for (var i = 0; i < products.length; i++) {
-                var p = products[i];
-                var matchCat = (currentCategory === 'all' || p.category === currentCategory);
-                var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
-                
-                if (matchCat && matchQuery) {
-                    foundAny = true;
-                    var imgContent = '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
-                                     '<div class="w-full h-full items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
-
-                    var price
