@@ -51,8 +51,8 @@
     </header>
 
     <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
-        <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
-        <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
+        <div id="bg-layer-1" class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80');"></div>
+        <div id="bg-layer-2" class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80');"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto pb-6">
             <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
@@ -196,17 +196,15 @@
     </div>
 
     <script>
-        var imgFolder = "";
-
         var products = [
-            { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
-            { id: 2, name: "الباچة", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" },
-            { id: 3, name: "القوزي العراقي", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" },
-            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", note: "" },
-            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "grilled chicken.png", note: "" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", note: "" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", note: "" },
-            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
+            { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80", note: "دولمة عراقية أصيلة طازجة" },
+            { id: 2, name: "الباچة", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" },
+            { id: 3, name: "القوزي العراقي", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" },
+            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=600&q=80", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
             { 
                 id: 11, 
                 name: "تكة لحم", 
@@ -216,7 +214,7 @@
                 minQty: 4, 
                 stepQty: 1, 
                 unitLabel: "سيخ لحم", 
-                image: "meat tecca.jpg", 
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80", 
                 note: "4 أسياخ بـ $28 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" 
             },
             { 
@@ -228,11 +226,11 @@
                 minQty: 4, 
                 stepQty: 1, 
                 unitLabel: "سيخ دجاج", 
-                image: "chicken tecca.jpg", 
+                image: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=600&q=80", 
                 note: "4 أسياخ بـ $20 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" 
             },
-            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", note: "" },
-            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg", note: "" },
+            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80", note: "" },
             { 
                 id: 15, 
                 name: "كبة حلب", 
@@ -242,7 +240,7 @@
                 minQty: 20, 
                 stepQty: 1, 
                 unitLabel: "قطعة", 
-                image: "kibbeh-halab.jpg", 
+                image: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80", 
                 note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
             },
             { 
@@ -254,7 +252,7 @@
                 minQty: 20, 
                 stepQty: 1, 
                 unitLabel: "قطعة", 
-                image: "kibbeh-jareesh.jpg", 
+                image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80", 
                 note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
             },
             { 
@@ -266,7 +264,7 @@
                 minQty: 20, 
                 stepQty: 1, 
                 unitLabel: "قطعة", 
-                image: "kibbeh-jareesh.jpg", 
+                image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80", 
                 note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
             },
             { 
@@ -278,7 +276,7 @@
                 minQty: 20, 
                 stepQty: 1, 
                 unitLabel: "قطعة", 
-                image: "bourak meat .jpg", 
+                image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80", 
                 note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية" 
             },
             { 
@@ -290,20 +288,20 @@
                 minQty: 20, 
                 stepQty: 1, 
                 unitLabel: "قطعة", 
-                image: "bourak cheese.jpg", 
+                image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80", 
                 note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية" 
             },
-            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
-            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
-            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "manakesh zaatar.jpg", note: "" },
-            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
-            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
-            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
-            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
-            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
-            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
-            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
+            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
+            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=600&q=80", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
+            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
+            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
+            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&w=600&q=80", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
+            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
+            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
             { 
                 id: 31, 
                 name: "الكليچة", 
@@ -313,20 +311,19 @@
                 minQty: 1, 
                 stepQty: 1, 
                 unitLabel: "باوند", 
-                image: "kleacha.png", 
+                image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80", 
                 note: "25$ / 1 باوند (الحد الأدنى) • الزيادة بالباوند" 
             },
-            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "falafel-plate.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "chicken tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "meat tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
-            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "kebab.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" }
+            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=600&q=80", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" }
         ];
 
         var heroImages = [
-            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
-            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
-            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
-            "gallery-13.jpg", "gallery-14.jpg"
+            "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
+            "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+            "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80"
         ];
         
         var currentImgIndex = 0;
@@ -338,14 +335,14 @@
             if (!layer1 || !layer2) return;
 
             currentImgIndex = (currentImgIndex + 1) % heroImages.length;
-            var nextImage = imgFolder + heroImages[currentImgIndex];
+            var nextImage = heroImages[currentImgIndex];
 
             if (isLayerOneActive) {
-                layer2.style.backgroundImage = "url('" + encodeURI(nextImage) + "')";
+                layer2.style.backgroundImage = "url('" + nextImage + "')";
                 layer1.classList.remove('active');
                 layer2.classList.add('active');
             } else {
-                layer1.style.backgroundImage = "url('" + encodeURI(nextImage) + "')";
+                layer1.style.backgroundImage = "url('" + nextImage + "')";
                 layer2.classList.remove('active');
                 layer1.classList.add('active');
             }
@@ -377,9 +374,8 @@
                 
                 if (matchCat && matchQuery) {
                     foundAny = true;
-                    var imgSrc = encodeURI(imgFolder + p.image);
+                    var imgSrc = p.image;
                     
-                    // تحسين وتأمين عرض الصور في حال تعذر تحميل الصورة الأصلية
                     var imgContent = '<img src="' + imgSrc + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
                                      '<div class="w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs" style="display:none;"><span>🍲</span><span class="text-white text-xs mt-1">' + p.name + '</span></div>';
 
@@ -436,7 +432,7 @@
             document.getElementById('item-custom-note').value = '';
             
             var modalContainer = document.getElementById('modal-img-container');
-            var modalImgSrc = encodeURI(imgFolder + (currentActiveProduct.image || 'gallery-1.jpg'));
+            var modalImgSrc = currentActiveProduct.image;
             modalContainer.innerHTML = '<img src="' + modalImgSrc + '" alt="" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
                                        '<div class="w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs" style="display:none;"><span>🍲</span><span class="text-white text-xs mt-1">' + currentActiveProduct.name + '</span></div>';
             
@@ -680,4 +676,102 @@
                 displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.isBulkAppetizer) {
                 if (currentModalQty <= 20) itemPrice = 30;
-                else itemPrice = 30 + ((currentModalQty - 20) * 1
+                else itemPrice = 30 + ((currentModalQty - 20) * 1.5);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isMeatBourak) {
+                if (currentModalQty <= 20) itemPrice = 35;
+                else itemPrice = 35 + ((currentModalQty - 20) * 1.75);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isCheeseBourak) {
+                if (currentModalQty <= 20) itemPrice = 20;
+                else itemPrice = 20 + ((currentModalQty - 20) * 1.00);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isSandwich) {
+                if (currentModalQty <= 5) itemPrice = 35;
+                else itemPrice = 35 + ((currentModalQty - 5) * 7);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.id === 31) { // الكليجة
+                itemPrice = currentModalQty * 25;
+                displayDetails = currentModalQty + ' باوند';
+            } else if (currentActiveProduct.isPoundBased) {
+                if (currentModalQty === 3) itemPrice = 70;
+                else if (currentModalQty === 4) itemPrice = 93;
+                else if (currentModalQty === 5) itemPrice = 116;
+                else itemPrice = 70 + ((currentModalQty - 3) * 23.33);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isPachaBased) {
+                if (currentModalQty === 1) itemPrice = 70;
+                else itemPrice = 70 + ((currentModalQty - 1) * 30);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else {
+                if (currentActiveProduct.unitPrice) itemPrice = currentModalQty * currentActiveProduct.unitPrice;
+                else itemPrice = currentModalQty * currentActiveProduct.price;
+                var unit = currentActiveProduct.unitLabel ? currentActiveProduct.unitLabel : 'قطعة';
+                displayDetails = currentModalQty + ' ' + unit;
+            }
+
+            var itemTotal = itemPrice + (extraBreadQty * 1) + (extraSamoonQty * 1);
+            var noteVal = document.getElementById('item-custom-note').value.trim();
+
+            cart.push({
+                product: currentActiveProduct,
+                qty: currentModalQty,
+                size: dolmaSelectedSize,
+                extraBread: extraBreadQty,
+                extraSamoon: extraSamoonQty,
+                totalPrice: itemTotal,
+                detailsText: displayDetails,
+                customNote: noteVal
+            });
+
+            updateCartBadge();
+            closeProductModal();
+        }
+
+        function updateCartBadge() {
+            var badge = document.getElementById('cart-badge');
+            if (cart.length > 0) {
+                badge.innerText = cart.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function openCart() {
+            renderCartItems();
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            var container = document.getElementById('cart-items');
+            if (!container) return;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">الصينية فارغة حالياً</div>';
+                return;
+            }
+
+            var html = '';
+            var grandTotal = 0;
+
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                grandTotal += item.totalPrice;
+
+                var extras = [];
+                if (item.extraBread > 0) extras.push(item.extraBread + ' خبز إضافي');
+                if (item.extraSamoon > 0) extras.push(item.extraSamoon + ' صمون إضافي');
+                var extrasStr = extras.length > 0 ? extras.join(' ، ') : '';
+
+                html += '<div class="bg-gray-950 p-4 rounded
