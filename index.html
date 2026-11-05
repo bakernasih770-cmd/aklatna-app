@@ -219,7 +219,18 @@
                 image: "meat tecca.jpg", 
                 note: "4 أسياخ بـ $28 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" 
             },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 25, image: "chicken tecca.jpg", note: "" },
+            { 
+                id: 12, 
+                name: "تكة دجاج", 
+                category: "grills", 
+                price: 20, 
+                isChickenTikkaBased: true, 
+                minQty: 4, 
+                stepQty: 1, 
+                unitLabel: "سيخ دجاج", 
+                image: "chicken tecca.jpg", 
+                note: "4 أسياخ بـ $20 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" 
+            },
             { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", note: "" },
             { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg", note: "" },
             { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg", note: "" },
@@ -304,7 +315,7 @@
                     var imgContent = '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
                                      '<div class="w-full h-full items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
 
-                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.price ? '$' + p.price.toFixed(2) : ''));
+                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.price ? '$' + p.price.toFixed(2) : '')));
 
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
@@ -473,6 +484,19 @@
                     dynInfo.classList.remove('hidden');
                 }
                 document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isChickenTikkaBased) {
+                if (currentModalQty <= 4) {
+                    basePrice = 20;
+                } else {
+                    basePrice = 20 + ((currentModalQty - 4) * 5);
+                }
+
+                var servingText = "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي";
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.isPoundBased) {
                 if (currentModalQty === 3) {
                     basePrice = 70;
@@ -540,6 +564,10 @@
             } else if (currentActiveProduct.isMeatTikkaBased) {
                 if (currentModalQty <= 4) itemPrice = 28;
                 else itemPrice = 28 + ((currentModalQty - 4) * 7);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isChickenTikkaBased) {
+                if (currentModalQty <= 4) itemPrice = 20;
+                else itemPrice = 20 + ((currentModalQty - 4) * 5);
                 displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.isPoundBased) {
                 if (currentModalQty === 3) itemPrice = 70;
@@ -667,7 +695,7 @@
             msg += "-------------------------\n";
             msg += "المجموع الكلي: $" + grandTotal.toFixed(2);
 
-            var whatsappNumber = "13360000000"; // يمكنك تغيير رقم الواتساب هنا
+            var whatsappNumber = "13360000000"; // استبدل الرقم برقم الواتساب الحقيقي
             var url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(msg);
             window.open(url, '_blank');
         }
