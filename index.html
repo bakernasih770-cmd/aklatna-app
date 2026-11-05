@@ -86,4 +86,59 @@
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
             <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
             <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
-            <button onclick="filterCategory('grills
+            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
+            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
+            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
+            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
+            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
+    </main>
+
+    <!-- Modal عرض المنتج -->
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
+        <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
+            <div class="relative h-64 bg-gray-950 flex items-center justify-center overflow-hidden">
+                <div id="modal-img-container" class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 font-bold relative">
+                    <span>طبق بيتي عراقي 🍲</span>
+                </div>
+                
+                <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/80 hover:bg-black text-amber-400 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg border border-amber-500/30 transition-all z-30">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>العودة للقائمة</span>
+                </button>
+                
+                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-30"></span>
+            </div>
+            <div class="p-6 space-y-4">
+                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
+                <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2 rounded-lg border border-gray-800 hidden"></p>
+                
+                <!-- خيار اختيار حجم قدر الدولمة -->
+                <div id="dolma-size-section" class="space-y-2 hidden">
+                    <label class="text-xs text-gray-400 font-bold block">اختر حجم القدر:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="setDolmaSize('small')" id="size-small-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر صغير ($60)</button>
+                        <button type="button" onclick="setDolmaSize('medium')" id="size-medium-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر وسط ($80)</button>
+                        <button type="button" onclick="setDolmaSize('large')" id="size-large-btn" class="py-2 px-3 rounded-xl border border-gray-700 bg-gray-950 text-xs font-bold text-gray-300 hover:border-amber-500 transition-all">قدر كبير ($100)</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2 border-t border-gray-800" id="normal-qty-wrapper">
+                    <span class="text-xs text-gray-400 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
+                    <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
+                        <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
+                        <span id="modal-qty" class="text-sm font-extrabold w-36 text-center text-amber-400">1</span>
+                        <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
+                    </div>
+                </div>
+
+                <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
+
+                <!-- خيارات إضافية للخبز والصمون -->
+                <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
+                    <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
+                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-xs text-gray-300">رغيف خبز
+                            
