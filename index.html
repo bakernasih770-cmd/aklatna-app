@@ -663,3 +663,73 @@
 
             if (cart.length === 0) {
                 html = '<div class="text-center text-gray-400 py-16 text-sm font-bold">الصينية فارغة حالياً.. أضف بعض الأطباق الشهية!</div>';
+            } else {
+                for (var i = 0; i < cart.length; i++) {
+                    var item = cart[i];
+                    totalSum += item.price;
+                    html += '<div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center gap-2">' +
+                        '<div>' +
+                            '<h4 class="font-extrabold text-sm text-amber-400">' + item.name + '</h4>' +
+                            '<p class="text-xs text-gray-300 mt-0.5">' + item.details + '</p>' +
+                        '</div>' +
+                        '<div class="flex items-center gap-3">' +
+                            '<span class="text-sm font-black text-amber-400">$' + item.price.toFixed(2) + '</span>' +
+                            '<button onclick="removeFromCart(' + i + ')" class="text-red-400 hover:text-red-300 text-xs p-1"><i class="fa-solid fa-trash"></i></button>' +
+                        '</div>' +
+                    '</div>';
+                }
+
+                html += '<div class="pt-4 border-t border-gray-800 flex justify-between items-center px-2">' +
+                    '<span class="font-extrabold text-sm text-white">المجموع الكلي:</span>' +
+                    '<span class="font-black text-lg text-amber-400">$' + totalSum.toFixed(2) + '</span>' +
+                '</div>';
+            }
+
+            container.innerHTML = html;
+            cartModal.classList.remove('hidden');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartBadge();
+            openCart();
+        }
+
+        function sendWhatsAppOrder() {
+            var customerNameInput = document.getElementById('customer-name');
+            var customerName = customerNameInput ? customerNameInput.value.trim() : '';
+
+            if (cart.length === 0) {
+                alert('الصينية فارغة!');
+                return;
+            }
+
+            var text = "السلام عليكم، أود تقديم طلب جديد:%0a";
+            if (customerName) {
+                text += "اسم الزبون: " + encodeURIComponent(customerName) + "%0a";
+            }
+            text += "--------------------------------%0a";
+
+            var total = 0;
+            for (var i = 0; i < cart.length; i++) {
+                text += (i + 1) + ". " + encodeURIComponent(cart[i].name) + " (%0a   " + encodeURIComponent(cart[i].details) + "%0a) - $" + cart[i].price.toFixed(2) + "%0a";
+                total += cart[i].price;
+            }
+
+            text += "--------------------------------%0a";
+            text += "المجموع الكلي: $" + total.toFixed(2) + "%0a";
+            text += "التوصيل: مجاني داخل جرينزبورو وضواحيها 🚚";
+
+            var phoneNumber = "13360000000"; // استبدل برقم الواتساب الخاص بك
+            var url = "https://wa.me/" + phoneNumber + "?text=" + text;
+            window.open(url, '_blank');
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
