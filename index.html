@@ -139,8 +139,6 @@
                     </div>
                 </div>
 
-                <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
-
                 <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
                     <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
                     <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
@@ -561,126 +559,14 @@
                 finalName += ' (' + variantDesc + ')';
             }
 
-            var itemTotal = unitPrice * currentModalQty;
+            var baseItemPrice = unitPrice;
             var extrasCost = (extraBreadQty * 1.0) + (extraSamoonQty * 1.0);
-            itemTotal += extrasCost;
+            var itemTotal = (baseItemPrice * currentModalQty) + extrasCost;
 
             var customNote = document.getElementById('item-custom-note').value;
 
             cart.push({
                 id: currentActiveProduct.id,
                 name: finalName,
-                price: itemTotal,
-                qty: currentModalQty,
-                unitLabel: currentActiveProduct.unitLabel || '',
-                extraBread: extraBreadQty,
-                extraSamoon: extraSamoonQty,
-                note: customNote
-            });
-
-            updateCartBadge();
-            closeProductModal();
-            openCart();
-        }
-
-        function updateCartBadge() {
-            var badge = document.getElementById('cart-badge');
-            if (!badge) return;
-            if (cart.length > 0) {
-                badge.innerText = cart.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function openCart() {
-            var modal = document.getElementById('cart-modal');
-            var container = document.getElementById('cart-items');
-            var totalContainer = document.getElementById('cart-total-price');
-            if (!modal) return;
-
-            var html = '';
-            var grandTotal = 0;
-
-            if (cart.length === 0) {
-                html = '<div class="text-center text-gray-400 py-20 font-bold text-sm">صينية الطلبات فارغة حالياً</div>';
-            } else {
-                for (var i = 0; i < cart.length; i++) {
-                    var item = cart[i];
-                    grandTotal += item.price;
-                    html += '<div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center gap-3">' +
-                        '<div>' +
-                            '<h4 class="font-extrabold text-amber-400 text-sm">' + item.name + '</h4>' +
-                            '<p class="text-xs text-gray-400 mt-0.5">الكمية: ' + item.qty + ' ' + item.unitLabel + '</p>' +
-                            (item.extraBread > 0 ? '<p class="text-[11px] text-amber-300">+ خبز إضافي: ' + item.extraBread + '</p>' : '') +
-                            (item.extraSamoon > 0 ? '<p class="text-[11px] text-amber-300">+ صمون إضافي: ' + item.extraSamoon + '</p>' : '') +
-                            (item.note ? '<p class="text-[11px] text-gray-300 italic">ملاحظة: ' + item.note + '</p>' : '') +
-                        '</div>' +
-                        '<div class="text-left flex flex-col items-end gap-2">' +
-                            '<span class="text-amber-400 font-black text-sm">$' + item.price.toFixed(2) + '</span>' +
-                            '<button onclick="removeFromCart(' + i + ')" class="text-red-400 hover:text-red-300 text-xs font-bold"><i class="fa-solid fa-trash"></i> حذف</button>' +
-                        '</div>' +
-                    '</div>';
-                }
-            }
-
-            container.innerHTML = html;
-            totalContainer.innerText = '$' + grandTotal.toFixed(2);
-            modal.classList.remove('hidden');
-        }
-
-        function closeCart() {
-            document.getElementById('cart-modal').classList.add('hidden');
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartBadge();
-            openCart();
-        }
-
-        function sendWhatsAppOrder() {
-            var nameInput = document.getElementById('customer-name');
-            var customerName = nameInput ? nameInput.value.trim() : '';
-            
-            if (cart.length === 0) {
-                alert('صينية الطلبات فارغة!');
-                return;
-            }
-            if (!customerName) {
-                alert('يرجى كتابة الاسم الكريم قبل إرسال الطلب.');
-                if(nameInput) nameInput.focus();
-                return;
-            }
-
-            var text = 'السلام عليكم، أود تقديم طلب جديد:\n\n';
-            text += '👤 اسم الزبون: ' + customerName + '\n';
-            text += '--------------------------\n';
-            
-            var grandTotal = 0;
-            for (var i = 0; i < cart.length; i++) {
-                var item = cart[i];
-                grandTotal += item.price;
-                text += '▪️ ' + item.name + ' (الكمية: ' + item.qty + ' ' + item.unitLabel + ') - $' + item.price.toFixed(2) + '\n';
-                if (item.extraBread > 0) text += '   + خبز إضافي: ' + item.extraBread + '\n';
-                if (item.extraSamoon > 0) text += '   + صمون إضافي: ' + item.extraSamoon + '\n';
-                if (item.note) text += '   + ملاحظة: ' + item.note + '\n';
-            }
-            
-            text += '--------------------------\n';
-            text += '💰 المجموع الكلي: $' + grandTotal.toFixed(2) + '\n';
-            text += '🚚 التوصيل مجاني مع جميع الطلبات\n';
-
-            var encoded = encodeURIComponent(text);
-            var phone = '10000000000'; // استبدل هذا برقم الواتساب الخاص بك
-            var url = 'https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded;
-            window.open(url, '_blank');
-        }
-
-        window.onload = function() {
-            renderProducts();
-        };
-    </script>
-</body>
-</html>
+                basePrice: baseItemPrice,
+                qty
