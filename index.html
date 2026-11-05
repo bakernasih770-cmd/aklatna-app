@@ -55,8 +55,8 @@
     </header>
 
     <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
-        <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
-        <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
+        <div id="bg-layer-1" class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=80');"></div>
+        <div id="bg-layer-2" class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80');"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto pb-6">
             <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
@@ -221,276 +221,26 @@
         var isKitchenOpen = true;
 
         var products = [
-            { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
-            { id: 2, name: "الباچة", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" },
-            { id: 3, name: "القوزي العراقي", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" },
-            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "chicken with rice.png", note: "" },
-            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "grilled chicken.png", note: "" },
-            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "meet with daugh.jpg", note: "" },
-            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", note: "" },
-            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", note: "" },
-            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "baqla-dehn.jpg", note: "" },
-            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
-            { id: 11, name: "تكة لحم", category: "grills", price: 28, isMeatTecca: true, minQty: 4, stepQty: 1, unitLabel: "سيخ", image: "meat tecca.jpg", note: "الحد الأدنى 4 أسياخ (28$) - معها رغيفين خبز وطماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 20, isChickenTecca: true, minQty: 4, stepQty: 1, unitLabel: "سيخ", image: "chicken tecca.jpg", note: "الحد الأدنى 4 أسياخ (20$) - معها رغيفين خبز وطماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" },
-            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", note: "" },
-            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg", note: "" },
-            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "kibbeh-halab.jpg", note: "" },
-            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "cuba gereash.png", note: "" },
-            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "kibbeh-jareesh.jpg", note: "" },
-            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "bourak meat .jpg", note: "" },
-            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "bourak cheese.jpg", note: "" },
-            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
-            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
-            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "manakesh zaatar.jpg", note: "" },
-            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
-            { id: 24, name: "فليفلة", category: "appetizers", price: 2, image: "orook.jpg", note: "" },
-            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
-            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
-            { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
-            { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
-            { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
-            { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera 1.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 31, name: "الكليچة", category: "bakery", price: 20, image: "kleacha.png", unitPrice: 20, minQty: 1, stepQty: 1, unitLabel: "باوند", note: "20$ / 1 باوند (الحد الأدنى)" },
-            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 8, image: "falafel-plate.jpg", note: "" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 12, image: "chicken tecca.jpg", note: "" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 14, image: "meat tecca.jpg", note: "" },
-            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 11, image: "kebab.jpg", note: "" }
-        ];
-
-        var heroImages = [
-            "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg", "gallery-4.jpg",
-            "gallery-5.jpg", "gallery-6.jpg", "gallery-7.jpg", "gallery-8.jpg",
-            "gallery-9.jpg", "gallery-10.jpg", "gallery-11.jpg", "gallery-12.jpg",
-            "gallery-13.jpg", "gallery-14.jpg"
-        ];
-        
-        var currentImgIndex = 0;
-        var isLayerOneActive = true;
-
-        function smoothChangeHeroBackground() {
-            var layer1 = document.getElementById('bg-layer-1');
-            var layer2 = document.getElementById('bg-layer-2');
-            if (!layer1 || !layer2) return;
-
-            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
-            var nextImage = heroImages[currentImgIndex];
-
-            if (isLayerOneActive) {
-                layer2.style.backgroundImage = "url('" + nextImage + "')";
-                layer1.classList.remove('active');
-                layer2.classList.add('active');
-            } else {
-                layer1.style.backgroundImage = "url('" + nextImage + "')";
-                layer2.classList.remove('active');
-                layer1.classList.add('active');
-            }
-            isLayerOneActive = !isLayerOneActive;
-        }
-
-        setInterval(smoothChangeHeroBackground, 4500);
-
-        var cart = [];
-        var currentCategory = 'all';
-        var currentActiveProduct = null;
-        var currentModalQty = 1;
-        var dolmaSelectedSize = 'small';
-        var extraBreadQty = 0;
-        var extraSamoonQty = 0;
-
-        function renderProducts() {
-            var grid = document.getElementById('products-grid');
-            if (!grid) return;
-            var queryInput = document.getElementById('search-input');
-            var query = (queryInput && queryInput.value) ? queryInput.value.toLowerCase().trim() : '';
-            var html = '';
-            var foundAny = false;
-            
-            for (var i = 0; i < products.length; i++) {
-                var p = products[i];
-                var matchCat = (currentCategory === 'all' || p.category === currentCategory);
-                var matchQuery = (query === '' || p.name.toLowerCase().indexOf(query) !== -1);
-                
-                if (matchCat && matchQuery) {
-                    foundAny = true;
-                    var imgContent = '<img src="' + p.image + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
-                                     '<div class="w-full h-full items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
-
-                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.price ? '$' + p.price.toFixed(2) : '');
-
-                    html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
-                        '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
-                            imgContent +
-                            '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">' + priceDisplay + '</span>' +
-                        '</div>' +
-                        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
-                            '<h3 class="font-extrabold text-base text-white mb-1">' + p.name + '</h3>' +
-                            (p.note ? '<p class="text-[11px] text-amber-300/90 mb-2 font-bold">' + p.note + '</p>' : '') +
-                            '<span class="text-xs text-amber-400 font-bold">اضغط للعرض والتفاصيل 🔍</span>' +
-                        '</div>' +
-                    '</div>';
-                }
-            }
-
-            if (!foundAny) {
-                html = '<div class="col-span-full text-center text-gray-400 py-16 text-sm font-bold">عذراً، لم يتم العثور على أطباق تطابق بحثك</div>';
-            }
-
-            grid.innerHTML = html;
-        }
-
-        function filterCategory(cat, btn) {
-            currentCategory = cat;
-            var buttons = document.querySelectorAll('.cat-btn');
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
-            }
-            if (btn) {
-                btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
-            }
-            renderProducts();
-        }
-
-        function openProductModal(id) {
-            for (var j = 0; j < products.length; j++) {
-                if (products[j].id === id) {
-                    currentActiveProduct = products[j];
-                    break;
-                }
-            }
-            if (!currentActiveProduct) return;
-            
-            currentModalQty = currentActiveProduct.minQty || 1;
-            dolmaSelectedSize = 'small';
-            extraBreadQty = 0;
-            extraSamoonQty = 0;
-            document.getElementById('extra-bread-qty').innerText = 0;
-            document.getElementById('extra-samoon-qty').innerText = 0;
-            document.getElementById('item-custom-note').value = '';
-            
-            var modalContainer = document.getElementById('modal-img-container');
-            modalContainer.innerHTML = '<img src="' + (currentActiveProduct.image || 'gallery-1.jpg') + '" alt="" class="w-full h-full object-cover" onerror="this.style.display=\'none\';">';
-            
-            document.getElementById('modal-title').innerText = currentActiveProduct.name;
-            
-            var modalNote = document.getElementById('modal-note');
-            if (currentActiveProduct.note) {
-                modalNote.innerText = "📌 " + currentActiveProduct.note;
-                modalNote.classList.remove('hidden');
-            } else {
-                modalNote.classList.add('hidden');
-            }
-
-            var dolmaSection = document.getElementById('dolma-size-section');
-            var normalQtyWrapper = document.getElementById('normal-qty-wrapper');
-            var extraSection = document.getElementById('extra-bread-section');
-
-            if (currentActiveProduct.isDolmaBased) {
-                dolmaSection.classList.remove('hidden');
-                normalQtyWrapper.classList.add('hidden');
-                updateDolmaSizeUIButtons();
-            } else {
-                dolmaSection.classList.add('hidden');
-                normalQtyWrapper.classList.remove('hidden');
-            }
-
-            if (currentActiveProduct.category === 'main' || currentActiveProduct.category === 'grills') {
-                extraSection.classList.remove('hidden');
-            } else {
-                extraSection.classList.add('hidden');
-            }
-
-            updateModalPriceUI();
-            document.getElementById('product-modal').classList.remove('hidden');
-        }
-
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
-        }
-
-        function setDolmaSize(size) {
-            dolmaSelectedSize = size;
-            updateDolmaSizeUIButtons();
-            updateModalPriceUI();
-        }
-
-        function updateDolmaSizeUIButtons() {
-            var btnS = document.getElementById('size-small-btn');
-            var btnM = document.getElementById('size-medium-btn');
-            var btnL = document.getElementById('size-large-btn');
-
-            btnS.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'small' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
-            btnM.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'medium' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
-            btnL.className = "py-2 px-3 rounded-xl border text-xs font-bold transition-all " + (dolmaSelectedSize === 'large' ? "bg-amber-500 text-gray-950 border-amber-400 font-extrabold shadow" : "bg-gray-950 text-gray-300 border-gray-700");
-        }
-
-        function changeModalQty(dir) {
-            var step = currentActiveProduct.stepQty || 1;
-            var min = currentActiveProduct.minQty || 1;
-
-            currentModalQty += (dir * step);
-            if (currentModalQty < min) currentModalQty = min;
-
-            updateModalPriceUI();
-        }
-
-        function changeExtra(type, dir) {
-            if (type === 'extraBread') {
-                extraBreadQty += dir;
-                if (extraBreadQty < 0) extraBreadQty = 0;
-                document.getElementById('extra-bread-qty').innerText = extraBreadQty;
-            } else if (type === 'extraSamoon') {
-                extraSamoonQty += dir;
-                if (extraSamoonQty < 0) extraSamoonQty = 0;
-                document.getElementById('extra-samoon-qty').innerText = extraSamoonQty;
-            }
-            updateModalPriceUI();
-        }
-
-        function updateModalPriceUI() {
-            if (!currentActiveProduct) return;
-            
-            var basePrice = 0;
-            var dynInfo = document.getElementById('dynamic-serving-info');
-
-            if (currentActiveProduct.isDolmaBased) {
-                var servingText = "";
-                if (dolmaSelectedSize === 'small') {
-                    basePrice = 60;
-                    servingText = "👥 تكفي قدر صغير (4 أشخاص) • معها (4 أرغفة خبز)";
-                } else if (dolmaSelectedSize === 'medium') {
-                    basePrice = 80;
-                    servingText = "👥 تكفي قدر وسط (6 أشخاص) • معها (6 أرغفة خبز)";
-                } else if (dolmaSelectedSize === 'large') {
-                    basePrice = 100;
-                    servingText = "👥 تكفي قدر كبير (8 أشخاص) • معها (8 أرغفة خبز)";
-                }
-
-                if (dynInfo) {
-                    dynInfo.innerText = servingText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = 'قدر ' + (dolmaSelectedSize === 'small' ? 'صغير' : dolmaSelectedSize === 'medium' ? 'وسط' : 'كبير');
-            } else if (currentActiveProduct.isMeatTecca) {
-                // حسابات تكة اللحم: 28$ للـ 4 أسياخ الأولى، وكل سيخ زياده بـ 7$
-                var extraSkewers = currentModalQty - 4;
-                basePrice = 28 + (extraSkewers * 7);
-
-                var teccaText = "👥 معها رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)";
-                if (dynInfo) {
-                    dynInfo.innerText = teccaText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = currentModalQty + ' أسياخ';
-            } else if (currentActiveProduct.isChickenTecca) {
-                // حسابات تكة الدجاج: 20$ للـ 4 أسياخ الأولى، وكل سيخ زياده بـ 5$
-                var extraSkewers = currentModalQty - 4;
-                basePrice = 20 + (extraSkewers * 5);
-
-                var teccaText = "👥 معها رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)";
-                if (dynInfo) {
-                    dynInfo.innerText = teccaText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = currentModalQty + ' أسياخ';
+            { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=600&q=80", note: "دولمة عراقية أصيلة طازجة" },
+            { id: 2, name: "الباچة", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)" },
+            { id: 3, name: "القوزي العراقي", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)" },
+            { id: 4, name: "دجاج مع طبق رز اصفر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 5, name: "دجاج مع طبق رز احمر", category: "main", price: 25, image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 6, name: "القيمة مع الرز", category: "main", price: 20, image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 9, name: "باقلاء بالدهن", category: "main", price: 18, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=600&q=80", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
+            { id: 11, name: "تكة لحم", category: "grills", price: 28, isMeatTecca: true, minQty: 4, stepQty: 1, unitLabel: "سيخ", image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80", note: "الحد الأدنى 4 أسياخ (28$) - معها رغيفين خبز وطماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" },
+            { id: 12, name: "تكة دجاج", category: "grills", price: 20, isChickenTecca: true, minQty: 4, stepQty: 1, unitLabel: "سيخ", image: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=600&q=80", note: "الحد الأدنى 4 أسياخ (20$) - معها رغيفين خبز وطماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" },
+            { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 15, name: "كبة حلب", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 16, name: "كبة الجريش", category: "appetizers", price: 3.5, image: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 18, name: "بورك اللحم", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 19, name: "بورك الجبن", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", note: "" },
+            { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "
