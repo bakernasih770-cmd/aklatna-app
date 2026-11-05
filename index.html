@@ -378,7 +378,10 @@
                 if (matchCat && matchQuery) {
                     foundAny = true;
                     var imgSrc = encodeURI(imgFolder + p.image);
-                    var imgContent = '<img src="' + imgSrc + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs\\\'><span>🍲</span><span class=\\\'text-white text-xs mt-1\\\'>' + p.name + '</span></div>\';">';
+                    
+                    // تحسين وتأمين عرض الصور في حال تعذر تحميل الصورة الأصلية
+                    var imgContent = '<img src="' + imgSrc + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
+                                     '<div class="w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs" style="display:none;"><span>🍲</span><span class="text-white text-xs mt-1">' + p.name + '</span></div>';
 
                     var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isMeatBourak ? 'يبدأ من $35' : (p.isCheeseBourak ? 'يبدأ من $20' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : '')))))));
 
@@ -434,7 +437,8 @@
             
             var modalContainer = document.getElementById('modal-img-container');
             var modalImgSrc = encodeURI(imgFolder + (currentActiveProduct.image || 'gallery-1.jpg'));
-            modalContainer.innerHTML = '<img src="' + modalImgSrc + '" alt="" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs\\\'><span>🍲</span><span class=\\\'text-white text-xs mt-1\\\'>' + currentActiveProduct.name + '</span></div>\';">';
+            modalContainer.innerHTML = '<img src="' + modalImgSrc + '" alt="" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
+                                       '<div class="w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs" style="display:none;"><span>🍲</span><span class="text-white text-xs mt-1">' + currentActiveProduct.name + '</span></div>';
             
             document.getElementById('modal-title').innerText = currentActiveProduct.name;
             
@@ -676,23 +680,4 @@
                 displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.isBulkAppetizer) {
                 if (currentModalQty <= 20) itemPrice = 30;
-                else itemPrice = 30 + ((currentModalQty - 20) * 1.5);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isMeatBourak) {
-                if (currentModalQty <= 20) itemPrice = 35;
-                else itemPrice = 35 + ((currentModalQty - 20) * 1.75);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isCheeseBourak) {
-                if (currentModalQty <= 20) itemPrice = 20;
-                else itemPrice = 20 + ((currentModalQty - 20) * 1.00);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isSandwich) {
-                if (currentModalQty <= 5) itemPrice = 35;
-                else itemPrice = 35 + ((currentModalQty - 5) * 7);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.id === 31) { // الكليجة
-                itemPrice = currentModalQty * 25;
-                displayDetails = currentModalQty + ' باوند';
-            } else if (currentActiveProduct.isPoundBased) {
-                if (currentModalQty === 3) itemPrice = 70;
-                else if
+                else itemPrice = 30 + ((currentModalQty - 20) * 1
