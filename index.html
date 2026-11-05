@@ -26,11 +26,6 @@
 </head>
 <body class="min-h-screen flex flex-col pb-10">
 
-    <!-- عنصر الصوت الخفي لعزف العود -->
-    <audio id="oud-audio" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=middle-east-oud-111456.mp3" type="audio/mpeg">
-    </audio>
-
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -42,15 +37,10 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-sm text-amber-400 font-semibold">طبخ عراقي في مدينة Greensboro و ضواحيها</p>
+                    <p class="text-sm text-amber-400 font-semibold"> طبخ عراقي في مدينة Greensboro و ضواحيها</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3 space-x-reverse">
-                <button onclick="toggleOudMusic()" id="oud-toggle-btn" class="bg-gray-800 hover:bg-gray-700 text-amber-400 border border-amber-500/40 px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow transition-all">
-                    <i id="oud-icon" class="fa-solid fa-music"></i>
-                    <span id="oud-text">عزف عود 🎶</span>
-                </button>
-
                 <button onclick="openCart()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all relative">
                     <i class="fa-solid fa-utensils"></i>
                     <span>الصينية</span>
@@ -60,20 +50,20 @@
         </div>
     </header>
 
-    <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[380px] flex flex-col justify-end">
+    <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
         <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
         <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto pb-6">
             <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
-            <p class="text-xl md:text-3xl font-extrabold text-white mb-6 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
+            <p class="text-xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
             
             <input 
                 type="text" 
                 id="search-input"
                 placeholder="ابحث عن طبقك المفضّل..." 
                 oninput="renderProducts()"
-                class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl mx-auto block"
+                class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
             />
         </div>
     </section>
@@ -88,17 +78,18 @@
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-clock text-amber-400"></i>
                 <span>يرجى إتمام الطلب قبل 24 ساعة</span>
-            </div>
-            <div class="hidden md:inline text-gray-600">|</div>
-            <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 px-3 py-1 rounded-lg">
-                <i class="fa-solid fa-truck-fast text-amber-400 text-base"></i>
-                <span class="text-amber-400 font-extrabold text-sm md:text-base tracking-wide">التوصيل مجاني داخل مدينة Greensboro وضواحيها</span>
+                </div>
+        <div class="hidden md:inline text-gray-600">|</div>
+        
+        <!-- عبارة التوصيل مجاني داخل مدينة  Greensboro  وضواحيها (بخط بارز وجذاب) -->
+        <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 px-3 py-1 rounded-lg">
+            <i class="fa-solid fa-truck-fast text-amber-400 text-base"></i>
+            <span class="text-amber-400 font-extrabold text-sm md:text-base tracking-wide"> التوصيل مجاني</span>
             </div>
         </div>
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-        <!-- شريط التبويبات الموحد (شمل أطباق القائمة + أزرار صواني التشكيل بنفس الخط والتنسيق) -->
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
             <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
             <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
@@ -107,123 +98,15 @@
             <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
             <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
             <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
-            
-            <!-- أزرار الصواني المدمجة في نفس التبويبات بنفس الخط -->
-            <button onclick="openCustomTrayModal('grills')" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-amber-400 border border-amber-500/40 hover:bg-amber-500 hover:text-gray-950 transition-all flex items-center gap-1.5">
-                <i class="fa-solid fa-fire-flame-curved"></i>
-                <span>شكّل صينية المشاوي ($40+)</span>
-            </button>
-            <button onclick="openCustomTrayModal('appetizers')" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-amber-400 border border-amber-500/40 hover:bg-amber-500 hover:text-gray-950 transition-all flex items-center gap-1.5">
-                <i class="fa-solid fa-plate-wheat"></i>
-                <span>شكّل صينية النواشف وعروك ($40+)</span>
-            </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
-    <!-- Modal تفصيل الصينية المخصصة -->
-    <div id="custom-tray-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 hidden p-4">
-        <div class="w-full max-w-lg bg-gray-900 text-white rounded-3xl overflow-hidden shadow-2xl border border-amber-500/50 flex flex-col max-h-[90vh]">
-            <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h3 id="custom-tray-title" class="font-black text-amber-400 text-base flex items-center gap-2">
-                    <i class="fa-solid fa-layer-group text-amber-400"></i> تفصيل الصينية المخصصة
-                </h3>
-                <button onclick="closeCustomTrayModal()" class="text-gray-400 hover:text-white text-xs font-bold bg-gray-800 px-3 py-1 rounded-xl">
-                    إغلاق ✖
-                </button>
-            </div>
-            
-            <div class="p-4 overflow-y-auto space-y-4 flex-1">
-                <p id="custom-tray-desc" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2.5 rounded-xl border border-gray-800 text-center"></p>
-
-                <!-- قسم صينية المشاوي -->
-                <div id="section-grills-tray" class="space-y-3 hidden">
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">كباب شوي (شيش)</span><span class="text-[10px] text-amber-400">$3.00 للشيش</span></div>
-                        <input type="number" min="0" value="0" id="tray-g-kebab" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">تكة لحم (سيخ)</span><span class="text-[10px] text-amber-400">$7.00 للسيخ</span></div>
-                        <input type="number" min="0" value="0" id="tray-g-tikka-meat" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">تكة دجاج (سيخ)</span><span class="text-[10px] text-amber-400">$5.00 للسيخ</span></div>
-                        <input type="number" min="0" value="0" id="tray-g-tikka-chicken" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                </div>
-
-                <!-- قسم صينية النواشف وعروك وبطاطا مقلاة -->
-                <div id="section-appetizers-tray" class="space-y-3 hidden">
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">كبة حلب (قطعة)</span><span class="text-[10px] text-amber-400">$1.50 للقطعة</span></div>
-                        <input type="number" min="0" value="0" id="tray-a-kibbeh-halab" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">كبة جريش (قطعة)</span><span class="text-[10px] text-amber-400">$1.50 للقطعة</span></div>
-                        <input type="number" min="0" value="0" id="tray-a-kibbeh-jareesh" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">بتيتة چاب (قطعة)</span><span class="text-[10px] text-amber-400">$1.50 للقطعة</span></div>
-                        <input type="number" min="0" value="0" id="tray-a-batata" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">بورك لحم (قطعة)</span><span class="text-[10px] text-amber-400">$1.75 للقطعة</span></div>
-                        <input type="number" min="0" value="0" id="tray-a-bourak-meat" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">بورك جبن (قطعة)</span><span class="text-[10px] text-amber-400">$1.00 للقطعة</span></div>
-                        <input type="number" min="0" value="0" id="tray-a-bourak-cheese" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">كباب عروك (قطعة)</span><span class="text-[10px] text-amber-400">$5.00 للقطعة</span></div>
-                        <input type="number" min="0" value="0" id="tray-a-orook" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
-                        <div><span class="text-xs font-bold text-white block">بطاطا مقلاة (باوند)</span><span class="text-[10px] text-amber-400">$4.00 للباوند</span></div>
-                        <input type="number" min="0" value="0" id="tray-a-french-fries" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
-                    </div>
-                </div>
-
-                <div class="space-y-2 pt-2 border-t border-gray-800">
-                    <p class="text-xs text-amber-400 font-bold">إضافات الخبز والصمون مع الصينية:</p>
-                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
-                        <span class="text-xs text-gray-300">رغيف خبز إضافي ($1.00)</span>
-                        <div class="flex items-center gap-2">
-                            <button onclick="changeTrayExtra('bread', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
-                            <span id="tray-extra-bread" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
-                            <button onclick="changeTrayExtra('bread', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
-                        <span class="text-xs text-gray-300">قطعة صمون إضافية ($1.00)</span>
-                        <div class="flex items-center gap-2">
-                            <button onclick="changeTrayExtra('samoon', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
-                            <span id="tray-extra-samoon" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
-                            <button onclick="changeTrayExtra('samoon', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-xs text-amber-400 font-bold block mb-1">ملاحظات على الصينية (اختياري):</label>
-                    <textarea id="tray-custom-note" rows="2" placeholder="اكتب أي ملاحظة..." class="w-full p-2.5 bg-gray-950 border border-amber-500/50 rounded-xl text-white text-xs focus:border-amber-400 focus:outline-none resize-none"></textarea>
-                </div>
-            </div>
-
-            <div class="p-4 bg-gray-950 border-t border-gray-800">
-                <button onclick="confirmCustomTrayAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-black py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-cart-plus"></i>
-                    <span>إضافة الصينية إلى صينية الطلبات</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal عرض المنتج الفردي والتفاصيل -->
+    <!-- Modal عرض المنتج -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
-        <div class="w-full max-w-md bg-gray-900 text-white rounded-3xl overflow-hidden shadow-2xl border border-amber-500/40 flex flex-col max-h-[90vh]">
-            <div class="relative h-52 bg-gray-950 flex items-center justify-center overflow-hidden shrink-0">
+        <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col">
+            <div class="relative h-64 bg-gray-950 flex items-center justify-center overflow-hidden">
                 <div id="modal-img-container" class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 font-bold relative">
                     <span>طبق بيتي عراقي 🍲</span>
                 </div>
@@ -232,22 +115,13 @@
                     <i class="fa-solid fa-arrow-right"></i>
                     <span>العودة للقائمة</span>
                 </button>
-            </div>
-            
-            <div class="p-6 space-y-4 overflow-y-auto flex-1">
-                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
-                <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2.5 rounded-lg border border-gray-800 hidden"></p>
                 
-                <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center text-xs">
-                    <span class="text-gray-400">السعر الأساسي / الحد الأدنى:</span>
-                    <span id="modal-base-info" class="text-amber-400 font-bold"></span>
-                </div>
-
-                <div class="bg-amber-500/10 border border-amber-500/40 p-3.5 rounded-2xl flex justify-between items-center">
-                    <span class="text-xs font-extrabold text-amber-300">السعر الإجمالي للطلب:</span>
-                    <span id="modal-total-price-display" class="text-amber-400 font-black text-lg">$0.00</span>
-                </div>
-
+                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-30"></span>
+            </div>
+            <div class="p-6 space-y-4">
+                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
+                <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2 rounded-lg border border-gray-800 hidden"></p>
+                
                 <div id="dolma-size-section" class="space-y-2 hidden">
                     <label class="text-xs text-gray-400 font-bold block">اختر حجم القدر:</label>
                     <div class="grid grid-cols-3 gap-2">
@@ -258,16 +132,18 @@
                 </div>
 
                 <div class="flex items-center justify-between pt-2 border-t border-gray-800" id="normal-qty-wrapper">
-                    <span class="text-xs text-gray-300 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
-                    <div class="flex items-center bg-gray-950 border border-amber-500/40 rounded-xl overflow-hidden shadow-inner">
-                        <button onclick="changeModalQty(-1)" class="px-4 py-2 bg-gray-900 hover:bg-amber-500 hover:text-gray-950 text-amber-400 font-bold text-base transition-all">-</button>
-                        <span id="modal-qty" class="text-sm font-black w-24 text-center text-amber-400">1</span>
-                        <button onclick="changeModalQty(1)" class="px-4 py-2 bg-gray-900 hover:bg-amber-500 hover:text-gray-950 text-amber-400 font-bold text-base transition-all">+</button>
+                    <span class="text-xs text-gray-400 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
+                    <div class="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700">
+                        <button onclick="changeModalQty(-1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">-</button>
+                        <span id="modal-qty" class="text-sm font-extrabold w-36 text-center text-amber-400">1</span>
+                        <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
                     </div>
                 </div>
 
+                <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
+
                 <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
-                    <p class="text-xs text-amber-400 font-bold">إضافات اختيارية:</p>
+                    <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
                     <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-300">رغيف خبز إضافي ($1.00)</span>
                         <div class="flex items-center gap-2">
@@ -291,7 +167,7 @@
                     <textarea id="item-custom-note" rows="2" placeholder="اكتب أي ملاحظة..." class="w-full p-3 bg-gray-950 border border-amber-500/50 rounded-xl text-white text-xs font-medium focus:border-amber-400 focus:outline-none shadow-inner resize-none"></textarea>
                 </div>
 
-                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3.5 rounded-2xl text-sm shadow-xl flex items-center justify-center gap-2 transform active:scale-95 transition-all">
+                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cart-plus"></i>
                     <span>أضف إلى الصينية</span>
                 </button>
@@ -303,7 +179,8 @@
     <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
         <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات</h2>
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات </h2>
+                
                 <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
                     <i class="fa-solid fa-arrow-right"></i>
                     <span>العودة للقائمة</span>
@@ -313,11 +190,6 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
 
             <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
-                <div class="flex justify-between items-center text-sm font-bold text-amber-300 border-b border-gray-800 pb-2">
-                    <span>المجموع الكلي:</span>
-                    <span id="cart-total-price" class="text-amber-400 font-extrabold text-base">$0.00</span>
-                </div>
-                
                 <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
 
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
@@ -330,138 +202,6 @@
 
     <script>
         var imgFolder = "";
-        var activeCustomTray = 'grills';
-        var trayExtraBread = 0;
-        var trayExtraSamoon = 0;
-
-        var isOudPlaying = false;
-        function toggleOudMusic() {
-            var audio = document.getElementById('oud-audio');
-            var btnText = document.getElementById('oud-text');
-            var icon = document.getElementById('oud-icon');
-
-            if (isOudPlaying) {
-                audio.pause();
-                isOudPlaying = false;
-                btnText.innerText = "عزف عود 🎶";
-                icon.className = "fa-solid fa-music";
-            } else {
-                audio.play().catch(function(e) { console.log(e); });
-                isOudPlaying = true;
-                btnText.innerText = "إيقاف العزف 🔇";
-                icon.className = "fa-solid fa-volume-high text-green-400";
-            }
-        }
-
-        function openCustomTrayModal(type) {
-            activeCustomTray = type;
-            trayExtraBread = 0;
-            trayExtraSamoon = 0;
-            document.getElementById('tray-extra-bread').innerText = 0;
-            document.getElementById('tray-extra-samoon').innerText = 0;
-            document.getElementById('tray-custom-note').value = '';
-
-            var titleEl = document.getElementById('custom-tray-title');
-            var descEl = document.getElementById('custom-tray-desc');
-            var secGrills = document.getElementById('section-grills-tray');
-            var secAppetizers = document.getElementById('section-appetizers-tray');
-
-            if (type === 'grills') {
-                titleEl.innerHTML = '<i class="fa-solid fa-fire-flame-curved text-amber-400"></i> شكّل صينية المشاوي المشكلة';
-                descEl.innerText = 'اختر تشكيلة أسياخ المشاوي (الحد الأدنى لقيمة الصينية $40)';
-                secGrills.classList.remove('hidden');
-                secAppetizers.classList.add('hidden');
-            } else {
-                titleEl.innerHTML = '<i class="fa-solid fa-plate-wheat text-amber-400"></i> شكّل صينية النواشف وعروك وبطاطا';
-                descEl.innerText = 'اختر تشكيلة المعجنات والكبة وعروك والبطاطا المقلاة (الحد الأدنى لقيمة الصينية $40)';
-                secAppetizers.classList.remove('hidden');
-                secGrills.classList.add('hidden');
-            }
-
-            document.getElementById('custom-tray-modal').classList.remove('hidden');
-        }
-
-        function closeCustomTrayModal() {
-            document.getElementById('custom-tray-modal').classList.add('hidden');
-        }
-
-        function changeTrayExtra(type, dir) {
-            if (type === 'bread') {
-                trayExtraBread += dir;
-                if (trayExtraBread < 0) trayExtraBread = 0;
-                document.getElementById('tray-extra-bread').innerText = trayExtraBread;
-            } else if (type === 'samoon') {
-                trayExtraSamoon += dir;
-                if (trayExtraSamoon < 0) trayExtraSamoon = 0;
-                document.getElementById('tray-extra-samoon').innerText = trayExtraSamoon;
-            }
-        }
-
-        function confirmCustomTrayAddToCart() {
-            var totalPrice = 0;
-            var componentsDesc = [];
-            var trayName = "";
-
-            if (activeCustomTray === 'grills') {
-                var kebab = parseInt(document.getElementById('tray-g-kebab').value) || 0;
-                var tMeat = parseInt(document.getElementById('tray-g-tikka-meat').value) || 0;
-                var tChicken = parseInt(document.getElementById('tray-g-tikka-chicken').value) || 0;
-
-                totalPrice = (kebab * 3.0) + (tMeat * 7.0) + (tChicken * 5.0);
-                if (kebab > 0) componentsDesc.push(kebab + " شيش كباب");
-                if (tMeat > 0) componentsDesc.push(tMeat + " سيخ تكة لحم");
-                if (tChicken > 0) componentsDesc.push(tChicken + " سيخ تكة دجاج");
-                trayName = "صينية مشاوي مشكلة 🍢 (" + componentsDesc.join(" + ") + ")";
-            } else {
-                var khaleb = parseInt(document.getElementById('tray-a-kibbeh-halab').value) || 0;
-                var kjareesh = parseInt(document.getElementById('tray-a-kibbeh-jareesh').value) || 0;
-                var batata = parseInt(document.getElementById('tray-a-batata').value) || 0;
-                var bmeat = parseInt(document.getElementById('tray-a-bourak-meat').value) || 0;
-                var bcheese = parseInt(document.getElementById('tray-a-bourak-cheese').value) || 0;
-                var orook = parseInt(document.getElementById('tray-a-orook').value) || 0;
-                var fries = parseInt(document.getElementById('tray-a-french-fries').value) || 0;
-
-                totalPrice = (khaleb * 1.5) + (kjareesh * 1.5) + (batata * 1.5) + (bmeat * 1.75) + (bcheese * 1.0) + (orook * 5.0) + (fries * 4.0);
-                if (khaleb > 0) componentsDesc.push(khaleb + " كبة حلب");
-                if (kjareesh > 0) componentsDesc.push(kjareesh + " كبة جريش");
-                if (batata > 0) componentsDesc.push(batata + " بتيتة چاب");
-                if (bmeat > 0) componentsDesc.push(bmeat + " بورك لحم");
-                if (bcheese > 0) componentsDesc.push(bcheese + " بورك جبن");
-                if (orook > 0) componentsDesc.push(orook + " كباب عروك");
-                if (fries > 0) componentsDesc.push(fries + " باوند بطاطا مقلاة");
-                trayName = "صينية نواشف وعروك وبطاطا مشكلة 🧆 (" + componentsDesc.join(" + ") + ")";
-            }
-
-            var extrasCost = (trayExtraBread * 1.0) + (trayExtraSamoon * 1.0);
-            totalPrice += extrasCost;
-
-            if (componentsDesc.length === 0) {
-                alert('يرجى اختيار عنصر واحد على الأقل لتشكيل الصينية!');
-                return;
-            }
-
-            if (totalPrice < 40) {
-                alert('عذراً، الحد الأدنى لقيمة الصينية هو $40.00. المجموع الحالي لصينيتك هو $' + totalPrice.toFixed(2) + '. يرجى إضافة المزيد من الأصناف.');
-                return;
-            }
-
-            var note = document.getElementById('tray-custom-note').value;
-
-            cart.push({
-                id: 'custom-' + Date.now(),
-                name: trayName,
-                basePrice: totalPrice,
-                qty: 1,
-                unitLabel: 'صينية',
-                extraBread: trayExtraBread,
-                extraSamoon: trayExtraSamoon,
-                note: note
-            });
-
-            updateCartBadge();
-            closeCustomTrayModal();
-            openCart();
-        }
 
         var products = [
             { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
@@ -472,33 +212,119 @@
             { id: 7, name: "البرياني بالدجاج", category: "main", price: 28, image: "byriani chicken.png", note: "" },
             { id: 8, name: "البرياني باللحم", category: "main", price: 32, image: "byriani meat.png", note: "" },
             { id: 10, name: "كباب شوي", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز " },
-            { id: 11, name: "تكة لحم", category: "grills", price: 28, isMeatTikkaBased: true, minQty: 4, stepQty: 1, unitLabel: "سيخ لحم", image: "meat tecca.jpg", note: "4 أسياخ بـ $28 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل المشوي وطرشي" },
-            { id: 12, name: "تكة دجاج", category: "grills", price: 20, isChickenTikkaBased: true, minQty: 4, stepQty: 1, unitLabel: "سيخ دجاج", image: "chicken tecca.jpg", note: "4 أسياخ بـ $20 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل المشوي وطرشي" },
+            { 
+                id: 11, 
+                name: "تكة لحم", 
+                category: "grills", 
+                price: 28, 
+                isMeatTikkaBased: true, 
+                minQty: 4, 
+                stepQty: 1, 
+                unitLabel: "سيخ لحم", 
+                image: "meat tecca.jpg", 
+                note: "4 أسياخ بـ $28 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" 
+            },
+            { 
+                id: 12, 
+                name: "تكة دجاج", 
+                category: "grills", 
+                price: 20, 
+                isChickenTikkaBased: true, 
+                minQty: 4, 
+                stepQty: 1, 
+                unitLabel: "سيخ دجاج", 
+                image: "chicken tecca.jpg", 
+                note: "4 أسياخ بـ $20 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)" 
+            },
             { id: 13, name: "السمك المشوي Tilapia", category: "fish", price: 28, image: "masgouf.jpg", note: "" },
             { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي)", category: "fish", price: 32, image: "fried-fish.jpg", note: "" },
-            { id: 15, name: "كبة حلب", category: "appetizers", price: 30, isBulkAppetizer: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", image: "kibbeh-halab.jpg", note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" },
-            { id: 16, name: "كبة الجريش", category: "appetizers", price: 30, isBulkAppetizer: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", image: "kibbeh-jareesh.jpg", note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" },
-            { id: 17, name: "بتيتة چاب", category: "appetizers", price: 30, isBulkAppetizer: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", image: "kibbeh-jareesh.jpg", note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" },
-            { id: 18, name: "بورك اللحم", category: "appetizers", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", image: "bourak meat .jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية" },
-            { id: 19, name: "بورك الجبن", category: "appetizers", price: 20, isCheeseBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", image: "bourak cheese.jpg", note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية" },
-            { id: 37, name: "كباب عروك", category: "appetizers", price: 25, unitPrice: 5, minQty: 5, stepQty: 1, unitLabel: "قطعة", image: "orook.jpg", note: "محضر باللحم الطازج والخضار والبهارات العراقية" },
-            { id: 38, name: "بطاطا مقلاة (French Fries)", category: "appetizers", price: 4, unitPrice: 4, minQty: 1, stepQty: 1, unitLabel: "باوند", image: "fries.jpg", note: "بطاطا مقرمشة طازجة ($4.00 للباوند)" },
+            { 
+                id: 15, 
+                name: "كبة حلب", 
+                category: "appetizers", 
+                price: 30, 
+                isBulkAppetizer: true, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "kibbeh-halab.jpg", 
+                note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
+            },
+            { 
+                id: 16, 
+                name: "كبة الجريش", 
+                category: "appetizers", 
+                price: 30, 
+                isBulkAppetizer: true, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "kibbeh-jareesh.jpg", 
+                note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
+            },
+            { 
+                id: 17, 
+                name: "بتيتة چاب", 
+                category: "appetizers", 
+                price: 30, 
+                isBulkAppetizer: true, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "kibbeh-jareesh.jpg", 
+                note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية" 
+            },
+            { 
+                id: 18, 
+                name: "بورك اللحم", 
+                category: "appetizers", 
+                price: 35, 
+                isMeatBourak: true, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "bourak meat .jpg", 
+                note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية" 
+            },
+            { 
+                id: 19, 
+                name: "بورك الجبن", 
+                category: "appetizers", 
+                price: 20, 
+                isCheeseBourak: true, 
+                minQty: 20, 
+                stepQty: 1, 
+                unitLabel: "قطعة", 
+                image: "bourak cheese.jpg", 
+                note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية" 
+            },
             { id: 20, name: "لحم بعجين", category: "appetizers", price: 4, image: "lahm-bajin.jpg", note: "" },
             { id: 21, name: "فطائر الجبن بالنعناع", category: "appetizers", price: 3, image: "lahm-bajin.jpg", note: "" },
             { id: 22, name: "فطائر الزعتر", category: "appetizers", price: 2.5, image: "manakesh zaatar.jpg", note: "" },
             { id: 23, name: "فطائر صدر الدجاج", category: "appetizers", price: 3.5, image: "lahm-bajin.jpg", note: "" },
-            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى)" },
-            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى)" },
+            { id: 25, name: "الصمون العراقي", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)" },
+            { id: 26, name: "خبز عراقي (تنور)", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)" },
             { id: 27, name: "خبز عروك (مثروم)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "20$ / ربطتين (الحد الأدنى)" },
             { id: 36, name: "خبز عروك (لحم صحاح)", category: "bakery", price: 25, image: "orook.jpg", unitPrice: 12.5, minQty: 2, stepQty: 2, unitLabel: "ربطة", note: "25$ / ربطتين (الحد الأدنى)" },
             { id: 28, name: "خبز بربري", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", note: "16$ / 4 قطع (الحد الأدنى)" },
             { id: 29, name: "لفة خميرة", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
             { id: 30, name: "كعك بالسمسم", category: "bakery", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", note: "10$ / 20 قطعة (الحد الأدنى)" },
-            { id: 31, name: "الكليچة", category: "bakery", price: 25, unitPrice: 25, minQty: 1, stepQty: 1, unitLabel: "باوند", image: "kleacha.png", note: "25$ / 1 باوند (الحد الأدنى)" },
-            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "falafel-plate.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى)" },
-            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "chicken tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى)" },
-            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "meat tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى)" },
-            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "kebab.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى)" }
+            { 
+                id: 31, 
+                name: "الكليچة", 
+                category: "bakery", 
+                price: 25, 
+                unitPrice: 25, 
+                minQty: 1, 
+                stepQty: 1, 
+                unitLabel: "باوند", 
+                image: "kleacha.png", 
+                note: "25$ / 1 باوند (الحد الأدنى) • الزيادة بالباوند" 
+            },
+            { id: 32, name: "ساندويچ فلافل", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "falafel-plate.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 33, name: "ساندويچ تكة دجاج", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "chicken tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 34, name: "ساندويچ تكة لحم", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "meat tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" },
+            { id: 35, name: "ساندويچ كباب شوي", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", image: "kebab.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية" }
         ];
 
         var heroImages = [
@@ -627,15 +453,6 @@
                 modalNote.classList.add('hidden');
             }
 
-            var baseInfo = document.getElementById('modal-base-info');
-            if (currentActiveProduct.isDolmaBased) {
-                baseInfo.innerText = "يبدأ من $60.00 (قدر صغير)";
-            } else if (currentActiveProduct.minQty && currentActiveProduct.minQty > 1) {
-                baseInfo.innerText = "$" + (currentActiveProduct.price || 0).toFixed(2) + " (الحد الأدنى: " + currentActiveProduct.minQty + " " + (currentActiveProduct.unitLabel || 'قطعة') + ")";
-            } else {
-                baseInfo.innerText = "$" + (currentActiveProduct.price || 0).toFixed(2) + " (" + (currentActiveProduct.unitLabel || 'وحدة') + ")";
-            }
-
             var dolmaSection = document.getElementById('dolma-size-section');
             var normalQtyWrapper = document.getElementById('normal-qty-wrapper');
             var extraSection = document.getElementById('extra-bread-section');
@@ -703,18 +520,318 @@
         }
 
         function updateModalPriceUI() {
-            var totalPriceDisplay = document.getElementById('modal-total-price-display');
-            var qtySpan = document.getElementById('modal-qty');
-            if (!totalPriceDisplay) return;
-
-            qtySpan.innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' (' + currentActiveProduct.unitLabel + ')' : '');
-
-            var unitPrice = currentActiveProduct.price || 0;
-            var calculatedTotal = 0;
+            if (!currentActiveProduct) return;
+            
+            var basePrice = 0;
+            var dynInfo = document.getElementById('dynamic-serving-info');
 
             if (currentActiveProduct.isDolmaBased) {
-                if (dolmaSelectedSize === 'small') unitPrice = 60;
-                else if (dolmaSelectedSize === 'medium') unitPrice = 80;
-                else if (dolmaSelectedSize === 'large') unitPrice = 100;
-                calculatedTotal = unitPrice;
-            } else if (currentActiveProduct.isBulkAppetizer || currentActiveProduct.isMeatBourak || currentActiveProduct.isCheeseBourak || current
+                var servingText = "";
+                if (dolmaSelectedSize === 'small') {
+                    basePrice = 60;
+                    servingText = "👥 تكفي قدر صغير (4 أشخاص) • معها (4 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'medium') {
+                    basePrice = 80;
+                    servingText = "👥 تكفي قدر وسط (6 أشخاص) • معها (6 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'large') {
+                    basePrice = 100;
+                    servingText = "👥 تكفي قدر كبير (8 أشخاص) • معها (8 أرغفة خبز)";
+                }
+
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = 'قدر ' + (dolmaSelectedSize === 'small' ? 'صغير' : dolmaSelectedSize === 'medium' ? 'وسط' : 'كبير');
+            } else if (currentActiveProduct.isMeatTikkaBased) {
+                if (currentModalQty <= 4) {
+                    basePrice = 28;
+                } else {
+                    basePrice = 28 + ((currentModalQty - 4) * 7);
+                }
+
+                var servingText = "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي";
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isChickenTikkaBased) {
+                if (currentModalQty <= 4) {
+                    basePrice = 20;
+                } else {
+                    basePrice = 20 + ((currentModalQty - 4) * 5);
+                }
+
+                var servingText = "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي";
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isBulkAppetizer) {
+                if (currentModalQty <= 20) {
+                    basePrice = 30;
+                } else {
+                    basePrice = 30 + ((currentModalQty - 20) * 1.5);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isMeatBourak) {
+                if (currentModalQty <= 20) {
+                    basePrice = 35;
+                } else {
+                    basePrice = 35 + ((currentModalQty - 20) * 1.75);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isCheeseBourak) {
+                if (currentModalQty <= 20) {
+                    basePrice = 20;
+                } else {
+                    basePrice = 20 + ((currentModalQty - 20) * 1.00);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isSandwich) {
+                if (currentModalQty <= 5) {
+                    basePrice = 35;
+                } else {
+                    basePrice = 35 + ((currentModalQty - 5) * 7);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.id === 31) { // الكليجة
+                basePrice = currentModalQty * 25;
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' باوند';
+            } else if (currentActiveProduct.isPoundBased) {
+                if (currentModalQty === 3) {
+                    basePrice = 70;
+                } else if (currentModalQty === 4) {
+                    basePrice = 93;
+                } else if (currentModalQty === 5) {
+                    basePrice = 116;
+                } else {
+                    basePrice = 70 + ((currentModalQty - 3) * 23.33);
+                }
+
+                var extraPounds = currentModalQty - 3;
+                var calcMin = 3 + (extraPounds * 2);
+                var calcMax = 5 + (extraPounds * 2);
+                var calcBread = 5 + (extraPounds * 2);
+
+                var servingText = "👥 تكفي تقريباً (" + calcMin + " إلى " + calcMax + " شخصاً) • معها (" + calcBread + " رغيف خبز)";
+
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isPachaBased) {
+                if (currentModalQty === 1) {
+                    basePrice = 70;
+                } else {
+                    basePrice = 70 + ((currentModalQty - 1) * 30);
+                }
+
+                var calcPeople = currentModalQty * 2; 
+                var calcBread = 3 + ((currentModalQty - 1) * 2); 
+
+                var pachaText = "👥 تكفي تقريباً (" + calcPeople + " أشخاص) • معها (" + calcBread + " رغيف خبز)";
+                if (dynInfo) {
+                    dynInfo.innerText = pachaText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else {
+                if (dynInfo) dynInfo.classList.add('hidden');
+                if (currentActiveProduct.unitPrice) {
+                    basePrice = currentModalQty * currentActiveProduct.unitPrice;
+                } else {
+                    basePrice = currentModalQty * currentActiveProduct.price;
+                }
+                var labelUnit = currentActiveProduct.unitLabel ? currentActiveProduct.unitLabel : 'قطعة';
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + labelUnit;
+            }
+
+            var totalPrice = basePrice + (extraBreadQty * 1) + (extraSamoonQty * 1);
+            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
+        }
+
+        function confirmAddToCart() {
+            if (!currentActiveProduct) return;
+
+            var itemPrice = 0;
+            var displayDetails = "";
+
+            if (currentActiveProduct.isDolmaBased) {
+                if (dolmaSelectedSize === 'small') { itemPrice = 60; displayDetails = "قدر صغير"; }
+                else if (dolmaSelectedSize === 'medium') { itemPrice = 80; displayDetails = "قدر وسط"; }
+                else if (dolmaSelectedSize === 'large') { itemPrice = 100; displayDetails = "قدر كبير"; }
+            } else if (currentActiveProduct.isMeatTikkaBased) {
+                if (currentModalQty <= 4) itemPrice = 28;
+                else itemPrice = 28 + ((currentModalQty - 4) * 7);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isChickenTikkaBased) {
+                if (currentModalQty <= 4) itemPrice = 20;
+                else itemPrice = 20 + ((currentModalQty - 4) * 5);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isBulkAppetizer) {
+                if (currentModalQty <= 20) itemPrice = 30;
+                else itemPrice = 30 + ((currentModalQty - 20) * 1.5);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isMeatBourak) {
+                if (currentModalQty <= 20) itemPrice = 35;
+                else itemPrice = 35 + ((currentModalQty - 20) * 1.75);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isCheeseBourak) {
+                if (currentModalQty <= 20) itemPrice = 20;
+                else itemPrice = 20 + ((currentModalQty - 20) * 1.00);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isSandwich) {
+                if (currentModalQty <= 5) itemPrice = 35;
+                else itemPrice = 35 + ((currentModalQty - 5) * 7);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.id === 31) { // الكليجة
+                itemPrice = currentModalQty * 25;
+                displayDetails = currentModalQty + ' باوند';
+            } else if (currentActiveProduct.isPoundBased) {
+                if (currentModalQty === 3) itemPrice = 70;
+                else if (currentModalQty === 4) itemPrice = 93;
+                else if (currentModalQty === 5) itemPrice = 116;
+                else itemPrice = 70 + ((currentModalQty - 3) * 23.33);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isPachaBased) {
+                if (currentModalQty === 1) itemPrice = 70;
+                else itemPrice = 70 + ((currentModalQty - 1) * 30);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else {
+                if (currentActiveProduct.unitPrice) itemPrice = currentModalQty * currentActiveProduct.unitPrice;
+                else itemPrice = currentModalQty * currentActiveProduct.price;
+                var unit = currentActiveProduct.unitLabel ? currentActiveProduct.unitLabel : 'قطعة';
+                displayDetails = currentModalQty + ' ' + unit;
+            }
+
+            var itemTotal = itemPrice + (extraBreadQty * 1) + (extraSamoonQty * 1);
+            var noteVal = document.getElementById('item-custom-note').value.trim();
+
+            cart.push({
+                product: currentActiveProduct,
+                qty: currentModalQty,
+                size: dolmaSelectedSize,
+                extraBread: extraBreadQty,
+                extraSamoon: extraSamoonQty,
+                totalPrice: itemTotal,
+                detailsText: displayDetails,
+                customNote: noteVal
+            });
+
+            updateCartBadge();
+            closeProductModal();
+        }
+
+        function updateCartBadge() {
+            var badge = document.getElementById('cart-badge');
+            if (cart.length > 0) {
+                badge.innerText = cart.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function openCart() {
+            renderCartItems();
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            var container = document.getElementById('cart-items');
+            if (!container) return;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">الصينية فارغة حالياً</div>';
+                return;
+            }
+
+            var html = '';
+            var grandTotal = 0;
+
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                grandTotal += item.totalPrice;
+
+                var extras = [];
+                if (item.extraBread > 0) extras.push(item.extraBread + ' خبز إضافي');
+                if (item.extraSamoon > 0) extras.push(item.extraSamoon + ' صمون إضافي');
+                var extrasStr = extras.length > 0 ? extras.join(' ، ') : '';
+
+                html += '<div class="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 relative">' +
+                    '<button onclick="removeFromCart(' + i + ')" class="absolute top-3 left-3 text-red-400 hover:text-red-300 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>' +
+                    '<h4 class="font-extrabold text-amber-400 text-sm">' + item.product.name + '</h4>' +
+                    '<p class="text-xs text-gray-300">الكمية/التفاصيل: <span class="font-bold text-white">' + item.detailsText + '</span></p>' +
+                    (extrasStr ? '<p class="text-xs text-emerald-400 font-semibold">إضافات: ' + extrasStr + '</p>' : '') +
+                    (item.customNote ? '<p class="text-xs text-amber-300 font-semibold bg-amber-500/10 p-2 rounded border border-amber-500/30">ملاحظة الزبون: "' + item.customNote + '"</p>' : '') +
+                    '<div class="pt-2 border-t border-gray-800 text-left font-black text-amber-400 text-sm">$' + item.totalPrice.toFixed(2) + '</div>' +
+                '</div>';
+            }
+
+            html += '<div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/30 text-center space-y-1">' +
+                '<span class="text-xs text-amber-300 font-bold block">المجموع الكلي </span>' +
+                '<span class="text-2xl font-black text-amber-400">$' + grandTotal.toFixed(2) + '</span>' +
+            '</div>';
+
+            container.innerHTML = html;
+        }
+
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) {
+                alert("يرجى إضافة أطباق إلى الصينية أولاً!");
+                return;
+            }
+
+            var customerName = document.getElementById('customer-name').value.trim();
+            var msg = "مرحباً، أود إتمام الطلب من أكلاتنا:\n";
+            if (customerName) {
+                msg += "اسم العميل: " + customerName + "\n";
+            }
+            msg += "-------------------------\n";
+
+            var grandTotal = 0;
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                grandTotal += item.totalPrice;
+                msg += (i + 1) + ". " + item.product.name + " (" + item.detailsText + ")\n";
+                if (item.extraBread > 0) msg += "   + " + item.extraBread + " خبز إضافي\n";
+                if (item.extraSamoon > 0) msg += "   + " + item.extraSamoon + " صمون إضافي\n";
+                if (item.customNote) msg += "   ملاحظة الزبون: " + item.customNote + "\n";
+                msg += "   السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
+            }
+
+            msg += "-------------------------\n";
+            msg += "المجموع الكلي: $" + grandTotal.toFixed(2);
+
+            var whatsappNumber = "13360000000";
+            var url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(msg);
+            window.open(url, '_blank');
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
