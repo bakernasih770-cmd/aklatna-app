@@ -63,7 +63,7 @@
                 id="search-input"
                 placeholder="ابحث عن طبقك المفضّل..." 
                 oninput="renderProducts()"
-                class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"
+                class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl mx-auto block"
             />
         </div>
     </section>
@@ -78,13 +78,12 @@
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-clock text-amber-400"></i>
                 <span>يرجى إتمام الطلب قبل 24 ساعة</span>
-                </div>
-        <div class="hidden md:inline text-gray-600">|</div>
-        
-        <!-- عبارة التوصيل مجاني داخل مدينة  Greensboro  وضواحيها (بخط بارز وجذاب) -->
-        <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 px-3 py-1 rounded-lg">
-            <i class="fa-solid fa-truck-fast text-amber-400 text-base"></i>
-            <span class="text-amber-400 font-extrabold text-sm md:text-base tracking-wide"> التوصيل مجاني</span>
+            </div>
+            <div class="hidden md:inline text-gray-600">|</div>
+            
+            <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 px-3 py-1 rounded-lg">
+                <i class="fa-solid fa-truck-fast text-amber-400 text-base"></i>
+                <span class="text-amber-400 font-extrabold text-sm md:text-base tracking-wide"> التوصيل مجاني</span>
             </div>
         </div>
     </div>
@@ -190,6 +189,11 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
 
             <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
+                <div class="flex justify-between items-center text-sm font-bold text-amber-300 border-b border-gray-800 pb-2">
+                    <span>المجموع الكلي:</span>
+                    <span id="cart-total-price" class="text-amber-400 font-extrabold text-base">$0.00</span>
+                </div>
+                
                 <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
 
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
@@ -520,223 +524,139 @@
         }
 
         function updateModalPriceUI() {
-            if (!currentActiveProduct) return;
-            
-            var basePrice = 0;
-            var dynInfo = document.getElementById('dynamic-serving-info');
+            var priceSpan = document.getElementById('modal-price');
+            var qtySpan = document.getElementById('modal-qty');
+            if (!priceSpan) return;
+
+            qtySpan.innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' (' + currentActiveProduct.unitLabel + ')' : '');
+
+            var unitPrice = currentActiveProduct.price || 0;
+            var calculatedTotal = 0;
 
             if (currentActiveProduct.isDolmaBased) {
-                var servingText = "";
-                if (dolmaSelectedSize === 'small') {
-                    basePrice = 60;
-                    servingText = "👥 تكفي قدر صغير (4 أشخاص) • معها (4 أرغفة خبز)";
-                } else if (dolmaSelectedSize === 'medium') {
-                    basePrice = 80;
-                    servingText = "👥 تكفي قدر وسط (6 أشخاص) • معها (6 أرغفة خبز)";
-                } else if (dolmaSelectedSize === 'large') {
-                    basePrice = 100;
-                    servingText = "👥 تكفي قدر كبير (8 أشخاص) • معها (8 أرغفة خبز)";
-                }
-
-                if (dynInfo) {
-                    dynInfo.innerText = servingText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = 'قدر ' + (dolmaSelectedSize === 'small' ? 'صغير' : dolmaSelectedSize === 'medium' ? 'وسط' : 'كبير');
-            } else if (currentActiveProduct.isMeatTikkaBased) {
-                if (currentModalQty <= 4) {
-                    basePrice = 28;
+                if (dolmaSelectedSize === 'small') unitPrice = 60;
+                else if (dolmaSelectedSize === 'medium') unitPrice = 80;
+                else if (dolmaSelectedSize === 'large') unitPrice = 100;
+                calculatedTotal = unitPrice;
+            } else if (currentActiveProduct.isBulkAppetizer || currentActiveProduct.isMeatBourak || currentActiveProduct.isCheeseBourak || currentActiveProduct.isSandwich) {
+                var min = currentActiveProduct.minQty || 20;
+                var basePrice = currentActiveProduct.price;
+                if (currentModalQty <= min) {
+                    calculatedTotal = basePrice;
                 } else {
-                    basePrice = 28 + ((currentModalQty - 4) * 7);
+                    var extraPieces = currentModalQty - min;
+                    var pricePerExtra = (currentActiveProduct.id === 18) ? 1.75 : ((currentActiveProduct.id === 19) ? 1.0 : 1.5);
+                    if (currentActiveProduct.isSandwich) pricePerExtra = 7.0;
+                    calculatedTotal = basePrice + (extraPieces * pricePerExtra);
                 }
-
-                var servingText = "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي";
-                if (dynInfo) {
-                    dynInfo.innerText = servingText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isChickenTikkaBased) {
-                if (currentModalQty <= 4) {
-                    basePrice = 20;
-                } else {
-                    basePrice = 20 + ((currentModalQty - 4) * 5);
-                }
-
-                var servingText = "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي";
-                if (dynInfo) {
-                    dynInfo.innerText = servingText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isBulkAppetizer) {
-                if (currentModalQty <= 20) {
-                    basePrice = 30;
-                } else {
-                    basePrice = 30 + ((currentModalQty - 20) * 1.5);
-                }
-
-                if (dynInfo) dynInfo.classList.add('hidden');
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isMeatBourak) {
-                if (currentModalQty <= 20) {
-                    basePrice = 35;
-                } else {
-                    basePrice = 35 + ((currentModalQty - 20) * 1.75);
-                }
-
-                if (dynInfo) dynInfo.classList.add('hidden');
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isCheeseBourak) {
-                if (currentModalQty <= 20) {
-                    basePrice = 20;
-                } else {
-                    basePrice = 20 + ((currentModalQty - 20) * 1.00);
-                }
-
-                if (dynInfo) dynInfo.classList.add('hidden');
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isSandwich) {
-                if (currentModalQty <= 5) {
-                    basePrice = 35;
-                } else {
-                    basePrice = 35 + ((currentModalQty - 5) * 7);
-                }
-
-                if (dynInfo) dynInfo.classList.add('hidden');
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.id === 31) { // الكليجة
-                basePrice = currentModalQty * 25;
-                if (dynInfo) dynInfo.classList.add('hidden');
-                document.getElementById('modal-qty').innerText = currentModalQty + ' باوند';
-            } else if (currentActiveProduct.isPoundBased) {
-                if (currentModalQty === 3) {
-                    basePrice = 70;
-                } else if (currentModalQty === 4) {
-                    basePrice = 93;
-                } else if (currentModalQty === 5) {
-                    basePrice = 116;
-                } else {
-                    basePrice = 70 + ((currentModalQty - 3) * 23.33);
-                }
-
-                var extraPounds = currentModalQty - 3;
-                var calcMin = 3 + (extraPounds * 2);
-                var calcMax = 5 + (extraPounds * 2);
-                var calcBread = 5 + (extraPounds * 2);
-
-                var servingText = "👥 تكفي تقريباً (" + calcMin + " إلى " + calcMax + " شخصاً) • معها (" + calcBread + " رغيف خبز)";
-
-                if (dynInfo) {
-                    dynInfo.innerText = servingText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isPachaBased) {
-                if (currentModalQty === 1) {
-                    basePrice = 70;
-                } else {
-                    basePrice = 70 + ((currentModalQty - 1) * 30);
-                }
-
-                var calcPeople = currentModalQty * 2; 
-                var calcBread = 3 + ((currentModalQty - 1) * 2); 
-
-                var pachaText = "👥 تكفي تقريباً (" + calcPeople + " أشخاص) • معها (" + calcBread + " رغيف خبز)";
-                if (dynInfo) {
-                    dynInfo.innerText = pachaText;
-                    dynInfo.classList.remove('hidden');
-                }
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.unitPrice) {
+                calculatedTotal = currentActiveProduct.unitPrice * currentModalQty;
             } else {
-                if (dynInfo) dynInfo.classList.add('hidden');
-                if (currentActiveProduct.unitPrice) {
-                    basePrice = currentModalQty * currentActiveProduct.unitPrice;
-                } else {
-                    basePrice = currentModalQty * currentActiveProduct.price;
-                }
-                var labelUnit = currentActiveProduct.unitLabel ? currentActiveProduct.unitLabel : 'قطعة';
-                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + labelUnit;
+                calculatedTotal = unitPrice * currentModalQty;
             }
 
-            var totalPrice = basePrice + (extraBreadQty * 1) + (extraSamoonQty * 1);
-            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
+            var extrasCost = (extraBreadQty * 1.0) + (extraSamoonQty * 1.0);
+            priceSpan.innerText = '$' + (calculatedTotal + extrasCost).toFixed(2);
         }
 
         function confirmAddToCart() {
             if (!currentActiveProduct) return;
-
-            var itemPrice = 0;
-            var displayDetails = "";
+            
+            var unitPrice = currentActiveProduct.price || 0;
+            var finalName = currentActiveProduct.name;
+            var variantDesc = '';
+            var calculatedTotal = 0;
 
             if (currentActiveProduct.isDolmaBased) {
-                if (dolmaSelectedSize === 'small') { itemPrice = 60; displayDetails = "قدر صغير"; }
-                else if (dolmaSelectedSize === 'medium') { itemPrice = 80; displayDetails = "قدر وسط"; }
-                else if (dolmaSelectedSize === 'large') { itemPrice = 100; displayDetails = "قدر كبير"; }
-            } else if (currentActiveProduct.isMeatTikkaBased) {
-                if (currentModalQty <= 4) itemPrice = 28;
-                else itemPrice = 28 + ((currentModalQty - 4) * 7);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isChickenTikkaBased) {
-                if (currentModalQty <= 4) itemPrice = 20;
-                else itemPrice = 20 + ((currentModalQty - 4) * 5);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isBulkAppetizer) {
-                if (currentModalQty <= 20) itemPrice = 30;
-                else itemPrice = 30 + ((currentModalQty - 20) * 1.5);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isMeatBourak) {
-                if (currentModalQty <= 20) itemPrice = 35;
-                else itemPrice = 35 + ((currentModalQty - 20) * 1.75);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isCheeseBourak) {
-                if (currentModalQty <= 20) itemPrice = 20;
-                else itemPrice = 20 + ((currentModalQty - 20) * 1.00);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isSandwich) {
-                if (currentModalQty <= 5) itemPrice = 35;
-                else itemPrice = 35 + ((currentModalQty - 5) * 7);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.id === 31) { // الكليجة
-                itemPrice = currentModalQty * 25;
-                displayDetails = currentModalQty + ' باوند';
-            } else if (currentActiveProduct.isPoundBased) {
-                if (currentModalQty === 3) itemPrice = 70;
-                else if (currentModalQty === 4) itemPrice = 93;
-                else if (currentModalQty === 5) itemPrice = 116;
-                else itemPrice = 70 + ((currentModalQty - 3) * 23.33);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
-            } else if (currentActiveProduct.isPachaBased) {
-                if (currentModalQty === 1) itemPrice = 70;
-                else itemPrice = 70 + ((currentModalQty - 1) * 30);
-                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+                if (dolmaSelectedSize === 'small') { unitPrice = 60; variantDesc = 'قدر صغير'; }
+                else if (dolmaSelectedSize === 'medium') { unitPrice = 80; variantDesc = 'قدر وسط'; }
+                else if (dolmaSelectedSize === 'large') { unitPrice = 100; variantDesc = 'قدر كبير'; }
+                finalName += ' (' + variantDesc + ')';
+                calculatedTotal = unitPrice;
+            } else if (currentActiveProduct.isBulkAppetizer || currentActiveProduct.isMeatBourak || currentActiveProduct.isCheeseBourak || currentActiveProduct.isSandwich) {
+                var min = currentActiveProduct.minQty || 20;
+                var basePrice = currentActiveProduct.price;
+                if (currentModalQty <= min) {
+                    calculatedTotal = basePrice;
+                } else {
+                    var extraPieces = currentModalQty - min;
+                    var pricePerExtra = (currentActiveProduct.id === 18) ? 1.75 : ((currentActiveProduct.id === 19) ? 1.0 : 1.5);
+                    if (currentActiveProduct.isSandwich) pricePerExtra = 7.0;
+                    calculatedTotal = basePrice + (extraPieces * pricePerExtra);
+                }
+            } else if (currentActiveProduct.unitPrice) {
+                calculatedTotal = currentActiveProduct.unitPrice * currentModalQty;
             } else {
-                if (currentActiveProduct.unitPrice) itemPrice = currentModalQty * currentActiveProduct.unitPrice;
-                else itemPrice = currentModalQty * currentActiveProduct.price;
-                var unit = currentActiveProduct.unitLabel ? currentActiveProduct.unitLabel : 'قطعة';
-                displayDetails = currentModalQty + ' ' + unit;
+                calculatedTotal = unitPrice * currentModalQty;
             }
 
-            var itemTotal = itemPrice + (extraBreadQty * 1) + (extraSamoonQty * 1);
-            var noteVal = document.getElementById('item-custom-note').value.trim();
+            var extrasCost = (extraBreadQty * 1.0) + (extraSamoonQty * 1.0);
+            var finalItemTotalPrice = calculatedTotal + extrasCost;
+
+            var customNote = document.getElementById('item-custom-note').value;
 
             cart.push({
-                product: currentActiveProduct,
+                productId: currentActiveProduct.id,
+                name: finalName,
+                unitPrice: unitPrice,
+                basePrice: finalItemTotalPrice,
                 qty: currentModalQty,
-                size: dolmaSelectedSize,
+                unitLabel: currentActiveProduct.unitLabel || '',
+                isBulkAppetizer: currentActiveProduct.isBulkAppetizer || false,
+                isMeatBourak: currentActiveProduct.isMeatBourak || false,
+                isCheeseBourak: currentActiveProduct.isCheeseBourak || false,
+                isSandwich: currentActiveProduct.isSandwich || false,
+                minQty: currentActiveProduct.minQty || 1,
                 extraBread: extraBreadQty,
                 extraSamoon: extraSamoonQty,
-                totalPrice: itemTotal,
-                detailsText: displayDetails,
-                customNote: noteVal
+                note: customNote
             });
 
             updateCartBadge();
             closeProductModal();
+            openCart();
+        }
+
+        // دالة تحديث الكمية مباشرة داخل سلة الطلبات (الصينية)
+        function changeCartItemQty(index, dir) {
+            var item = cart[index];
+            var step = 1;
+            var min = item.minQty || 1;
+
+            item.qty += dir;
+            if (item.qty < min) {
+                item.qty = min;
+            }
+
+            // إعادة حساب السعر بناءً على الكمية الجديدة
+            if (item.isBulkAppetizer || item.isMeatBourak || item.isCheeseBourak || item.isSandwich) {
+                var basePrice = 0;
+                for (var p = 0; p < products.length; p++) {
+                    if (products[p].id === item.productId) {
+                        basePrice = products[p].price;
+                        break;
+                    }
+                }
+                if (item.qty <= min) {
+                    item.basePrice = basePrice;
+                } else {
+                    var extraPieces = item.qty - min;
+                    var pricePerExtra = (item.productId === 18) ? 1.75 : ((item.productId === 19) ? 1.0 : 1.5);
+                    if (item.isSandwich) pricePerExtra = 7.0;
+                    item.basePrice = basePrice + (extraPieces * pricePerExtra);
+                }
+            } else {
+                // للأطباق العادية التي تعتمد على سعر الوحدة المضاعف
+                var singleUnitPrice = item.basePrice / (item.qty - dir > 0 ? item.qty - dir : 1);
+                item.basePrice = item.unitPrice ? (item.unitPrice * item.qty) : (singleUnitPrice * item.qty);
+            }
+
+            openCart();
         }
 
         function updateCartBadge() {
             var badge = document.getElementById('cart-badge');
+            if (!badge) return;
             if (cart.length > 0) {
                 badge.innerText = cart.length;
                 badge.classList.remove('hidden');
@@ -746,8 +666,49 @@
         }
 
         function openCart() {
-            renderCartItems();
-            document.getElementById('cart-modal').classList.remove('hidden');
+            var modal = document.getElementById('cart-modal');
+            var container = document.getElementById('cart-items');
+            var totalContainer = document.getElementById('cart-total-price');
+            if (!modal) return;
+
+            var html = '';
+            var grandTotal = 0;
+
+            if (cart.length === 0) {
+                html = '<div class="text-center text-gray-400 py-20 font-bold text-sm">صينية الطلبات فارغة حالياً</div>';
+            } else {
+                for (var i = 0; i < cart.length; i++) {
+                    var item = cart[i];
+                    var currentItemPrice = item.basePrice;
+                    grandTotal += currentItemPrice;
+
+                    html += '<div class="bg-gray-950 p-3 rounded-xl border border-gray-800 space-y-2">' +
+                        '<div class="flex justify-between items-start gap-3">' +
+                            '<div>' +
+                                '<h4 class="font-extrabold text-amber-400 text-sm">' + item.name + '</h4>' +
+                                '<p class="text-[11px] text-gray-300 mt-0.5">الكمية: ' + item.qty + ' ' + item.unitLabel + '</p>' +
+                                (item.extraBread > 0 ? '<p class="text-[11px] text-amber-300 mt-0.5">+ خبز إضافي: ' + item.extraBread + '</p>' : '') +
+                                (item.extraSamoon > 0 ? '<p class="text-[11px] text-amber-300 mt-0.5">+ صمون إضافي: ' + item.extraSamoon + '</p>' : '') +
+                                (item.note ? '<p class="text-[11px] text-gray-300 italic mt-0.5">ملاحظة: ' + item.note + '</p>' : '') +
+                            '</div>' +
+                            '<span class="text-amber-400 font-black text-sm">$' + currentItemPrice.toFixed(2) + '</span>' +
+                        '</div>' +
+                        '<div class="flex justify-between items-center pt-2 border-t border-gray-900">' +
+                            '<!-- أزرار الزيادة والنقصان داخل الصينية -->' +
+                            '<div class="flex items-center gap-2 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
+                                '<button onclick="changeCartItemQty(' + i + ', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>' +
+                                '<span class="text-xs font-bold text-amber-400 w-6 text-center">' + item.qty + '</span>' +
+                                '<button onclick="changeCartItemQty(' + i + ', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>' +
+                            '</div>' +
+                            '<button onclick="removeFromCart(' + i + ')" class="text-red-400 hover:text-red-300 text-xs font-bold flex items-center gap-1"><i class="fa-solid fa-trash"></i> حذف</button>' +
+                        '</div>' +
+                    '</div>';
+                }
+            }
+
+            container.innerHTML = html;
+            totalContainer.innerText = '$' + grandTotal.toFixed(2);
+            modal.classList.remove('hidden');
         }
 
         function closeCart() {
@@ -757,81 +718,51 @@
         function removeFromCart(index) {
             cart.splice(index, 1);
             updateCartBadge();
-            renderCartItems();
-        }
-
-        function renderCartItems() {
-            var container = document.getElementById('cart-items');
-            if (!container) return;
-
-            if (cart.length === 0) {
-                container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">الصينية فارغة حالياً</div>';
-                return;
-            }
-
-            var html = '';
-            var grandTotal = 0;
-
-            for (var i = 0; i < cart.length; i++) {
-                var item = cart[i];
-                grandTotal += item.totalPrice;
-
-                var extras = [];
-                if (item.extraBread > 0) extras.push(item.extraBread + ' خبز إضافي');
-                if (item.extraSamoon > 0) extras.push(item.extraSamoon + ' صمون إضافي');
-                var extrasStr = extras.length > 0 ? extras.join(' ، ') : '';
-
-                html += '<div class="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 relative">' +
-                    '<button onclick="removeFromCart(' + i + ')" class="absolute top-3 left-3 text-red-400 hover:text-red-300 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>' +
-                    '<h4 class="font-extrabold text-amber-400 text-sm">' + item.product.name + '</h4>' +
-                    '<p class="text-xs text-gray-300">الكمية/التفاصيل: <span class="font-bold text-white">' + item.detailsText + '</span></p>' +
-                    (extrasStr ? '<p class="text-xs text-emerald-400 font-semibold">إضافات: ' + extrasStr + '</p>' : '') +
-                    (item.customNote ? '<p class="text-xs text-amber-300 font-semibold bg-amber-500/10 p-2 rounded border border-amber-500/30">ملاحظة الزبون: "' + item.customNote + '"</p>' : '') +
-                    '<div class="pt-2 border-t border-gray-800 text-left font-black text-amber-400 text-sm">$' + item.totalPrice.toFixed(2) + '</div>' +
-                '</div>';
-            }
-
-            html += '<div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/30 text-center space-y-1">' +
-                '<span class="text-xs text-amber-300 font-bold block">المجموع الكلي </span>' +
-                '<span class="text-2xl font-black text-amber-400">$' + grandTotal.toFixed(2) + '</span>' +
-            '</div>';
-
-            container.innerHTML = html;
+            openCart();
         }
 
         function sendWhatsAppOrder() {
+            var nameInput = document.getElementById('customer-name');
+            var customerName = nameInput ? nameInput.value.trim() : '';
+            
             if (cart.length === 0) {
-                alert("يرجى إضافة أطباق إلى الصينية أولاً!");
+                alert('صينية الطلبات فارغة!');
+                return;
+            }
+            if (!customerName) {
+                alert('يرجى كتابة الاسم الكريم قبل إرسال الطلب.');
+                if(nameInput) nameInput.focus();
                 return;
             }
 
-            var customerName = document.getElementById('customer-name').value.trim();
-            var msg = "مرحباً، أود إتمام الطلب من أكلاتنا:\n";
-            if (customerName) {
-                msg += "اسم العميل: " + customerName + "\n";
-            }
-            msg += "-------------------------\n";
-
+            var text = 'السلام عليكم، أود تقديم طلب جديد:\n\n';
+            text += '👤 اسم الزبون: ' + customerName + '\n';
+            text += '--------------------------\n';
+            
             var grandTotal = 0;
             for (var i = 0; i < cart.length; i++) {
                 var item = cart[i];
-                grandTotal += item.totalPrice;
-                msg += (i + 1) + ". " + item.product.name + " (" + item.detailsText + ")\n";
-                if (item.extraBread > 0) msg += "   + " + item.extraBread + " خبز إضافي\n";
-                if (item.extraSamoon > 0) msg += "   + " + item.extraSamoon + " صمون إضافي\n";
-                if (item.customNote) msg += "   ملاحظة الزبون: " + item.customNote + "\n";
-                msg += "   السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
+                grandTotal += item.basePrice;
+
+                text += '▪️ ' + item.name + ' (الكمية: ' + item.qty + ' ' + item.unitLabel + ') - $' + item.basePrice.toFixed(2) + '\n';
+                if (item.extraBread > 0) text += '   + خبز إضافي: ' + item.extraBread + '\n';
+                if (item.extraSamoon > 0) text += '   + صمون إضافي: ' + item.extraSamoon + '\n';
+                if (item.note) text += '   + ملاحظة: ' + item.note + '\n';
             }
+            
+            text += '--------------------------\n';
+            text += '💰 المجموع الكلي: $' + grandTotal.toFixed(2) + '\n';
+            text += '🚚 التوصيل مجاني داخل مدينة Greensboro وضواحيها\n';
 
-            msg += "-------------------------\n";
-            msg += "المجموع الكلي: $" + grandTotal.toFixed(2);
-
-            var whatsappNumber = "13360000000";
-            var url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(msg);
+            var encoded = encodeURIComponent(text);
+            var phone = '10000000000'; // استبدل هذا برقم الواتساب الخاص بك
+            var url = 'https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded;
             window.open(url, '_blank');
         }
 
-        renderProducts();
+        window.onload = function() {
+            renderProducts();
+        };
     </script>
 </body>
 </html>
