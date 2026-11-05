@@ -60,11 +60,11 @@
         </div>
     </header>
 
-    <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[380px] flex flex-col justify-center">
+    <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[380px] flex flex-col justify-end">
         <div id="bg-layer-1" class="hero-bg active" style="background-image: url('gallery-1.jpg');"></div>
         <div id="bg-layer-2" class="hero-bg" style="background-image: url('gallery-2.jpg');"></div>
 
-        <div class="relative z-10 max-w-4xl mx-auto">
+        <div class="relative z-10 max-w-4xl mx-auto pb-6">
             <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]">أكلاتنا</h2>
             <p class="text-xl md:text-3xl font-extrabold text-white mb-6 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]">أطباق عراقية طازجة</p>
             
@@ -98,42 +98,38 @@
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-        <!-- شريط التبويبات وأزرار الصواني المخصصة تحته مباشرة -->
-        <div class="flex flex-col items-center gap-4 mb-8">
-            <div class="flex gap-2 overflow-x-auto pb-2 justify-center flex-wrap w-full" id="categories-container">
-                <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
-                <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
-                <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
-                <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
-                <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
-                <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
-                <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
-            </div>
-
-            <!-- أزرار الصواني تحت التبويبات مباشرة -->
-            <div class="flex flex-wrap justify-center gap-3 w-full">
-                <button onclick="openCustomTrayModal('grills')" class="bg-gray-950 border border-amber-500 hover:bg-amber-500 hover:text-gray-950 text-amber-400 font-bold px-5 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-2 transition-all">
-                    <i class="fa-solid fa-fire-flame-curved"></i>
-                    <span>🍢 شكّل صينية المشاوي (حد أدنى $40)</span>
-                </button>
-                <button onclick="openCustomTrayModal('appetizers')" class="bg-gray-950 border border-amber-500 hover:bg-amber-500 hover:text-gray-950 text-amber-400 font-bold px-5 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-2 transition-all">
-                    <i class="fa-solid fa-plate-wheat"></i>
-                    <span>🧆 شكّل صينية النواشف وعروك وبطاطا (حد أدنى $40)</span>
-                </button>
-            </div>
+        <!-- شريط التبويبات الموحد (شمل أطباق القائمة + أزرار صواني التشكيل بنفس الخط والتنسيق) -->
+        <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
+            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
+            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
+            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
+            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
+            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
+            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
+            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
+            
+            <!-- أزرار الصواني المدمجة في نفس التبويبات بنفس الخط -->
+            <button onclick="openCustomTrayModal('grills')" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-amber-400 border border-amber-500/40 hover:bg-amber-500 hover:text-gray-950 transition-all flex items-center gap-1.5">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+                <span>شكّل صينية المشاوي ($40+)</span>
+            </button>
+            <button onclick="openCustomTrayModal('appetizers')" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-amber-400 border border-amber-500/40 hover:bg-amber-500 hover:text-gray-950 transition-all flex items-center gap-1.5">
+                <i class="fa-solid fa-plate-wheat"></i>
+                <span>شكّل صينية النواشف وعروك ($40+)</span>
+            </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
-    <!-- Modal تفصيل الصينية المخصصة مع السعر المجموع المباشر وأزرار جديدة -->
+    <!-- Modal تفصيل الصينية المخصصة -->
     <div id="custom-tray-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 hidden p-4">
         <div class="w-full max-w-lg bg-gray-900 text-white rounded-3xl overflow-hidden shadow-2xl border border-amber-500/50 flex flex-col max-h-[90vh]">
             <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
                 <h3 id="custom-tray-title" class="font-black text-amber-400 text-base flex items-center gap-2">
                     <i class="fa-solid fa-layer-group text-amber-400"></i> تفصيل الصينية المخصصة
                 </h3>
-                <button onclick="closeCustomTrayModal()" class="text-gray-400 hover:text-white text-xs font-bold bg-gray-800 px-3 py-1.5 rounded-xl">
+                <button onclick="closeCustomTrayModal()" class="text-gray-400 hover:text-white text-xs font-bold bg-gray-800 px-3 py-1 rounded-xl">
                     إغلاق ✖
                 </button>
             </div>
@@ -143,108 +139,68 @@
 
                 <!-- قسم صينية المشاوي -->
                 <div id="section-grills-tray" class="space-y-3 hidden">
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">كباب شوي (شيش)</span><span class="text-[10px] text-amber-400">$3.00 للشيش</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('g-kebab', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-g-kebab" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('g-kebab', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-g-kebab" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">تكة لحم (سيخ)</span><span class="text-[10px] text-amber-400">$7.00 للسيخ</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('g-tikka-meat', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-g-tikka-meat" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('g-tikka-meat', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-g-tikka-meat" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">تكة دجاج (سيخ)</span><span class="text-[10px] text-amber-400">$5.00 للسيخ</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('g-tikka-chicken', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-g-tikka-chicken" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('g-tikka-chicken', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-g-tikka-chicken" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
                 </div>
 
                 <!-- قسم صينية النواشف وعروك وبطاطا مقلاة -->
                 <div id="section-appetizers-tray" class="space-y-3 hidden">
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">كبة حلب (قطعة)</span><span class="text-[10px] text-amber-400">$1.50 للقطعة</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('a-kibbeh-halab', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-a-kibbeh-halab" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('a-kibbeh-halab', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-a-kibbeh-halab" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">كبة جريش (قطعة)</span><span class="text-[10px] text-amber-400">$1.50 للقطعة</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('a-kibbeh-jareesh', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-a-kibbeh-jareesh" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('a-kibbeh-jareesh', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-a-kibbeh-jareesh" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">بتيتة چاب (قطعة)</span><span class="text-[10px] text-amber-400">$1.50 للقطعة</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('a-batata', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-a-batata" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('a-batata', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-a-batata" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">بورك لحم (قطعة)</span><span class="text-[10px] text-amber-400">$1.75 للقطعة</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('a-bourak-meat', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-a-bourak-meat" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('a-bourak-meat', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-a-bourak-meat" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">بورك جبن (قطعة)</span><span class="text-[10px] text-amber-400">$1.00 للقطعة</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('a-bourak-cheese', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-a-bourak-cheese" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('a-bourak-cheese', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-a-bourak-cheese" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">كباب عروك (قطعة)</span><span class="text-[10px] text-amber-400">$5.00 للقطعة</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('a-orook', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-a-orook" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('a-orook', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-a-orook" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
-                    <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 flex justify-between items-center">
+                    <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
                         <div><span class="text-xs font-bold text-white block">بطاطا مقلاة (باوند)</span><span class="text-[10px] text-amber-400">$4.00 للباوند</span></div>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="adjustTrayQty('a-french-fries', -1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">-</button>
-                            <span id="val-tray-a-french-fries" class="w-8 text-center text-xs font-bold text-white">0</span>
-                            <button onclick="adjustTrayQty('a-french-fries', 1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-sm flex items-center justify-center transition-all">+</button>
-                        </div>
+                        <input type="number" min="0" value="0" id="tray-a-french-fries" class="w-16 p-1.5 bg-gray-900 border border-gray-700 rounded text-center text-xs text-amber-400 font-bold" />
                     </div>
                 </div>
 
                 <div class="space-y-2 pt-2 border-t border-gray-800">
                     <p class="text-xs text-amber-400 font-bold">إضافات الخبز والصمون مع الصينية:</p>
-                    <div class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-800">
+                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-300">رغيف خبز إضافي ($1.00)</span>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="changeTrayExtra('bread', -1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">-</button>
-                            <span id="tray-extra-bread" class="text-xs font-bold w-6 text-center text-white">0</span>
-                            <button onclick="changeTrayExtra('bread', 1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">+</button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeTrayExtra('bread', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="tray-extra-bread" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeTrayExtra('bread', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-800">
+                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-300">قطعة صمون إضافية ($1.00)</span>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="changeTrayExtra('samoon', -1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">-</button>
-                            <span id="tray-extra-samoon" class="text-xs font-bold w-6 text-center text-white">0</span>
-                            <button onclick="changeTrayExtra('samoon', 1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">+</button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeTrayExtra('samoon', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="tray-extra-samoon" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeTrayExtra('samoon', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
                         </div>
                     </div>
                 </div>
@@ -255,15 +211,10 @@
                 </div>
             </div>
 
-            <!-- عرض المجموع الكلي للصينية بداخل النافذة بشكل دائم -->
-            <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3">
-                <div class="flex justify-between items-center bg-gray-900 p-3 rounded-xl border border-amber-500/40">
-                    <span class="text-xs text-amber-300 font-bold">مجموع الصينية (الحد الأدنى $40):</span>
-                    <span id="tray-live-total" class="text-amber-400 font-black text-lg">$0.00</span>
-                </div>
+            <div class="p-4 bg-gray-950 border-t border-gray-800">
                 <button onclick="confirmCustomTrayAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-black py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cart-plus"></i>
-                    <span>أضف الصينية إلى صينية الطلبات</span>
+                    <span>إضافة الصينية إلى صينية الطلبات</span>
                 </button>
             </div>
         </div>
@@ -271,8 +222,8 @@
 
     <!-- Modal عرض المنتج الفردي والتفاصيل -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
-        <div class="w-full max-w-md bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl border border-gray-800 flex flex-col max-h-[90vh]">
-            <div class="relative h-56 bg-gray-950 flex items-center justify-center overflow-hidden shrink-0">
+        <div class="w-full max-w-md bg-gray-900 text-white rounded-3xl overflow-hidden shadow-2xl border border-amber-500/40 flex flex-col max-h-[90vh]">
+            <div class="relative h-52 bg-gray-950 flex items-center justify-center overflow-hidden shrink-0">
                 <div id="modal-img-container" class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 font-bold relative">
                     <span>طبق بيتي عراقي 🍲</span>
                 </div>
@@ -281,8 +232,6 @@
                     <i class="fa-solid fa-arrow-right"></i>
                     <span>العودة للقائمة</span>
                 </button>
-                
-                <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-30"></span>
             </div>
             
             <div class="p-6 space-y-4 overflow-y-auto flex-1">
@@ -292,6 +241,11 @@
                 <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center text-xs">
                     <span class="text-gray-400">السعر الأساسي / الحد الأدنى:</span>
                     <span id="modal-base-info" class="text-amber-400 font-bold"></span>
+                </div>
+
+                <div class="bg-amber-500/10 border border-amber-500/40 p-3.5 rounded-2xl flex justify-between items-center">
+                    <span class="text-xs font-extrabold text-amber-300">السعر الإجمالي للطلب:</span>
+                    <span id="modal-total-price-display" class="text-amber-400 font-black text-lg">$0.00</span>
                 </div>
 
                 <div id="dolma-size-section" class="space-y-2 hidden">
@@ -304,11 +258,11 @@
                 </div>
 
                 <div class="flex items-center justify-between pt-2 border-t border-gray-800" id="normal-qty-wrapper">
-                    <span class="text-xs text-gray-400 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
-                    <div class="flex items-center gap-3 bg-gray-950 px-3 py-2 rounded-2xl border border-gray-700">
-                        <button onclick="changeModalQty(-1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-xl font-black text-sm flex items-center justify-center transition-all">-</button>
-                        <span id="modal-qty" class="text-sm font-extrabold w-28 text-center text-amber-400">1</span>
-                        <button onclick="changeModalQty(1)" class="w-8 h-8 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-xl font-black text-sm flex items-center justify-center transition-all">+</button>
+                    <span class="text-xs text-gray-300 font-bold" id="modal-qty-label">الكمية المطلوبة:</span>
+                    <div class="flex items-center bg-gray-950 border border-amber-500/40 rounded-xl overflow-hidden shadow-inner">
+                        <button onclick="changeModalQty(-1)" class="px-4 py-2 bg-gray-900 hover:bg-amber-500 hover:text-gray-950 text-amber-400 font-bold text-base transition-all">-</button>
+                        <span id="modal-qty" class="text-sm font-black w-24 text-center text-amber-400">1</span>
+                        <button onclick="changeModalQty(1)" class="px-4 py-2 bg-gray-900 hover:bg-amber-500 hover:text-gray-950 text-amber-400 font-bold text-base transition-all">+</button>
                     </div>
                 </div>
 
@@ -316,18 +270,18 @@
                     <p class="text-xs text-amber-400 font-bold">إضافات اختيارية:</p>
                     <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-300">رغيف خبز إضافي ($1.00)</span>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="changeExtra('extraBread', -1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">-</button>
-                            <span id="extra-bread-qty" class="text-xs font-bold w-6 text-center text-white">0</span>
-                            <button onclick="changeExtra('extraBread', 1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">+</button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeExtra('extraBread', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="extra-bread-qty" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeExtra('extraBread', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
                         </div>
                     </div>
                     <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-300">قطعة صمون إضافية ($1.00)</span>
-                        <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                            <button onclick="changeExtra('extraSamoon', -1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">-</button>
-                            <span id="extra-samoon-qty" class="text-xs font-bold w-6 text-center text-white">0</span>
-                            <button onclick="changeExtra('extraSamoon', 1)" class="w-7 h-7 bg-gray-800 hover:bg-amber-500 hover:text-gray-950 text-amber-400 rounded-lg font-black text-xs flex items-center justify-center transition-all">+</button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeExtra('extraSamoon', -1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">-</button>
+                            <span id="extra-samoon-qty" class="text-xs font-bold w-6 text-center text-amber-400">0</span>
+                            <button onclick="changeExtra('extraSamoon', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button>
                         </div>
                     </div>
                 </div>
@@ -337,7 +291,7 @@
                     <textarea id="item-custom-note" rows="2" placeholder="اكتب أي ملاحظة..." class="w-full p-3 bg-gray-950 border border-amber-500/50 rounded-xl text-white text-xs font-medium focus:border-amber-400 focus:outline-none shadow-inner resize-none"></textarea>
                 </div>
 
-                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2">
+                <button onclick="confirmAddToCart()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3.5 rounded-2xl text-sm shadow-xl flex items-center justify-center gap-2 transform active:scale-95 transition-all">
                     <i class="fa-solid fa-cart-plus"></i>
                     <span>أضف إلى الصينية</span>
                 </button>
@@ -377,11 +331,6 @@
     <script>
         var imgFolder = "";
         var activeCustomTray = 'grills';
-        var trayQuantities = {
-            'g-kebab': 0, 'g-tikka-meat': 0, 'g-tikka-chicken': 0,
-            'a-kibbeh-halab': 0, 'a-kibbeh-jareesh': 0, 'a-batata': 0,
-            'a-bourak-meat': 0, 'a-bourak-cheese': 0, 'a-orook': 0, 'a-french-fries': 0
-        };
         var trayExtraBread = 0;
         var trayExtraSamoon = 0;
 
@@ -406,7 +355,6 @@
 
         function openCustomTrayModal(type) {
             activeCustomTray = type;
-            for (var k in trayQuantities) { trayQuantities[k] = 0; }
             trayExtraBread = 0;
             trayExtraSamoon = 0;
             document.getElementById('tray-extra-bread').innerText = 0;
@@ -430,18 +378,11 @@
                 secGrills.classList.add('hidden');
             }
 
-            updateTrayModalUI();
             document.getElementById('custom-tray-modal').classList.remove('hidden');
         }
 
         function closeCustomTrayModal() {
             document.getElementById('custom-tray-modal').classList.add('hidden');
-        }
-
-        function adjustTrayQty(key, dir) {
-            trayQuantities[key] += dir;
-            if (trayQuantities[key] < 0) trayQuantities[key] = 0;
-            updateTrayModalUI();
         }
 
         function changeTrayExtra(type, dir) {
@@ -454,32 +395,6 @@
                 if (trayExtraSamoon < 0) trayExtraSamoon = 0;
                 document.getElementById('tray-extra-samoon').innerText = trayExtraSamoon;
             }
-            updateTrayModalUI();
-        }
-
-        function updateTrayModalUI() {
-            for (var k in trayQuantities) {
-                var el = document.getElementById('val-tray-' + k);
-                if (el) el.innerText = trayQuantities[k];
-            }
-
-            var totalPrice = 0;
-            if (activeCustomTray === 'grills') {
-                totalPrice = (trayQuantities['g-kebab'] * 3.0) + 
-                             (trayQuantities['g-tikka-meat'] * 7.0) + 
-                             (trayQuantities['g-tikka-chicken'] * 5.0);
-            } else {
-                totalPrice = (trayQuantities['a-kibbeh-halab'] * 1.5) + 
-                             (trayQuantities['a-kibbeh-jareesh'] * 1.5) + 
-                             (trayQuantities['a-batata'] * 1.5) + 
-                             (trayQuantities['a-bourak-meat'] * 1.75) + 
-                             (trayQuantities['a-bourak-cheese'] * 1.0) + 
-                             (trayQuantities['a-orook'] * 5.0) + 
-                             (trayQuantities['a-french-fries'] * 4.0);
-            }
-
-            totalPrice += (trayExtraBread * 1.0) + (trayExtraSamoon * 1.0);
-            document.getElementById('tray-live-total').innerText = '$' + totalPrice.toFixed(2);
         }
 
         function confirmCustomTrayAddToCart() {
@@ -488,9 +403,9 @@
             var trayName = "";
 
             if (activeCustomTray === 'grills') {
-                var kebab = trayQuantities['g-kebab'];
-                var tMeat = trayQuantities['g-tikka-meat'];
-                var tChicken = trayQuantities['g-tikka-chicken'];
+                var kebab = parseInt(document.getElementById('tray-g-kebab').value) || 0;
+                var tMeat = parseInt(document.getElementById('tray-g-tikka-meat').value) || 0;
+                var tChicken = parseInt(document.getElementById('tray-g-tikka-chicken').value) || 0;
 
                 totalPrice = (kebab * 3.0) + (tMeat * 7.0) + (tChicken * 5.0);
                 if (kebab > 0) componentsDesc.push(kebab + " شيش كباب");
@@ -498,13 +413,13 @@
                 if (tChicken > 0) componentsDesc.push(tChicken + " سيخ تكة دجاج");
                 trayName = "صينية مشاوي مشكلة 🍢 (" + componentsDesc.join(" + ") + ")";
             } else {
-                var khaleb = trayQuantities['a-kibbeh-halab'];
-                var kjareesh = trayQuantities['a-kibbeh-jareesh'];
-                var batata = trayQuantities['a-batata'];
-                var bmeat = trayQuantities['a-bourak-meat'];
-                var bcheese = trayQuantities['a-bourak-cheese'];
-                var orook = trayQuantities['a-orook'];
-                var fries = trayQuantities['a-french-fries'];
+                var khaleb = parseInt(document.getElementById('tray-a-kibbeh-halab').value) || 0;
+                var kjareesh = parseInt(document.getElementById('tray-a-kibbeh-jareesh').value) || 0;
+                var batata = parseInt(document.getElementById('tray-a-batata').value) || 0;
+                var bmeat = parseInt(document.getElementById('tray-a-bourak-meat').value) || 0;
+                var bcheese = parseInt(document.getElementById('tray-a-bourak-cheese').value) || 0;
+                var orook = parseInt(document.getElementById('tray-a-orook').value) || 0;
+                var fries = parseInt(document.getElementById('tray-a-french-fries').value) || 0;
 
                 totalPrice = (khaleb * 1.5) + (kjareesh * 1.5) + (batata * 1.5) + (bmeat * 1.75) + (bcheese * 1.0) + (orook * 5.0) + (fries * 4.0);
                 if (khaleb > 0) componentsDesc.push(khaleb + " كبة حلب");
@@ -788,9 +703,9 @@
         }
 
         function updateModalPriceUI() {
-            var priceSpan = document.getElementById('modal-price');
+            var totalPriceDisplay = document.getElementById('modal-total-price-display');
             var qtySpan = document.getElementById('modal-qty');
-            if (!priceSpan) return;
+            if (!totalPriceDisplay) return;
 
             qtySpan.innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' (' + currentActiveProduct.unitLabel + ')' : '');
 
@@ -802,138 +717,4 @@
                 else if (dolmaSelectedSize === 'medium') unitPrice = 80;
                 else if (dolmaSelectedSize === 'large') unitPrice = 100;
                 calculatedTotal = unitPrice;
-            } else if (currentActiveProduct.isBulkAppetizer || currentActiveProduct.isMeatBourak || currentActiveProduct.isCheeseBourak || currentActiveProduct.isSandwich) {
-                var min = currentActiveProduct.minQty || 20;
-                var basePrice = currentActiveProduct.price;
-                if (currentModalQty <= min) {
-                    calculatedTotal = basePrice;
-                } else {
-                    var extraPieces = currentModalQty - min;
-                    var pricePerExtra = (currentActiveProduct.id === 18) ? 1.75 : ((currentActiveProduct.id === 19) ? 1.0 : 1.5);
-                    if (currentActiveProduct.isSandwich) pricePerExtra = 7.0;
-                    calculatedTotal = basePrice + (extraPieces * pricePerExtra);
-                }
-            } else if (currentActiveProduct.unitPrice) {
-                calculatedTotal = currentActiveProduct.unitPrice * currentModalQty;
-            } else {
-                calculatedTotal = unitPrice * currentModalQty;
-            }
-
-            var extrasCost = (extraBreadQty * 1.0) + (extraSamoonQty * 1.0);
-            priceSpan.innerText = '$' + (calculatedTotal + extrasCost).toFixed(2);
-        }
-
-        function confirmAddToCart() {
-            if (!currentActiveProduct) return;
-            
-            var unitPrice = currentActiveProduct.price || 0;
-            var finalName = currentActiveProduct.name;
-            var variantDesc = '';
-            var calculatedTotal = 0;
-
-            if (currentActiveProduct.isDolmaBased) {
-                if (dolmaSelectedSize === 'small') { unitPrice = 60; variantDesc = 'قدر صغير'; }
-                else if (dolmaSelectedSize === 'medium') { unitPrice = 80; variantDesc = 'قدر وسط'; }
-                else if (dolmaSelectedSize === 'large') { unitPrice = 100; variantDesc = 'قدر كبير'; }
-                finalName += ' (' + variantDesc + ')';
-                calculatedTotal = unitPrice;
-            } else if (currentActiveProduct.isBulkAppetizer || currentActiveProduct.isMeatBourak || currentActiveProduct.isCheeseBourak || currentActiveProduct.isSandwich) {
-                var min = currentActiveProduct.minQty || 20;
-                var basePrice = currentActiveProduct.price;
-                if (currentModalQty <= min) {
-                    calculatedTotal = basePrice;
-                } else {
-                    var extraPieces = currentModalQty - min;
-                    var pricePerExtra = (currentActiveProduct.id === 18) ? 1.75 : ((currentActiveProduct.id === 19) ? 1.0 : 1.5);
-                    if (currentActiveProduct.isSandwich) pricePerExtra = 7.0;
-                    calculatedTotal = basePrice + (extraPieces * pricePerExtra);
-                }
-            } else if (currentActiveProduct.unitPrice) {
-                calculatedTotal = currentActiveProduct.unitPrice * currentModalQty;
-            } else {
-                calculatedTotal = unitPrice * currentModalQty;
-            }
-
-            var extrasCost = (extraBreadQty * 1.0) + (extraSamoonQty * 1.0);
-            var finalItemTotalPrice = calculatedTotal + extrasCost;
-
-            var customNote = document.getElementById('item-custom-note').value;
-
-            cart.push({
-                id: currentActiveProduct.id,
-                name: finalName,
-                basePrice: finalItemTotalPrice,
-                qty: currentModalQty,
-                unitLabel: currentActiveProduct.unitLabel || '',
-                extraBread: extraBreadQty,
-                extraSamoon: extraSamoonQty,
-                note: customNote
-            });
-
-            updateCartBadge();
-            closeProductModal();
-            openCart();
-        }
-
-        function updateCartBadge() {
-            var badge = document.getElementById('cart-badge');
-            if (!badge) return;
-            if (cart.length > 0) {
-                badge.innerText = cart.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function openCart() {
-            var modal = document.getElementById('cart-modal');
-            var container = document.getElementById('cart-items');
-            var totalContainer = document.getElementById('cart-total-price');
-            if (!modal) return;
-
-            var html = '';
-            var grandTotal = 0;
-
-            if (cart.length === 0) {
-                html = '<div class="text-center text-gray-400 py-20 font-bold text-sm">صينية الطلبات فارغة حالياً</div>';
-            } else {
-                for (var i = 0; i < cart.length; i++) {
-                    var item = cart[i];
-                    var currentItemPrice = item.basePrice;
-                    grandTotal += currentItemPrice;
-
-                    html += '<div class="bg-gray-950 p-3 rounded-xl border border-gray-800 space-y-2">' +
-                        '<div class="flex justify-between items-start gap-3">' +
-                            '<div>' +
-                                '<h4 class="font-extrabold text-amber-400 text-sm">' + item.name + '</h4>' +
-                                '<p class="text-[11px] text-gray-300 mt-0.5">الكمية: ' + item.qty + ' ' + item.unitLabel + '</p>' +
-                                (item.extraBread > 0 ? '<p class="text-[11px] text-amber-300 mt-0.5">+ خبز إضافي: ' + item.extraBread + '</p>' : '') +
-                                (item.extraSamoon > 0 ? '<p class="text-[11px] text-amber-300 mt-0.5">+ صمون إضافي: ' + item.extraSamoon + '</p>' : '') +
-                                (item.note ? '<p class="text-[11px] text-gray-300 italic mt-0.5">ملاحظة: ' + item.note + '</p>' : '') +
-                            '</div>' +
-                            '<span class="text-amber-400 font-black text-sm">$' + currentItemPrice.toFixed(2) + '</span>' +
-                        '</div>' +
-                        '<div class="flex justify-end pt-2 border-t border-gray-900">' +
-                            '<button onclick="removeFromCart(' + i + ')" class="text-red-400 hover:text-red-300 text-xs font-bold flex items-center gap-1"><i class="fa-solid fa-trash"></i> حذف</button>' +
-                        '</div>' +
-                    '</div>';
-                }
-            }
-
-            container.innerHTML = html;
-            totalContainer.innerText = '$' + grandTotal.toFixed(2);
-            modal.classList.remove('hidden');
-        }
-
-        function closeCart() {
-            document.getElementById('cart-modal').classList.add('hidden');
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartBadge();
-            openCart();
-        }
-
-        function sendWhatsAppOrder() {
+            } else if (currentActiveProduct.isBulkAppetizer || currentActiveProduct.isMeatBourak || currentActiveProduct.isCheeseBourak || current
