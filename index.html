@@ -26,11 +26,6 @@
 </head>
 <body class="min-h-screen flex flex-col pb-10">
 
-    <!-- عنصر الصوت الخفي لعزف العود -->
-    <audio id="oud-audio" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=middle-east-oud-111456.mp3" type="audio/mpeg">
-    </audio>
-
     <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -42,15 +37,10 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-xs text-amber-400 font-semibold">طبخ بيتي عراقي حلال 100% في Greensboro, NC</p>
+                    <p class="text-sm text-amber-400 font-semibold"> طبخ عراقي في مدينة Greensboro و ضواحيها</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3 space-x-reverse">
-                <button onclick="toggleOudMusic()" id="oud-toggle-btn" class="bg-gray-800 hover:bg-gray-700 text-amber-400 border border-amber-500/40 px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow transition-all">
-                    <i id="oud-icon" class="fa-solid fa-music"></i>
-                    <span id="oud-text">عزف عود 🎶</span>
-                </button>
-
                 <button onclick="openCart()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all relative">
                     <i class="fa-solid fa-utensils"></i>
                     <span>الصينية</span>
@@ -78,7 +68,6 @@
         </div>
     </section>
 
-    <!-- شريط المميزات العلوي -->
     <div class="bg-gray-900 border-y border-amber-500/30 py-3 px-4 shadow-inner">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-6 text-xs md:text-sm font-bold text-amber-300 text-center">
             <div class="flex items-center gap-2">
@@ -89,11 +78,13 @@
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-clock text-amber-400"></i>
                 <span>يرجى إتمام الطلب قبل 24 ساعة</span>
-            </div>
-            <div class="hidden md:inline text-gray-600">|</div>
-            <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 px-3 py-1.5 rounded-lg shadow-sm">
-                <i class="fa-solid fa-truck-fast text-amber-400 text-base"></i>
-                <span class="text-amber-400 font-extrabold text-sm md:text-base tracking-wide">التوصيل مجاني مع جميع الطلبات</span>
+                </div>
+        <div class="hidden md:inline text-gray-600">|</div>
+        
+        <!-- عبارة التوصيل مجاني داخل مدينة  Greensboro  وضواحيها (بخط بارز وجذاب) -->
+        <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 px-3 py-1 rounded-lg">
+            <i class="fa-solid fa-truck-fast text-amber-400 text-base"></i>
+            <span class="text-amber-400 font-extrabold text-sm md:text-base tracking-wide"> التوصيل مجاني داخل مدينة Greensboro وضواحيها</span>
             </div>
         </div>
     </div>
@@ -128,12 +119,7 @@
                 <span id="modal-price" class="absolute bottom-3 left-3 bg-amber-500 text-gray-950 px-3 py-1 rounded-full text-sm font-black z-30"></span>
             </div>
             <div class="p-6 space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
-                    <span class="text-[10px] text-amber-300/80 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <i class="fa-solid fa-guitar"></i> نكهة بغدادية
-                    </span>
-                </div>
+                <h3 id="modal-title" class="text-xl font-extrabold text-amber-400"></h3>
                 <p id="modal-note" class="text-xs text-amber-300 font-semibold bg-gray-950 p-2 rounded-lg border border-gray-800 hidden"></p>
                 
                 <div id="dolma-size-section" class="space-y-2 hidden">
@@ -153,6 +139,8 @@
                         <button onclick="changeModalQty(1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm">+</button>
                     </div>
                 </div>
+
+                <div id="dynamic-serving-info" class="text-xs text-center font-bold text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30 hidden"></div>
 
                 <div id="extra-bread-section" class="space-y-2 pt-2 border-t border-gray-800 hidden">
                     <p class="text-xs text-amber-400 font-bold">إضافات اختيارية مع الطبق:</p>
@@ -187,11 +175,11 @@
         </div>
     </div>
 
-    <!-- Modal صينية الطلبات -->
+    <!-- Modal الصينية -->
     <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
         <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
-                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات</h2>
+                <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils ml-2"></i> صينية الطلبات </h2>
                 
                 <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
                     <i class="fa-solid fa-arrow-right"></i>
@@ -202,17 +190,6 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
 
             <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
-                <!-- عرض الهدية في الصينية إذا تم السحب عليها -->
-                <div id="gift-display-box" class="hidden bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border border-amber-500/50 p-2.5 rounded-xl text-center">
-                    <span class="text-xs text-amber-300 font-extrabold block">🎁 عيدية الطبخ المجانية:</span>
-                    <span id="gift-name-text" class="text-sm font-black text-emerald-400"></span>
-                </div>
-
-                <div class="flex justify-between items-center text-sm font-bold text-amber-300 border-b border-gray-800 pb-2">
-                    <span>المجموع الكلي:</span>
-                    <span id="cart-total-price" class="text-amber-400 font-extrabold text-base">$0.00</span>
-                </div>
-                
                 <input type="text" id="customer-name" placeholder="الاسم الكريم" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none" />
 
                 <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
@@ -223,58 +200,8 @@
         </div>
     </div>
 
-    <!-- Modal عيدية الطبخ (نافذة المفاجأة) -->
-    <div id="gift-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 hidden p-4">
-        <div class="w-full max-w-sm bg-gray-900 text-white rounded-3xl p-6 text-center shadow-2xl border-2 border-amber-500/60 space-y-4 relative animate-bounce-once">
-            <div class="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto border border-amber-500">
-                <i class="fa-solid fa-gift text-3xl text-amber-400"></i>
-            </div>
-            <h3 class="text-xl font-black text-amber-400">مبارك! عيدية الطبخ بانتظارك 🎁</h3>
-            <p class="text-xs text-gray-300">تجاوزت طلباتك $50! اضغط على الصندوق لتكتشف هديتك المجانية مع الطلب.</p>
-
-            <div id="gift-box-trigger" onclick="spinGiftWheel()" class="py-4 bg-gray-950 border border-amber-500/40 rounded-2xl cursor-pointer hover:border-amber-400 transition-all shadow-inner">
-                <span id="gift-box-status" class="text-sm font-extrabold text-amber-400">🎁 اضغط لفتح العيدية 🎁</span>
-            </div>
-
-            <button onclick="closeGiftModal()" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-black py-2.5 rounded-xl text-xs shadow-lg">
-                متابعة الطلب
-            </button>
-        </div>
-    </div>
-
     <script>
         var imgFolder = "";
-        var wonGift = null; // اسم الهدية إن وُجدت
-        var giftClaimed = false; // هل استلم الهدية سابقاً
-
-        var giftsList = [
-            "علبة طرشي عراقي أصيل 🥒",
-            "ربطة صمون عراقي مجاناً 🥖",
-            "استكان شاي عراقي بالهيل ☕",
-            "لفة كليجة عراقية هدية 🥮"
-        ];
-
-        // دالة التحكم بموسيقى العود
-        var isOudPlaying = false;
-        function toggleOudMusic() {
-            var audio = document.getElementById('oud-audio');
-            var btnText = document.getElementById('oud-text');
-            var icon = document.getElementById('oud-icon');
-
-            if (isOudPlaying) {
-                audio.pause();
-                isOudPlaying = false;
-                btnText.innerText = "عزف عود 🎶";
-                icon.className = "fa-solid fa-music";
-            } else {
-                audio.play().catch(function(e) {
-                    console.log("Autoplay prevented or error:", e);
-                });
-                isOudPlaying = true;
-                btnText.innerText = "إيقاف العزف 🔇";
-                icon.className = "fa-solid fa-volume-high text-green-400";
-            }
-        }
 
         var products = [
             { id: 1, name: "الدولمة العراقية", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة" },
@@ -589,110 +516,322 @@
                 if (extraSamoonQty < 0) extraSamoonQty = 0;
                 document.getElementById('extra-samoon-qty').innerText = extraSamoonQty;
             }
+            updateModalPriceUI();
         }
 
         function updateModalPriceUI() {
-            var priceSpan = document.getElementById('modal-price');
-            var qtySpan = document.getElementById('modal-qty');
-            if (!priceSpan) return;
+            if (!currentActiveProduct) return;
+            
+            var basePrice = 0;
+            var dynInfo = document.getElementById('dynamic-serving-info');
 
-            qtySpan.innerText = currentModalQty + (currentActiveProduct.unitLabel ? ' (' + currentActiveProduct.unitLabel + ')' : '');
-
-            var unitPrice = currentActiveProduct.price || 0;
             if (currentActiveProduct.isDolmaBased) {
-                if (dolmaSelectedSize === 'small') unitPrice = 60;
-                else if (dolmaSelectedSize === 'medium') unitPrice = 80;
-                else if (dolmaSelectedSize === 'large') unitPrice = 100;
-                priceSpan.innerText = '$' + unitPrice.toFixed(2);
+                var servingText = "";
+                if (dolmaSelectedSize === 'small') {
+                    basePrice = 60;
+                    servingText = "👥 تكفي قدر صغير (4 أشخاص) • معها (4 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'medium') {
+                    basePrice = 80;
+                    servingText = "👥 تكفي قدر وسط (6 أشخاص) • معها (6 أرغفة خبز)";
+                } else if (dolmaSelectedSize === 'large') {
+                    basePrice = 100;
+                    servingText = "👥 تكفي قدر كبير (8 أشخاص) • معها (8 أرغفة خبز)";
+                }
+
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = 'قدر ' + (dolmaSelectedSize === 'small' ? 'صغير' : dolmaSelectedSize === 'medium' ? 'وسط' : 'كبير');
+            } else if (currentActiveProduct.isMeatTikkaBased) {
+                if (currentModalQty <= 4) {
+                    basePrice = 28;
+                } else {
+                    basePrice = 28 + ((currentModalQty - 4) * 7);
+                }
+
+                var servingText = "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي";
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isChickenTikkaBased) {
+                if (currentModalQty <= 4) {
+                    basePrice = 20;
+                } else {
+                    basePrice = 20 + ((currentModalQty - 4) * 5);
+                }
+
+                var servingText = "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي";
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isBulkAppetizer) {
+                if (currentModalQty <= 20) {
+                    basePrice = 30;
+                } else {
+                    basePrice = 30 + ((currentModalQty - 20) * 1.5);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isMeatBourak) {
+                if (currentModalQty <= 20) {
+                    basePrice = 35;
+                } else {
+                    basePrice = 35 + ((currentModalQty - 20) * 1.75);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isCheeseBourak) {
+                if (currentModalQty <= 20) {
+                    basePrice = 20;
+                } else {
+                    basePrice = 20 + ((currentModalQty - 20) * 1.00);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isSandwich) {
+                if (currentModalQty <= 5) {
+                    basePrice = 35;
+                } else {
+                    basePrice = 35 + ((currentModalQty - 5) * 7);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.id === 31) { // الكليجة
+                basePrice = currentModalQty * 25;
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' باوند';
             } else if (currentActiveProduct.isPoundBased) {
-                var total = unitPrice * currentModalQty;
-                priceSpan.innerText = '$' + total.toFixed(2);
-            } else if (currentActiveProduct.unitPrice) {
-                var total = currentActiveProduct.unitPrice * currentModalQty;
-                priceSpan.innerText = '$' + total.toFixed(2);
+                if (currentModalQty === 3) {
+                    basePrice = 70;
+                } else if (currentModalQty === 4) {
+                    basePrice = 93;
+                } else if (currentModalQty === 5) {
+                    basePrice = 116;
+                } else {
+                    basePrice = 70 + ((currentModalQty - 3) * 23.33);
+                }
+
+                var extraPounds = currentModalQty - 3;
+                var calcMin = 3 + (extraPounds * 2);
+                var calcMax = 5 + (extraPounds * 2);
+                var calcBread = 5 + (extraPounds * 2);
+
+                var servingText = "👥 تكفي تقريباً (" + calcMin + " إلى " + calcMax + " شخصاً) • معها (" + calcBread + " رغيف خبز)";
+
+                if (dynInfo) {
+                    dynInfo.innerText = servingText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isPachaBased) {
+                if (currentModalQty === 1) {
+                    basePrice = 70;
+                } else {
+                    basePrice = 70 + ((currentModalQty - 1) * 30);
+                }
+
+                var calcPeople = currentModalQty * 2; 
+                var calcBread = 3 + ((currentModalQty - 1) * 2); 
+
+                var pachaText = "👥 تكفي تقريباً (" + calcPeople + " أشخاص) • معها (" + calcBread + " رغيف خبز)";
+                if (dynInfo) {
+                    dynInfo.innerText = pachaText;
+                    dynInfo.classList.remove('hidden');
+                }
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else {
-                var total = unitPrice * currentModalQty;
-                priceSpan.innerText = '$' + total.toFixed(2);
+                if (dynInfo) dynInfo.classList.add('hidden');
+                if (currentActiveProduct.unitPrice) {
+                    basePrice = currentModalQty * currentActiveProduct.unitPrice;
+                } else {
+                    basePrice = currentModalQty * currentActiveProduct.price;
+                }
+                var labelUnit = currentActiveProduct.unitLabel ? currentActiveProduct.unitLabel : 'قطعة';
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + labelUnit;
             }
+
+            var totalPrice = basePrice + (extraBreadQty * 1) + (extraSamoonQty * 1);
+            document.getElementById('modal-price').innerText = '$' + totalPrice.toFixed(2);
         }
 
         function confirmAddToCart() {
             if (!currentActiveProduct) return;
-            
-            var unitPrice = currentActiveProduct.price || 0;
-            var finalName = currentActiveProduct.name;
-            var variantDesc = '';
+
+            var itemPrice = 0;
+            var displayDetails = "";
 
             if (currentActiveProduct.isDolmaBased) {
-                if (dolmaSelectedSize === 'small') { unitPrice = 60; variantDesc = 'قدر صغير'; }
-                else if (dolmaSelectedSize === 'medium') { unitPrice = 80; variantDesc = 'قدر وسط'; }
-                else if (dolmaSelectedSize === 'large') { unitPrice = 100; variantDesc = 'قدر كبير'; }
-                finalName += ' (' + variantDesc + ')';
+                if (dolmaSelectedSize === 'small') { itemPrice = 60; displayDetails = "قدر صغير"; }
+                else if (dolmaSelectedSize === 'medium') { itemPrice = 80; displayDetails = "قدر وسط"; }
+                else if (dolmaSelectedSize === 'large') { itemPrice = 100; displayDetails = "قدر كبير"; }
+            } else if (currentActiveProduct.isMeatTikkaBased) {
+                if (currentModalQty <= 4) itemPrice = 28;
+                else itemPrice = 28 + ((currentModalQty - 4) * 7);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isChickenTikkaBased) {
+                if (currentModalQty <= 4) itemPrice = 20;
+                else itemPrice = 20 + ((currentModalQty - 4) * 5);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isBulkAppetizer) {
+                if (currentModalQty <= 20) itemPrice = 30;
+                else itemPrice = 30 + ((currentModalQty - 20) * 1.5);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isMeatBourak) {
+                if (currentModalQty <= 20) itemPrice = 35;
+                else itemPrice = 35 + ((currentModalQty - 20) * 1.75);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isCheeseBourak) {
+                if (currentModalQty <= 20) itemPrice = 20;
+                else itemPrice = 20 + ((currentModalQty - 20) * 1.00);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isSandwich) {
+                if (currentModalQty <= 5) itemPrice = 35;
+                else itemPrice = 35 + ((currentModalQty - 5) * 7);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.id === 31) { // الكليجة
+                itemPrice = currentModalQty * 25;
+                displayDetails = currentModalQty + ' باوند';
+            } else if (currentActiveProduct.isPoundBased) {
+                if (currentModalQty === 3) itemPrice = 70;
+                else if (currentModalQty === 4) itemPrice = 93;
+                else if (currentModalQty === 5) itemPrice = 116;
+                else itemPrice = 70 + ((currentModalQty - 3) * 23.33);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else if (currentActiveProduct.isPachaBased) {
+                if (currentModalQty === 1) itemPrice = 70;
+                else itemPrice = 70 + ((currentModalQty - 1) * 30);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+            } else {
+                if (currentActiveProduct.unitPrice) itemPrice = currentModalQty * currentActiveProduct.unitPrice;
+                else itemPrice = currentModalQty * currentActiveProduct.price;
+                var unit = currentActiveProduct.unitLabel ? currentActiveProduct.unitLabel : 'قطعة';
+                displayDetails = currentModalQty + ' ' + unit;
             }
 
-            var baseItemPrice = unitPrice;
-            var extrasCost = (extraBreadQty * 1.0) + (extraSamoonQty * 1.0);
-            var itemTotal = (baseItemPrice * currentModalQty) + extrasCost;
-
-            var customNote = document.getElementById('item-custom-note').value;
+            var itemTotal = itemPrice + (extraBreadQty * 1) + (extraSamoonQty * 1);
+            var noteVal = document.getElementById('item-custom-note').value.trim();
 
             cart.push({
-                id: currentActiveProduct.id,
-                name: finalName,
-                basePrice: baseItemPrice,
+                product: currentActiveProduct,
                 qty: currentModalQty,
-                unitLabel: currentActiveProduct.unitLabel || '',
+                size: dolmaSelectedSize,
                 extraBread: extraBreadQty,
                 extraSamoon: extraSamoonQty,
-                note: customNote
+                totalPrice: itemTotal,
+                detailsText: displayDetails,
+                customNote: noteVal
             });
 
             updateCartBadge();
             closeProductModal();
-            
-            // التحقق من شرط فتح "عيدية الطبخ" عند تجاوز المجموع $50
-            checkGiftEligibility();
-            openCart();
         }
 
-        function changeCartItemQty(index, dir) {
-            var item = cart[index];
-            var step = 1;
-            
-            item.qty += (dir * step);
-            if (item.qty < 1) item.qty = 1;
-
-            var baseTotal = item.basePrice * item.qty;
-            var extrasCost = (item.extraBread * 1.0) + (item.extraSamoon * 1.0);
-            item.price = baseTotal + extrasCost;
-
-            checkGiftEligibility();
-            openCart();
+        function updateCartBadge() {
+            var badge = document.getElementById('cart-badge');
+            if (cart.length > 0) {
+                badge.innerText = cart.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
-        function calculateCartTotal() {
+        function openCart() {
+            renderCartItems();
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            var container = document.getElementById('cart-items');
+            if (!container) return;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">الصينية فارغة حالياً</div>';
+                return;
+            }
+
+            var html = '';
+            var grandTotal = 0;
+
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                grandTotal += item.totalPrice;
+
+                var extras = [];
+                if (item.extraBread > 0) extras.push(item.extraBread + ' خبز إضافي');
+                if (item.extraSamoon > 0) extras.push(item.extraSamoon + ' صمون إضافي');
+                var extrasStr = extras.length > 0 ? extras.join(' ، ') : '';
+
+                html += '<div class="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 relative">' +
+                    '<button onclick="removeFromCart(' + i + ')" class="absolute top-3 left-3 text-red-400 hover:text-red-300 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>' +
+                    '<h4 class="font-extrabold text-amber-400 text-sm">' + item.product.name + '</h4>' +
+                    '<p class="text-xs text-gray-300">الكمية/التفاصيل: <span class="font-bold text-white">' + item.detailsText + '</span></p>' +
+                    (extrasStr ? '<p class="text-xs text-emerald-400 font-semibold">إضافات: ' + extrasStr + '</p>' : '') +
+                    (item.customNote ? '<p class="text-xs text-amber-300 font-semibold bg-amber-500/10 p-2 rounded border border-amber-500/30">ملاحظة الزبون: "' + item.customNote + '"</p>' : '') +
+                    '<div class="pt-2 border-t border-gray-800 text-left font-black text-amber-400 text-sm">$' + item.totalPrice.toFixed(2) + '</div>' +
+                '</div>';
+            }
+
+            html += '<div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/30 text-center space-y-1">' +
+                '<span class="text-xs text-amber-300 font-bold block">المجموع الكلي </span>' +
+                '<span class="text-2xl font-black text-amber-400">$' + grandTotal.toFixed(2) + '</span>' +
+            '</div>';
+
+            container.innerHTML = html;
+        }
+
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) {
+                alert("يرجى إضافة أطباق إلى الصينية أولاً!");
+                return;
+            }
+
+            var customerName = document.getElementById('customer-name').value.trim();
+            var msg = "مرحباً، أود إتمام الطلب من أكلاتنا:\n";
+            if (customerName) {
+                msg += "اسم العميل: " + customerName + "\n";
+            }
+            msg += "-------------------------\n";
+
             var grandTotal = 0;
             for (var i = 0; i < cart.length; i++) {
                 var item = cart[i];
-                var currentItemPrice = item.price !== undefined ? item.price : (item.basePrice * item.qty + (item.extraBread * 1.0) + (item.extraSamoon * 1.0));
-                grandTotal += currentItemPrice;
+                grandTotal += item.totalPrice;
+                msg += (i + 1) + ". " + item.product.name + " (" + item.detailsText + ")\n";
+                if (item.extraBread > 0) msg += "   + " + item.extraBread + " خبز إضافي\n";
+                if (item.extraSamoon > 0) msg += "   + " + item.extraSamoon + " صمون إضافي\n";
+                if (item.customNote) msg += "   ملاحظة الزبون: " + item.customNote + "\n";
+                msg += "   السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
             }
-            return grandTotal;
+
+            msg += "-------------------------\n";
+            msg += "المجموع الكلي: $" + grandTotal.toFixed(2);
+
+            var whatsappNumber = "13360000000";
+            var url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(msg);
+            window.open(url, '_blank');
         }
 
-        function checkGiftEligibility() {
-            var total = calculateCartTotal();
-            if (total >= 50 && !giftClaimed) {
-                document.getElementById('gift-modal').classList.remove('hidden');
-            }
-        }
-
-        function spinGiftWheel() {
-            if (giftClaimed) return;
-            var randomIndex = Math.floor(Math.random() * giftsList.length);
-            wonGift = giftsList[randomIndex];
-            giftClaimed = true;
-
-            var statusBtn = document.getElementById('gift-box-status');
-            statusBtn.innerText = "🎉 مبروك! حصلت على: " + wonGift;
-            statusBtn.className =
+        renderProducts();
+    </script>
+</body>
+</html>
