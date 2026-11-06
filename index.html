@@ -442,7 +442,7 @@
                     var imgContent = '<img src="' + imgSrc + '" alt="' + p.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs\\\'><span>❌ مفقودة:</span><span class=\\\'text-gray-300 text-[10px] mt-1\\\'>' + p.image + '</span></div>\';">' +
                                      '<div class="w-full h-full flex items-center justify-center bg-gray-900 text-amber-400 text-xs font-bold" style="display:none;">🍲 ' + p.name + '</div>';
 
-                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isMeatBourak ? 'يبدأ من $35' : (p.isCheeseBourak ? 'يبدأ من $20' : (p.isZaatarPastry ? 'يبدأ من $25' : (p.isLahmBajin ? 'يبدأ من $35' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : '')))))))));
+                    var priceDisplay = p.isDolmaBased ? 'يبدأ من $60' : (p.isPachaBased ? 'يبدأ من $70' : (p.isPoundBased ? 'يبدأ من $70' : (p.isMeatTikkaBased ? 'يبدأ من $28' : (p.isChickenTikkaBased ? 'يبدأ من $20' : (p.isBulkAppetizer ? 'يبدأ من $30' : (p.isMeatBourak ? 'يبدأ من $35' : (p.isCheeseBourak ? 'يبدأ من $20' : (p.isZaatarPastry ? 'يبدأ من $25' : (p.isLahmBajin ? 'يبدأ من $35' : (p.isSandwich ? 'يبدأ من $35' : (p.price ? '$' + p.price.toFixed(2) : '')))))))))));
 
                     html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
                         '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' +
@@ -587,7 +587,15 @@
                 else if (dolmaSelectedSize === 'medium') totalPrice = 80;
                 else if (dolmaSelectedSize === 'large') totalPrice = 100;
             } else if (p.isPachaBased) {
-                totalPrice = p.price * currentModalQty;
+                var basePrice = p.price;
+                var min = p.minQty;
+                if (currentModalQty <= min) {
+                    totalPrice = basePrice;
+                } else {
+                    var diff = currentModalQty - min;
+                    var extraRate = basePrice / min;
+                    totalPrice = basePrice + (diff * extraRate);
+                }
             } else if (p.isPoundBased || p.isMeatTikkaBased || p.isChickenTikkaBased || p.isBulkAppetizer || p.isMeatBourak || p.isCheeseBourak || p.isZaatarPastry || p.isLahmBajin || p.isSandwich) {
                 var basePrice = p.price;
                 var min = p.minQty;
