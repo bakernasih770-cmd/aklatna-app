@@ -89,23 +89,16 @@
         </div>
     </div>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
         <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
-    <!-- التبويبات الـ 7 القديمة -->
-    <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
-    <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
-    <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
-    <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
-    <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
-    <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
-    <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
-
-    <!-- التبويبات الـ 3 الجديدة للصواني -->
-    <button onclick="filterCategory('grill_trays', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">مشكّل صينية المشاوي</button>
-    <button onclick="filterCategory('dry_trays', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">مشكّل صينية النواشف</button>
-    <button onclick="filterCategory('pastry_trays', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">مشكّل صينية المعجنات</button>
-</div>
-
+            <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950">الكل</button>
+            <button onclick="filterCategory('main', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأطباق الرئيسية</button>
+            <button onclick="filterCategory('grills', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المشويات</button>
+            <button onclick="filterCategory('fish', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">الأسماك</button>
+            <button onclick="filterCategory('appetizers', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المعجنات والمقبلات</button>
+            <button onclick="filterCategory('bakery', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">المخبوزات والخبز</button>
+            <button onclick="filterCategory('sandwiches', this)" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400">السندويتشات</button>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
     </main>
 
