@@ -788,8 +788,10 @@
 
         function renderCartItems() {
             var container = document.getElementById('cart-items');
+            if (!container) return;
+
             if (cart.length === 0) {
-                container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">صينية الطلبات فارغة حالياً 🍲</div>';
+                container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">الصينية فارغة حالياً</div>';
                 return;
             }
 
@@ -798,45 +800,29 @@
 
             for (var i = 0; i < cart.length; i++) {
                 var item = cart[i];
-                grandTotal += item.price;
-                
-                var detailsText = item.qty + ' ' + (item.product.unitLabel || 'قطعة');
-                if (item.dolmaSize) {
-                    var sizeAr = item.dolmaSize === 'small' ? 'صغير' : (item.dolmaSize === 'medium' ? 'وسط' : 'كبير');
-                    detailsText = 'حجم القدر: ' + sizeAr;
-                }
+                grandTotal += item.totalPrice;
 
-                var extrasText = '';
-                if (item.extraBread > 0) extrasText += ' + ' + item.extraBread + ' خبز إضافي';
-                if (item.extraSamoon > 0) extrasText += ' + ' + item.extraSamoon + ' صمون إضافي';
+                var extras = [];
+                if (item.extraBread > 0) extras.push(item.extraBread + ' خبز إضافي');
+                if (item.extraSamoon > 0) extras.push(item.extraSamoon + ' صمون إضافي');
+                var extrasStr = extras.length > 0 ? extras.join(' ، ') : '';
 
-                // مسار الصورة الخاص بالطبق المختار
-                var itemImgSrc = encodeURI(imgFolder + (item.product.image || 'gallery-1.jpg'));
-
-                html += '<div class="bg-gray-950 border border-gray-800 p-3 rounded-xl flex items-center justify-between gap-3">' +
-                    // إضافة صورة الطبق المصغرة هنا
-                    '<div class="flex items-center gap-3">' +
-                        '<div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-900 flex-shrink-0 border border-gray-800">' +
-                            '<img src="' + itemImgSrc + '" alt="' + item.product.name + '" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=\'gallery-1.jpg\';">' +
-                        '</div>' +
-                        '<div>' +
-                            '<h4 class="font-bold text-amber-400 text-sm">' + item.product.name + '</h4>' +
-                            '<p class="text-xs text-gray-300">' + detailsText + extrasText + '</p>' +
-                            (item.note ? '<p class="text-[11px] text-gray-400 italic mt-1">ملاحظة: ' + item.note + '</p>' : '') +
-                            '<p class="text-xs font-black text-amber-300 mt-1">$' + item.price.toFixed(2) + '</p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<button onclick="removeFromCart(' + i + ')" class="text-red-500 hover:text-red-400 p-2 flex-shrink-0"><i class="fa-solid fa-trash"></i></button>' +
+                html += '<div class="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 relative">' +
+                    '<button onclick="removeFromCart(' + i + ')" class="absolute top-3 left-3 text-red-400 hover:text-red-300 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>' +
+                    '<h4 class="font-extrabold text-amber-400 text-sm">' + item.product.name + '</h4>' +
+                    '<p class="text-xs text-gray-300">الكمية/التفاصيل: <span class="font-bold text-white">' + item.detailsText + '</span></p>' +
+                    (extrasStr ? '<p class="text-xs text-emerald-400 font-semibold">إضافات: ' + extrasStr + '</p>' : '') +
+                    (item.customNote ? '<p class="text-xs text-amber-300 font-semibold bg-amber-500/10 p-2 rounded border border-amber-500/30">ملاحظة الزبون: "' + item.customNote + '"</p>' : '') +
+                    '<div class="pt-2 border-t border-gray-800 text-left font-black text-amber-400 text-sm">$' + item.totalPrice.toFixed(2) + '</div>' +
                 '</div>';
             }
 
-            html += '<div class="pt-4 border-t border-gray-800 flex justify-between items-center font-extrabold text-amber-400 text-base">' +
-                '<span>المجموع الكلي:</span>' +
-                '<span>$' + grandTotal.toFixed(2) + '</span>' +
+            html += '<div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/30 text-center space-y-1">' +
+                '<span class="text-xs text-amber-300 font-bold block">المجموع الكلي </span>' +
+                '<span class="text-2xl font-black text-amber-400">$' + grandTotal.toFixed(2) + '</span>' +
             '</div>';
 
             container.innerHTML = html;
-        }
         }
 
         function sendWhatsAppOrder() {
