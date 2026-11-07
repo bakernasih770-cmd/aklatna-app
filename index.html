@@ -861,63 +861,57 @@
             container.innerHTML = html;
         }
 
-       function sendWhatsAppOrder() {
-    var customerNameInput = document.getElementById('customer-name');
-    var customerName = customerNameInput ? customerNameInput.value.trim() : '';
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) {
+                alert('الرجاء إضافة أطباق إلى الصينية أولاً');
+                return;
+            }
 
-    var streetInput = document.getElementById('street-address');
-    var street = streetInput ? streetInput.value.trim() : '';
+            var nameInput = document.getElementById('customer-name');
+            var customerName = nameInput ? nameInput.value.trim() : '';
 
-    var zipInput = document.getElementById('zip-code');
-    var zip = zipInput ? zipInput.value.trim() : '';
+            var addressInput = document.getElementById('customer-address');
+            var customerAddress = addressInput ? addressInput.value.trim() : '';
 
-    var dateInput = document.getElementById('delivery-date');
-    var date = dateInput ? dateInput.value : '';
+            var dateInput = document.getElementById('delivery-date');
+            var deliveryDate = dateInput ? dateInput.value : '';
 
-    var timeInput = document.getElementById('delivery-time');
-    var time = timeInput ? timeInput.value : '';
+            var timeInput = document.getElementById('delivery-time');
+            var deliveryTime = timeInput ? timeInput.value : '';
 
-    if (cart.length === 0) {
-        alert('الصينية فارغة!');
-        return;
-    }
+            var message = "مرحباً أكلاتنا، أرغب بطلب الآتي:\n\n";
+            
+            if (customerName) message += "👤 الاسم: " + customerName + "\n";
+            if (customerAddress) message += "📍 العنوان: " + customerAddress + "\n";
+            if (deliveryDate || deliveryTime) {
+                message += "⏰ موعد الاستلام: " + (deliveryDate || 'غير محدد') + " - الساعة " + (deliveryTime || 'غير محدد') + "\n";
+            }
+            message += "\n--------------------\n\n";
 
-    if (!customerName || !street || !zip) {
-        alert('يرجى إدخال الاسم، عنوان الشارع، والرمز البريدي (ZIP Code) كاملاً');
-        return;
-    }
+            var grandTotal = 0;
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                grandTotal += item.price;
+                
+                var detailsText = item.qty + ' ' + (item.product.unitLabel || 'قطعة');
+                if (item.dolmaSize) {
+                    var sizeAr = item.dolmaSize === 'small' ? 'صغير' : (item.dolmaSize === 'medium' ? 'وسط' : 'كبير');
+                    detailsText = 'قدر ' + sizeAr;
+                }
 
-    var text = "السلام عليكم، أود تقديم طلب جديد:%0a";
-    text += "👤 اسم الزبون: " + encodeURIComponent(customerName) + "%0a";
-    text += "📍 العنوان: " + encodeURIComponent(street + ", Greensboro, NC " + zip) + "%0a";
-    if (date || time) {
-        text += "📅 موعد الاستلام: " + encodeURIComponent((date || "غير محدد") + " - " + (time || "غير محدد")) + "%0a";
-    }
-    text += "--------------------------------%0a";
+                message += (i + 1) + ". " + item.product.name + " (" + detailsText + ")\n";
+                if (item.extraBread > 0) message += "   - " + item.extraBread + " خبز إضافي\n";
+                if (item.extraSamoon > 0) message += "   - " + item.extraSamoon + " صمون إضافي\n";
+                if (item.note) message += "   - ملاحظة: " + item.note + "\n";
+                message += "   السعر: $" + item.price.toFixed(2) + "\n\n";
+            }
 
-    var total = 0;
-    for (var i = 0; i < cart.length; i++) {
-        var itemName = cart[i].name || (cart[i].product ? cart[i].product.name : 'منتج');
-        var itemDetails = cart[i].details || cart[i].note || '';
+            message += "--------------------\n";
+            message += "المجموع الكلي: $" + grandTotal.toFixed(2);
 
-        text += (i + 1) + ". " + encodeURIComponent(itemName);
-        if (itemDetails) {
-            text += " (%0a   " + encodeURIComponent(itemDetails) + "%0a)";
-        }
-        text += " - $" + cart[i].price.toFixed(2) + "%0a";
-        total += cart[i].price;
-    }
-
-    text += "--------------------------------%0a";
-    text += "المجموع الكلي: $" + total.toFixed(2) + "%0a";
-    text += "التوصيل: مجاني داخل جرينزبورو وضواحيها 🚚";
-
-    var phoneNumber = "13366867948"; // رقم الواتساب الخاص بك
-    var url = "https://wa.me/" + phoneNumber + "?text=" + text;
-    
-    // استخدام التحويل المباشر لضمان فتح الواتساب على الهاتف دون حظر
-    window.location.href = url;
-}
+            var phone = "13366867948";
+            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+            window.open(url, '_blank');
         }
 
         renderProducts();
