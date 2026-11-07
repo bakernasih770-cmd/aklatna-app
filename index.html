@@ -862,56 +862,61 @@
         }
 
         function sendWhatsAppOrder() {
-            if (cart.length === 0) {
-                alert('الرجاء إضافة أطباق إلى الصينية أولاً');
-                return;
-            }
+    if (cart.length === 0) {
+        alert('الرجاء إضافة أطباق إلى الصينية أولاً');
+        return;
+    }
 
-            var nameInput = document.getElementById('customer-name');
-            var customerName = nameInput ? nameInput.value.trim() : '';
+    var val = function(id) {
+        var el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+    };
 
-            var addressInput = document.getElementById('customer-address');
-            var customerAddress = addressInput ? addressInput.value.trim() : '';
+    var customerName = val('customer-name');
+    var street = val('street-address');
+    var city = val('city');
+    var state = val('state');
+    var zip = val('zip-code');
+    var addressNotes = val('address-notes');
+    var deliveryDate = val('delivery-date');
+    var deliveryTime = val('delivery-time');
 
-            var dateInput = document.getElementById('delivery-date');
-            var deliveryDate = dateInput ? dateInput.value : '';
+    if (!customerName || !street) {
+        alert('الرجاء إدخال الاسم والعنوان');
+        return;
+    }
 
-            var timeInput = document.getElementById('delivery-time');
-            var deliveryTime = timeInput ? timeInput.value : '';
+    var message = "مرحباً أكلاتنا، أرغب بطلب الآتي:\n\n";
+    message += "👤 الاسم: " + customerName + "\n";
 
-            var message = "مرحباً أكلاتنا، أرغب بطلب الآتي:\n\n";
-            
-            if (customerName) message += "👤 الاسم: " + customerName + "\n";
-            if (customerAddress) message += "📍 العنوان: " + customerAddress + "\n";
-            if (deliveryDate || deliveryTime) {
-                message += "⏰ موعد الاستلام: " + (deliveryDate || 'غير محدد') + " - الساعة " + (deliveryTime || 'غير محدد') + "\n";
-            }
-            message += "\n--------------------\n\n";
+    var fullAddress = street + "، " + city + "، " + state + " " + zip;
+    message += "📍 العنوان: " + fullAddress + "\n";
+    if (addressNotes) message += "📝 ملاحظات العنوان: " + addressNotes + "\n";
 
-            var grandTotal = 0;
-            for (var i = 0; i < cart.length; i++) {
-                var item = cart[i];
-                grandTotal += item.price;
-                
-                var detailsText = item.qty + ' ' + (item.product.unitLabel || 'قطعة');
-                if (item.dolmaSize) {
-                    var sizeAr = item.dolmaSize === 'small' ? 'صغير' : (item.dolmaSize === 'medium' ? 'وسط' : 'كبير');
-                    detailsText = 'قدر ' + sizeAr;
-                }
+    if (deliveryDate || deliveryTime) {
+        message += "⏰ موعد الاستلام: " + (deliveryDate || 'غير محدد') + " - الساعة " + (deliveryTime || 'غير محدد') + "\n";
+    }
+    message += "\n--------------------\n\n";
 
-                message += (i + 1) + ". " + item.product.name + " (" + detailsText + ")\n";
-                if (item.extraBread > 0) message += "   - " + item.extraBread + " خبز إضافي\n";
-                if (item.extraSamoon > 0) message += "   - " + item.extraSamoon + " صمون إضافي\n";
-                if (item.note) message += "   - ملاحظة: " + item.note + "\n";
-                message += "   السعر: $" + item.price.toFixed(2) + "\n\n";
-            }
+    var grandTotal = 0;
+    for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        grandTotal += item.totalPrice;
 
-            message += "--------------------\n";
-            message += "المجموع الكلي: $" + grandTotal.toFixed(2);
+        message += (i + 1) + ". " + item.product.name + " (" + item.detailsText + ")\n";
+        if (item.extraBread > 0) message += "   - " + item.extraBread + " خبز إضافي\n";
+        if (item.extraSamoon > 0) message += "   - " + item.extraSamoon + " صمون إضافي\n";
+        if (item.customNote) message += "   - ملاحظة: " + item.customNote + "\n";
+        message += "   السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
+    }
 
-            var phone = "13366867948";
-            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-            window.open(url, '_blank');
+    message += "--------------------\n";
+    message += "المجموع الكلي: $" + grandTotal.toFixed(2);
+
+    var phone = "13366867948";
+    var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+    window.location.href = url;
+}
         }
 
         renderProducts();
