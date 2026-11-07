@@ -908,9 +908,11 @@
             message += "--------------------\n";
             message += "المجموع الكلي: $" + grandTotal.toFixed(2);
 
-            var phone = "13366867948";
+           var phone = "13366867948";
             var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-            window.open(url, '_blank');
+            
+            // استخدام التحويل المباشر لضمان فتح تطبيق الواتساب على الهاتف
+            window.location.href = url;
         }
 
         renderProducts();
