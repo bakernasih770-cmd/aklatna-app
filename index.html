@@ -861,8 +861,7 @@
             container.innerHTML = html;
         }
 
-      function sendWhatsAppOrder() {
-    // 1. جلب العناصر بدقة والتحقق منها
+        function sendWhatsAppOrder() {
     var nameEl = document.getElementById('customer-name');
     var streetEl = document.getElementById('street-address');
     var cityEl = document.getElementById('city');
@@ -881,7 +880,6 @@
     var date = dateEl ? dateEl.value : '';
     var time = timeEl ? timeEl.value : '';
 
-    // 2. التحقق من الحقول الأساسية قبل الإرسال
     if (!name || !street || !zip) {
         alert('يرجى إدخال الاسم، عنوان الشارع، والرمز البريدي (ZIP Code) كاملاً');
         return;
@@ -892,13 +890,11 @@
         return;
     }
 
-    // 3. تجميع العنوان بالشكل الأمريكي
     var fullAddress = street + ", " + city + ", " + state + " " + zip;
     if (addressNotes) {
         fullAddress += " (ملاحظة: " + addressNotes + ")";
     }
 
-    // 4. بناء نص الرسالة للواتساب
     var message = "طلب جديد من تطبيق أكلاتنا:\n";
     message += "👤 الاسم: " + name + "\n";
     message += "📍 العنوان: " + fullAddress + "\n";
@@ -917,13 +913,13 @@
     message += "--------------------\n";
     message += "المجموع الكلي: $" + grandTotal.toFixed(2);
 
-    // 5. رابط الواتساب والتحويل المباشر
     var phone = "13366867948";
-    var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
     
-    // استخدام window.location.href لضمان فتح الواتساب مباشرة على الهاتف
-    window.location.href = url;
-}
+    // جرب هذه الطريقة الآمنة للفتح
+    var whatsappUrl = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(message);
+    
+    // محاولة الفتح
+    window.location.href = whatsappUrl;
 }
         }
 
