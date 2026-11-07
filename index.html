@@ -888,11 +888,8 @@
 
     var message = "مرحباً أكلاتنا، أرغب بطلب الآتي:\n\n";
     message += "👤 الاسم: " + customerName + "\n";
-
-    var fullAddress = street + "، " + city + "، " + state + " " + zip;
-    message += "📍 العنوان: " + fullAddress + "\n";
+    message += "📍 العنوان: " + street + "، " + city + "، " + state + " " + zip + "\n";
     if (addressNotes) message += "📝 ملاحظات العنوان: " + addressNotes + "\n";
-
     if (deliveryDate || deliveryTime) {
         message += "⏰ موعد الاستلام: " + (deliveryDate || 'غير محدد') + " - الساعة " + (deliveryTime || 'غير محدد') + "\n";
     }
@@ -902,7 +899,6 @@
     for (var i = 0; i < cart.length; i++) {
         var item = cart[i];
         grandTotal += item.totalPrice;
-
         message += (i + 1) + ". " + item.product.name + " (" + item.detailsText + ")\n";
         if (item.extraBread > 0) message += "   - " + item.extraBread + " خبز إضافي\n";
         if (item.extraSamoon > 0) message += "   - " + item.extraSamoon + " صمون إضافي\n";
@@ -914,10 +910,8 @@
     message += "المجموع الكلي: $" + grandTotal.toFixed(2);
 
     var phone = "13366867948";
-    var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-    window.location.href = url;
+    window.location.href = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
 }
-        }
 
         renderProducts();
     </script>
