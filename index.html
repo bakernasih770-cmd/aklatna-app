@@ -861,88 +861,59 @@
             container.innerHTML = html;
         }
 
-       function sendWhatsAppOrder() {
-    try {
-        // 1. جلب عناصر العنوان مع وضع قيم افتراضية آمنة
-        var nameEl = document.getElementById('customer-name');
-        var streetEl = document.getElementById('street-address') || document.getElementById('customer-address');
-        var cityEl = document.getElementById('city');
-        var stateEl = document.getElementById('state');
-        var zipEl = document.getElementById('zip-code');
-        var notesEl = document.getElementById('address-notes');
-        var dateEl = document.getElementById('delivery-date');
-        var timeEl = document.getElementById('delivery-time');
-
-        var name = nameEl ? nameEl.value.trim() : '';
-        var street = streetEl ? streetEl.value.trim() : '';
-        var city = cityEl ? cityEl.value.trim() : 'Greensboro';
-        var state = stateEl ? stateEl.value.trim() : 'NC';
-        var zip = zipEl ? zipEl.value.trim() : '';
-        var addressNotes = notesEl ? notesEl.value.trim() : '';
-        var date = dateEl ? dateEl.value : '';
-        var time = timeEl ? timeEl.value : '';
-
-        // 2. التحقق من السلة أولاً
-        if (typeof cart === 'undefined' || !cart || cart.length === 0) {
-            alert('الرجاء إضافة أطباق إلى الصينية أولاً');
-            return;
-        }
-
-        // 3. التحقق من الحقول الأساسية
-        if (!name || !street) {
-            alert('يرجى إدخال الاسم وعنوان الشارع على الأقل لتوصيل الطلب');
-            return;
-        }
-
-        // 4. تجميع العنوان
-        var fullAddress = street;
-        if (city || state || zip) {
-            fullAddress += ", " + city + ", " + state + " " + zip;
-        }
-        if (addressNotes) {
-            fullAddress += " (ملاحظة: " + addressNotes + ")";
-        }
-
-        // 5. بناء نص الرسالة
-        var message = "طلب جديد من تطبيق أكلاتنا:\n";
-        message += "👤 الاسم: " + name + "\n";
-        message += "📍 العنوان: " + fullAddress + "\n";
-        message += "📅 موعد الاستلام: " + (date || "غير محدد") + " - الوقت: " + (time || "غير محدد") + "\n\n";
-        message += "--- تفاصيل الطلب ---\n";
-
-        var grandTotal = 0;
-        for (var i = 0; i < cart.length; i++) {
-            var item = cart[i];
-            
-            // قراءة اسم المنتج وسعره بأمان بغض النظر عن طريقة حفظه في السلة
-            var itemName = (item.product && item.product.name) ? item.product.name : (item.name || "طبق عراقـي");
-            var itemQty = item.qty || 1;
-            var itemPrice = typeof item.price === 'number' ? item.price : 0;
-            
-            grandTotal += itemPrice;
-            
-            message += (i + 1) + ". " + itemName + " (الكمية: " + itemQty + ")";
-            if (itemPrice > 0) {
-                message += " - $" + itemPrice.toFixed(2);
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) {
+                alert('الرجاء إضافة أطباق إلى الصينية أولاً');
+                return;
             }
-            message += "\n";
+
+            var nameInput = document.getElementById('customer-name');
+            var customerName = nameInput ? nameInput.value.trim() : '';
+
+            var addressInput = document.getElementById('customer-address');
+            var customerAddress = addressInput ? addressInput.value.trim() : '';
+
+            var dateInput = document.getElementById('delivery-date');
+            var deliveryDate = dateInput ? dateInput.value : '';
+
+            var timeInput = document.getElementById('delivery-time');
+            var deliveryTime = timeInput ? timeInput.value : '';
+
+            var message = "مرحباً أكلاتنا، أرغب بطلب الآتي:\n\n";
             
-            if (item.note) message += "   ملاحظة: " + item.note + "\n";
+            if (customerName) message += "👤 الاسم: " + customerName + "\n";
+            if (customerAddress) message += "📍 العنوان: " + customerAddress + "\n";
+            if (deliveryDate || deliveryTime) {
+                message += "⏰ موعد الاستلام: " + (deliveryDate || 'غير محدد') + " - الساعة " + (deliveryTime || 'غير محدد') + "\n";
+            }
+            message += "\n--------------------\n\n";
+
+            var grandTotal = 0;
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                grandTotal += item.price;
+                
+                var detailsText = item.qty + ' ' + (item.product.unitLabel || 'قطعة');
+                if (item.dolmaSize) {
+                    var sizeAr = item.dolmaSize === 'small' ? 'صغير' : (item.dolmaSize === 'medium' ? 'وسط' : 'كبير');
+                    detailsText = 'قدر ' + sizeAr;
+                }
+
+                message += (i + 1) + ". " + item.product.name + " (" + detailsText + ")\n";
+                if (item.extraBread > 0) message += "   - " + item.extraBread + " خبز إضافي\n";
+                if (item.extraSamoon > 0) message += "   - " + item.extraSamoon + " صمون إضافي\n";
+                if (item.note) message += "   - ملاحظة: " + item.note + "\n";
+                message += "   السعر: $" + item.price.toFixed(2) + "\n\n";
+            }
+
+            message += "--------------------\n";
+            message += "المجموع الكلي: $" + grandTotal.toFixed(2);
+
+            var phone = "13366867948";
+            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+            window.open(url, '_blank');
         }
 
-        message += "--------------------\n";
-        message += "المجموع الكلي: $" + grandTotal.toFixed(2);
-
-        // 6. التحويل إلى الواتساب
-        var phone = "13366867948";
-        var whatsappUrl = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(message);
-        
-        window.location.href = whatsappUrl;
-
-    } catch (error) {
-        alert("حدث خطأ أثناء إعداد الطلب: " + error.message);
-    }
-}
         renderProducts();
     </script>
 </body>
