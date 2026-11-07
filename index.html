@@ -862,69 +862,64 @@
         }
 
         function sendWhatsAppOrder() {
-    if (cart.length === 0) {
-        alert("يرجى إضافة أطباق إلى الصينية أولاً!");
-        return;
-    }
 
-    var customerNameInput = document.getElementById('customer-name');
-    var streetInput = document.getElementById('street-address');
-    var cityInput = document.getElementById('city');
-    var stateInput = document.getElementById('state');
-    var zipInput = document.getElementById('zip-code');
-    var notesInput = document.getElementById('address-notes');
-    var dateInput = document.getElementById('delivery-date');
-    var timeInput = document.getElementById('delivery-time');
+            if (cart.length === 0) {
 
-    var customerName = customerNameInput ? customerNameInput.value.trim() : '';
-    var street = streetInput ? streetInput.value.trim() : '';
-    var city = cityInput ? cityInput.value.trim() : 'Greensboro';
-    var state = stateInput ? stateInput.value.trim() : 'NC';
-    var zip = zipInput ? zipInput.value.trim() : '';
-    var addressNotes = notesInput ? notesInput.value.trim() : '';
-    var date = dateInput ? dateInput.value : '';
-    var time = timeInput ? timeInput.value : '';
+                alert("يرجى إضافة أطباق إلى الصينية أولاً!");
 
-    if (!customerName || !street || !zip) {
-        alert('يرجى إدخال الاسم، عنوان الشارع، والرمز البريدي (ZIP Code) كاملاً');
-        return;
-    }
+                return;
 
-    var fullAddress = street + ", " + city + ", " + state + " " + zip;
-    if (addressNotes) {
-        fullAddress += " (ملاحظة: " + addressNotes + ")";
-    }
+            }
 
-    var msg = "مرحباً، أود إتمام الطلب من أكلاتنا:\n";
-    if (customerName) {
-        msg += "👤 اسم العميل: " + customerName + "\n";
-    }
-    msg += "📍 العنوان: " + fullAddress + "\n";
-    if (date || time) {
-        msg += "📅 موعد الاستلام: " + (date || "غير محدد") + " - " + (time || "غير محدد") + "\n";
-    }
-    msg += "-------------------------\n";
 
-    var grandTotal = 0;
-    for (var i = 0; i < cart.length; i++) {
-        var item = cart[i];
-        grandTotal += item.totalPrice;
-        msg += (i + 1) + ". " + item.product.name + " (" + (item.detailsText || "") + ")\n";
-        if (item.extraBread > 0) msg += "   + " + item.extraBread + " خبز إضافي\n";
-        if (item.extraSamoon > 0) msg += "   + " + item.extraSamoon + " صمون إضافي\n";
-        if (item.customNote) msg += "   ملاحظة الزبون: " + item.customNote + "\n";
-        msg += "   السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
-    }
 
-    msg += "-------------------------\n";
-    msg += "المجموع الكلي: $" + grandTotal.toFixed(2) + "\n";
-    msg += "التوصيل: مجاني داخل جرينزبورو وضواحيها 🚚";
+            var customerName = document.getElementById('customer-name').value.trim();
 
-    var whatsappNumber = "13366867948";
-    var url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(msg);
-    
-    // استخدام التحويل المباشر لضمان فتح الواتساب على الهواتف والمتصفحات دون حظر
-    window.location.href = url;
+            var msg = "مرحباً، أود إتمام الطلب من أكلاتنا:\n";
+
+            if (customerName) {
+
+                msg += "اسم العميل: " + customerName + "\n";
+
+            }
+
+            msg += "-------------------------\n";
+
+
+
+            var grandTotal = 0;
+
+            for (var i = 0; i < cart.length; i++) {
+
+                var item = cart[i];
+
+                grandTotal += item.totalPrice;
+
+                msg += (i + 1) + ". " + item.product.name + " (" + item.detailsText + ")\n";
+
+                if (item.extraBread > 0) msg += "   + " + item.extraBread + " خبز إضافي\n";
+
+                if (item.extraSamoon > 0) msg += "   + " + item.extraSamoon + " صمون إضافي\n";
+
+                if (item.customNote) msg += "   ملاحظة الزبون: " + item.customNote + "\n";
+
+                msg += "   السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
+
+            }
+
+
+
+            msg += "-------------------------\n";
+
+            msg += "المجموع الكلي: $" + grandTotal.toFixed(2);
+
+
+
+            var whatsappNumber = "13366867948";
+
+            var url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(msg);
+
+            window.open(url, '_blank'); 
 }
         }
 
