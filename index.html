@@ -872,17 +872,20 @@
         function sendWhatsAppOrder() {
     var name = document.getElementById('customer-name').value;
     var street = document.getElementById('street-address').value;
+    var city = document.getElementById('city').value;
+    var state = document.getElementById('state').value;
     var zip = document.getElementById('zip-code').value;
     var addressNotes = document.getElementById('address-notes').value;
     var date = document.getElementById('delivery-date').value;
     var time = document.getElementById('delivery-time').value;
 
-    if (!name || !street || !zip) {
-        alert('يرجى إدخال الاسم، عنوان الشارع، والرمز البريدي (ZIP Code) كاملاً');
+    if (!name || !street || !city || !zip) {
+        alert('يرجى إدخال الاسم، عنوان الشارع، المدينة، والرمز البريدي (ZIP Code) كاملاً');
         return;
     }
 
-    var fullAddress = street + ", Greensboro, NC " + zip;
+    // تجميع العنوان كاملاً مع المدينة والولاية التي كتبها الزبون
+    var fullAddress = street + ", " + city + ", " + (state || "NC") + " " + zip;
     if (addressNotes) {
         fullAddress += " (ملاحظة: " + addressNotes + ")";
     }
@@ -895,11 +898,13 @@
 
     for (var i = 0; i < cart.length; i++) {
         message += (i + 1) + ". " + cart[i].product.name + " (الكمية: " + cart[i].qty + ")\n";
+        if (cart[i].note) message += "   ملاحظة: " + cart[i].note + "\n";
     }
 
     var phone = "10000000000"; // ضع رقم الواتساب الخاص بك هنا
     var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
     window.open(url, '_blank');
+}
 }
         }
 
