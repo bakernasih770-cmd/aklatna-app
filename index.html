@@ -910,8 +910,14 @@
             message += "المجموع الكلي: $" + grandTotal.toFixed(2);
 
             var phone = "13366867948";
-            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-            window.open(url, '_blank');
+    var whatsappUrl = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+    
+    // محاولة فتح الرابط مباشرة
+    var opened = window.open(whatsappUrl, '_blank');
+    if (!opened) {
+        // إذا قام المتصفح بحظر النافذة المنبثقة، قم بتحويل الصفحة
+        window.location.href = whatsappUrl;
+    }
         }
 
         renderProducts();
