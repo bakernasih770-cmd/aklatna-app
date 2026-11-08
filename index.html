@@ -886,6 +886,16 @@
         return;
     }
 
+    if (!deliveryDate || !deliveryTime) {
+        alert('الرجاء اختيار تاريخ ووقت الاستلام');
+        return;
+    }
+    var pickup = new Date(deliveryDate + 'T' + deliveryTime);
+    var earliest = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    if (isNaN(pickup.getTime()) || pickup < earliest) {
+        alert('يرجى إتمام الطلب قبل 24 ساعة على الأقل من موعد الاستلام');
+        return;
+    }
     var message = "مرحباً أكلاتنا، أرغب بطلب الآتي:\n\n";
     message += "👤 الاسم: " + customerName + "\n";
     message += "📍 العنوان: " + street + "، " + city + "، " + state + " " + zip + "\n";
@@ -914,6 +924,13 @@
 }
 
         renderProducts();
+         (function () {
+            var d = new Date();
+            d.setDate(d.getDate() + 1);
+            var min = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            var el = document.getElementById('delivery-date');
+            if (el) el.min = min;
+        })();
     </script>
 </body>
 </html>
