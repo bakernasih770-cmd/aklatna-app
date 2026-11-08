@@ -667,6 +667,19 @@
 
                 if (dynInfo) dynInfo.classList.add('hidden');
                 document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+                 } else if (currentActiveProduct.isFishBased) {
+                if (currentModalQty <= 3) {
+                    basePrice = 32;
+                } else {
+                    basePrice = 32 + ((currentModalQty - 3) * 9);
+                }
+
+                if (dynInfo) dynInfo.classList.add('hidden');
+                document.getElementById('modal-qty').innerText = currentModalQty + ' ' + currentActiveProduct.unitLabel;
+                } else if (currentActiveProduct.isFishBased) {
+                if (currentModalQty <= 3) itemPrice = 32;
+                else itemPrice = 32 + ((currentModalQty - 3) * 9);
+                displayDetails = currentModalQty + ' ' + currentActiveProduct.unitLabel;
             } else if (currentActiveProduct.id === 31) { // الكليجة
                 basePrice = currentModalQty * 25;
                 if (dynInfo) dynInfo.classList.add('hidden');
