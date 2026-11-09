@@ -78,7 +78,6 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
     <button onclick="filterCategory('pastries', this)" data-i18n="catPastries" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
     <button onclick="filterCategory('bakery', this)" data-i18n="catBakery" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
     <button onclick="filterCategory('sandwiches', this)" data-i18n="catSand" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('services', this)" data-i18n="catServices" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
 </main>
@@ -222,7 +221,6 @@ var T = {
   buildTotal: { ar: "المجموع", en: "Total" },
   catBakery: { ar: "المخبوزات والخبز", en: "Bakery & Bread" },
   catSand: { ar: "السندويتشات", en: "Sandwiches" },
-  catServices: { ar: "خدمات خاصة", en: "Special Services" },
   back: { ar: "العودة للقائمة", en: "Back to menu" },
   chooseSize: { ar: "اختر حجم القدر:", en: "Choose pot size:" },
   sizeSmall: { ar: "قدر صغير ($60)", en: "Small pot ($60)" },
@@ -270,9 +268,6 @@ var products = [
   { id: 1, name: "الدولمة العراقية", nameEn: "Iraqi Dolma", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", unitEn: "pot of dolma", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة", noteEn: "Fresh, authentic Iraqi dolma" },
   { id: 2, name: "الباچة", nameEn: "Pacha (Sheep's Head & Trotters)", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", unitEn: "cooked pacha meal", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)", noteEn: "Sheep's head with 4 trotters, cooked, with 3 loaves of bread (serves 2)" },
   { id: 3, name: "القوزي العراقي", nameEn: "Iraqi Qoozi", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", unitEn: "lb of meat", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)", noteEn: "Lamb with almonds, vermicelli and raisins, with 5 loaves of bread (minimum 3 lb)" },
-  { id: 40, name: "شوي خروف (الخروف من الزبون)", nameEn: "Lamb Roasting (customer provides the lamb)", category: "services", price: 200, minQty: 1, stepQty: 1, unitLabel: "خروف", unitEn: "lamb", image: "roast-lamb.jpg", note: "شوي الخروف الذي يجلبه الزبون، ويأتي معه 10 باوند رز مع الشعرية والكشمش والبزاليا والجزر واللوز", noteEn: "We roast the lamb you bring, served with 10 lb of rice with vermicelli, raisins, peas, carrots and almonds" },
-  { id: 41, name: "طبخ قيمة ورز (المواد من الزبون)", nameEn: "Qeema & Rice Cooking (customer provides ingredients)", category: "services", price: 200, minQty: 1, stepQty: 1, unitLabel: "طلب", unitEn: "order", image: "ashura.jpg", note: "أجرة طبخ قدر قيمة وقدر رز كبير، والزبون يجلب المواد (لا يشمل ثمن المواد)", noteEn: "Cooking fee for one pot of qeema and one large pot of rice. The customer provides the ingredients (ingredients not included)" },
-  { id: 42, name: "طبخ قيمة ورز - الحجم الأكبر (المواد من الزبون)", nameEn: "Qeema & Rice Cooking - Larger Size (customer provides ingredients)", category: "services", price: 300, minQty: 1, stepQty: 1, unitLabel: "طلب", unitEn: "order", image: "ashura.jpg", note: "أجرة طبخ الحجم الأكبر من القيمة والرز، والزبون يجلب المواد (لا يشمل ثمن المواد)", noteEn: "Cooking fee for the larger size of qeema and rice. The customer provides the ingredients (ingredients not included)" },
   { id: 4, name: "دجاجة مع طبق رز اصفر", nameEn: "Chicken with Yellow Rice", category: "main", price: 20, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "chicken with yellow rise.jpg", note: "طبق دجاج مشوي مع الرز الاصفر مع رغيفي خبز وطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Grilled chicken plate with yellow rice, 2 loaves of bread and pickles (serves about 1 to 2 people)" },
   { id: 5, name: "دجاجة مع طبق رز احمر", nameEn: "Chicken with Red Rice", category: "main", price: 20, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "chicken with red rise.jpg", note: "طبق دجاج مشوي مع الرز الاحمر مع رغيفي خبز وطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Grilled chicken plate with red rice, 2 loaves of bread and pickles (serves about 1 to 2 people)" },
   { id: 7, name: "البرياني بالدجاج", nameEn: "Chicken Biryani", category: "main", price: 28, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "byriani chicken.png", note: "طبق دجاج مع الرز والبزاليا والشعرية والجزر مع رغيفي خبز وطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Chicken plate with rice, peas, vermicelli and carrots, 2 loaves of bread and pickles (serves about 1 to 2 people)" },
@@ -288,6 +283,8 @@ var products = [
   { id: 18, name: "بورك اللحم", nameEn: "Meat Bourak", category: "appetizers", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "bourak meat .jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
   { id: 19, name: "بورك الجبن", nameEn: "Cheese Bourak", category: "appetizers", price: 25, isCheeseBourak25: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "bourak cheese.jpg", note: "20 قطعة بـ $25 (الحد الأدنى) • $1.25 لكل قطعة إضافية", noteEn: "20 pieces for $25 (minimum) • $1.25 per additional piece" },
   { id: 24, name: "كباب عروك", nameEn: "Orook Kebab", category: "appetizers", price: 20, isOrookKebab: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "kebab-orook.jpg", note: "20 قطعة بـ $20 (الحد الأدنى) • $1 لكل قطعة إضافية", noteEn: "20 pieces for $20 (minimum) • $1.00 per additional piece" },
+  { id: 43, name: "باذنجان مقلي", nameEn: "Fried Eggplant", category: "appetizers", price: 20, isEggplant: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "fried-eggplant.jpg", note: "20 قطعة بـ $20 (الحد الأدنى) • $1 لكل قطعة إضافية", noteEn: "20 pieces for $20 (minimum) • $1.00 per additional piece" },
+  { id: 44, name: "بطاطا مقلية", nameEn: "French Fries", category: "appetizers", price: 20, isFries: true, minQty: 4, stepQty: 1, unitLabel: "نصف باوند", unitEn: "half lb", image: "french-fries.jpg", note: "$5 لكل نصف باوند • الحد الأدنى $20 (4 أنصاف = 2 باوند)", noteEn: "$5 per half pound • minimum $20 (4 halves = 2 lb)" },
   { id: 20, name: "لحم بعجين", nameEn: "Lahm Bi Ajeen (Meat Pies)", category: "pastries", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "lahm-bajin.jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
   { id: 21, name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", category: "pastries", price: 3, unitEn: "piece", image: "lahm-bajin.jpg", note: "", noteEn: "" },
   { id: 22, name: "فطائر الزعتر", nameEn: "Zaatar Pies", category: "pastries", price: 20, isCheeseBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "manakesh zaatar.jpg", note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية", noteEn: "20 pieces for $20 (minimum) • $1.00 per additional piece" },
@@ -350,6 +347,8 @@ var tiers = {
   isCheeseBourak: [20, 20, 1],
   isCheeseBourak25: [25, 20, 1.25],
   isOrookKebab: [20, 20, 1],
+  isEggplant: [20, 20, 1],
+  isFries: [20, 4, 5],
   isSandwich: [35, 5, 7],
   isFishBased: [32, 3, 9]
 };
@@ -376,6 +375,7 @@ function calcItem(p, qty, size, L) {
     if (p[key]) {
       var t = tiers[key];
       r.price = qty <= t[1] ? t[0] : t[0] + (qty - t[1]) * t[2];
+      if (p.isFries) r.label = (L === 'en') ? qty + ' × half lb (' + (qty / 2) + ' lb)' : qty + ' × نصف باوند (' + (qty / 2) + ' باوند)';
       if (p.isMeatTikkaBased || p.isChickenTikkaBased) r.info = tikkaInfo[L];
       return r;
     }
@@ -423,7 +423,9 @@ var trays = {
       { key: 'batata', name: "بتيتة چاب", nameEn: "Batata Chap (Potato Chop)", price: 1.5, image: "kibbeh-jareesh.jpg" },
       { key: 'orookKebab', name: "كباب عروك", nameEn: "Orook Kebab", price: 1, image: "kebab-orook.jpg" },
       { key: 'meatBourak', name: "بورك اللحم", nameEn: "Meat Bourak", price: 1.75, image: "bourak meat .jpg" },
-      { key: 'cheeseBourak', name: "بورك الجبن", nameEn: "Cheese Bourak", price: 1.25, image: "bourak cheese.jpg" }
+      { key: 'cheeseBourak', name: "بورك الجبن", nameEn: "Cheese Bourak", price: 1.25, image: "bourak cheese.jpg" },
+      { key: 'eggplant', name: "باذنجان مقلي", nameEn: "Fried Eggplant", price: 1, image: "fried-eggplant.jpg" },
+      { key: 'fries', name: "بطاطا مقلية", nameEn: "French Fries", price: 5, image: "french-fries.jpg", unit: { ar: 'نصف باوند', en: 'half lb', enMany: 'half lb' } }
     ]
   },
   pastries: {
@@ -512,7 +514,7 @@ function renderTrays() {
     var it = tray.items[i], nm = (lang === 'en') ? it.nameEn : it.name;
     html += '<div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col">' +
       '<div class="relative h-48 bg-gray-950 flex items-center justify-center">' + imgTag(it.image, nm) +
-      '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">$' + fmtPrice(it.price) + ' / ' + unitOne + '</span></div>' +
+      '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">$' + fmtPrice(it.price) + ' / ' + (it.unit ? ((lang === 'en') ? it.unit.en : it.unit.ar) : unitOne) + '</span></div>' +
       '<div class="p-4 text-center space-y-3"><h3 class="font-extrabold text-base text-white">' + nm + '</h3>' +
       '<div class="flex items-center justify-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-700 w-fit mx-auto">' +
       '<button onclick="changeTray(\'' + it.key + '\', -1)" class="' + btnCls + '">-</button>' +
@@ -542,8 +544,9 @@ function addTrayToCart() {
   for (var i = 0; i < tray.items.length; i++) {
     var it = tray.items[i], q = trayQty[k][it.key];
     if (q > 0) {
-      ar.push(q + ' ' + tray.unit.ar + ' ' + it.name);
-      en.push(q + ' ' + it.nameEn + ' ' + (q > 1 ? tray.unit.enMany : tray.unit.en));
+      var u = it.unit || tray.unit;
+      ar.push(q + ' ' + u.ar + ' ' + it.name);
+      en.push(q + ' ' + it.nameEn + ' ' + (q > 1 ? (u.enMany || u.en) : u.en));
     }
   }
   cart.push({
