@@ -253,6 +253,7 @@ var T = {
   buildSub: { ar: "اختر نوع الصينية، ثم العدد الذي تريده من كل صنف بدون حد أدنى لكل صنف", en: "Choose a tray type, then any amount of each item with no minimum per item" },
   buildMinHint: { ar: "الحد الأدنى لسعر الصينية ${n}", en: "Tray minimum: ${n}" },
   buildMinAlert: { ar: "الحد الأدنى لسعر الصينية هو ${n} (لا يشمل الخبز والصمون الإضافي)", en: "The tray minimum is ${n} (extra bread and samoon not included)" },
+  buildMinAlertPlain: { ar: "الحد الأدنى لسعر الصينية هو ${n}", en: "The tray minimum is ${n}" },
   buildEmpty: { ar: "اختر صنفاً واحداً على الأقل", en: "Please choose at least one item" },
   buildAdded: { ar: "تمت الإضافة إلى الصينية ✓", en: "Added to tray ✓" },
   buildTotal: { ar: "المجموع", en: "Total" },
@@ -338,7 +339,7 @@ var products = [
   { id: 23, name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", category: "pastries", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "chicken-breast-pie.jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
   { id: 25, name: "الصمون العراقي", nameEn: "Iraqi Samoon", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", unitEn: "bundles (20 pieces)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)", noteEn: "$20 / 2 bundles (minimum) (10 pieces per bundle)" },
   { id: 26, name: "خبز عراقي (تنور)", nameEn: "Iraqi Tannour Bread", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", unitEn: "bundles (5 loaves each)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)", noteEn: "$20 / 4 bundles (minimum) (5 loaves per bundle)" },
-  { id: 27, name: "خبز عروك (مثروم)", nameEn: "Orook Bread (Minced)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", unitEn: "bundles", note: "20$ / ربطتين (الحد الأدنى)", noteEn: "$20 / 2 bundles (minimum)" },
+  { id: 27, name: "خبز عروك", nameEn: "Orook Bread", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", unitEn: "bundles", note: "20$ / ربطتين (الحد الأدنى)", noteEn: "$20 / 2 bundles (minimum)" },
   { id: 28, name: "خبز بربري", nameEn: "Barbari Bread", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", unitEn: "pieces", note: "16$ / 4 قطع (الحد الأدنى)", noteEn: "$16 / 4 pieces (minimum)" },
   { id: 29, name: "لفة خميرة", nameEn: "Khameera Rolls", category: "pastries", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", unitEn: "pieces", note: "10$ / 20 قطعة (الحد الأدنى)", noteEn: "$10 / 20 pieces (minimum)" },
   { id: 31, name: "الكليچة", nameEn: "Kleicha", category: "pastries", price: 25, unitPrice: 25, minQty: 1, stepQty: 1, unitLabel: "باوند", unitEn: "lb", image: "kleacha.png", note: "25$ / 1 باوند (الحد الأدنى) • الزيادة بالباوند", noteEn: "$25 / 1 lb (minimum) • additional by the pound" },
@@ -449,11 +450,10 @@ function calcItem(p, qty, size, L) {
 }
 
 /* ---------- شكّل صينيتك (صواني بالمفرد، بدون حد أدنى لكل صنف) ---------- */
-// الحد الأدنى لسعر أي صينية بالدولار (اجعله 0 لإلغائه)
-var TRAY_MIN_PRICE = 50;
+// الحد الأدنى لسعر كل صينية بالدولار: غيّر minPrice داخل كل صينية أدناه (اجعله 0 لإلغائه)
 var trays = {
   grills: {
-    label: 'trayNameGrills', cart: { ar: "صينية مشاوي", en: "Grill Platter" }, extras: true,
+    label: 'trayNameGrills', minPrice: 50, cart: { ar: "صينية مشاوي", en: "Grill Platter" }, extras: true,
     unit: { ar: 'سيخ', en: 'skewer', arMany: 'أسياخ', enMany: 'skewers' },
     items: [
       { key: 'kebab', name: "كباب شوي", nameEn: "Grilled Kebab", price: 3, image: "kebab.jpg" },
@@ -462,7 +462,7 @@ var trays = {
     ]
   },
   nawashef: {
-    label: 'trayNameNawashef', cart: { ar: "صينية نواشف", en: "Nawashef Tray" }, extras: true,
+    label: 'trayNameNawashef', minPrice: 35, cart: { ar: "صينية نواشف", en: "Nawashef Tray" }, extras: true,
     unit: { ar: 'قطعة', en: 'piece', arMany: 'قطعة', enMany: 'pieces' },
     items: [
       { key: 'kibHalab', name: "كبة حلب", nameEn: "Kibbeh Halab", price: 1.5, image: "kibbeh-halab.jpg" },
@@ -476,13 +476,13 @@ var trays = {
     ]
   },
   pastries: {
-    label: 'trayNamePastries', cart: { ar: "صينية معجنات", en: "Pastries Tray" }, extras: false,
+    label: 'trayNamePastries', minPrice: 30, cart: { ar: "صينية معجنات", en: "Pastries Tray" }, extras: false,
     unit: { ar: 'قطعة', en: 'piece', arMany: 'قطعة', enMany: 'pieces' },
     items: [
       { key: 'lahm', name: "لحم بعجين", nameEn: "Lahm Bi Ajeen (Meat Pies)", price: 1.75, image: "lahm-bajin.jpg" },
-      { key: 'cheeseMint', name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", price: 1.75, image: "lahm-bajin.jpg" },
+      { key: 'cheeseMint', name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", price: 1.75, image: "cheese-mint-pie.jpg" },
       { key: 'zaatar', name: "فطائر الزعتر", nameEn: "Zaatar Pies", price: 1, image: "manakesh zaatar.jpg" },
-      { key: 'chickenPie', name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", price: 1.75, image: "lahm-bajin.jpg" },
+      { key: 'chickenPie', name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", price: 1.75, image: "chicken-breast-pie.jpg" },
       { key: 'khameera', name: "لفة خميرة", nameEn: "Khameera Rolls", price: 0.5, image: "laffat khameera.jpg" }
     ]
   }
@@ -535,6 +535,11 @@ function trayExtraRow(labelKey, type) {
     '<button onclick="changeTrayExtra(\'' + type + '\', 1)" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button></div></div>';
 }
 
+function minAlertText(k) {
+  var tray = trays[k];
+  return tr(tray.extras ? 'buildMinAlert' : 'buildMinAlertPlain').replace('{n}', tray.minPrice);
+}
+
 function selectTray(k) { currentTray = k; renderTrays(); }
 
 function renderTrays() {
@@ -554,7 +559,7 @@ function renderTrays() {
       (k === currentTray ? 'bg-amber-500 text-gray-950 border-amber-400 shadow' : 'bg-gray-900 text-gray-300 border-gray-700 hover:border-amber-500') + '">' + tr(trays[k].label) + '</button>';
   }
   html += '</div>' +
-    (TRAY_MIN_PRICE > 0 ? '<p class="text-center text-xs text-amber-300 font-bold">' + tr('buildMinHint').replace('{n}', TRAY_MIN_PRICE) + '</p>' : '') +
+    (tray.minPrice > 0 ? '<p class="text-center text-xs text-amber-300 font-bold">' + tr('buildMinHint').replace('{n}', tray.minPrice) + '</p>' : '') +
     '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">';
 
   for (var i = 0; i < tray.items.length; i++) {
@@ -586,7 +591,7 @@ function renderTrays() {
 function addTrayToCart() {
   var k = currentTray, tray = trays[k], t = trayTotals(k);
   if (t.count === 0) { alert(tr('buildEmpty')); return; }
-  if (t.sum < TRAY_MIN_PRICE) { alert(tr('buildMinAlert').replace('{n}', TRAY_MIN_PRICE)); return; }
+  if (t.sum < tray.minPrice) { alert(minAlertText(k)); return; }
   var tq = {};
   for (var key in trayQty[k]) tq[key] = trayQty[k][key];
   var item = {
@@ -867,7 +872,7 @@ function renderCartItems() {
             stepper(q, 'cartChangeTrayQty(' + i + ',\'' + it.key + '\',-1)', 'cartChangeTrayQty(' + i + ',\'' + it.key + '\',1)', false));
         }
       }
-      if (item.sum < TRAY_MIN_PRICE) controls += '<p class="text-xs text-red-400 font-bold">' + tr('buildMinHint').replace('{n}', TRAY_MIN_PRICE) + '</p>';
+      if (item.sum < tray.minPrice) controls += '<p class="text-xs text-red-400 font-bold">' + tr('buildMinHint').replace('{n}', tray.minPrice) + '</p>';
       hasExtras = tray.extras;
     } else if (p.isDolmaBased) {
       var sizes = ['small', 'medium', 'large'], keys = ['sizeSmall', 'sizeMedium', 'sizeLarge'];
@@ -1039,8 +1044,8 @@ function sendWhatsAppOrder() {
   }
 
   for (var ci = 0; ci < cart.length; ci++) {
-    if (cart[ci].trayKey && cart[ci].sum < TRAY_MIN_PRICE) {
-      alert(pName(cart[ci].product) + ': ' + tr('buildMinAlert').replace('{n}', TRAY_MIN_PRICE));
+    if (cart[ci].trayKey && cart[ci].sum < trays[cart[ci].trayKey].minPrice) {
+      alert(pName(cart[ci].product) + ': ' + minAlertText(cart[ci].trayKey));
       return;
     }
   }
