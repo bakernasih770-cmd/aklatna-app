@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>أكلاتنا - طبخ بيتي عراقي في جرينزبورو | Aklatna - Iraqi Home Cooking</title>
-<meta name="description" content="أكلاتنا: طبخ عراقي بيتي طازج في Greensboro وضواحيها. التوصيل مجاني. Iraqi home cooking, free delivery.">
+<meta name="description" content="أكلاتنا: طبخ عراقي بيتي طازج في Greensboro وضواحيها. توصيل مجاني للطلبات من $70. Iraqi home cooking, free delivery on orders $70+.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="أكلاتنا | Aklatna">
 <meta property="og:title" content="أكلاتنا - طبخ عراقي بيتي | Aklatna">
-<meta property="og:description" content="اطلب أطباقك العراقية الطازجة الآن. التوصيل مجاني في Greensboro وضواحيها.">
+<meta property="og:description" content="اطلب أطباقك العراقية الطازجة الآن. توصيل مجاني للطلبات من $70 في Greensboro وضواحيها.">
 <meta property="og:image" content="https://bakernasih770-cmd.github.io/aklatna-app/share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -98,6 +98,12 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
 </main>
 
+<!-- أزرار التواصل قبل الطلب -->
+<div id="contact-fab" class="fixed bottom-4 left-4 z-40 flex flex-col gap-2">
+  <a class="js-wa w-12 h-12 rounded-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center shadow-lg border-2 border-green-400" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp text-xl"></i></a>
+  <a class="js-tel w-12 h-12 rounded-full bg-amber-500 hover:bg-amber-600 text-gray-950 flex items-center justify-center shadow-lg border-2 border-amber-300" aria-label="Call"><i class="fa-solid fa-phone text-lg"></i></a>
+</div>
+
 <!-- Modal عرض المنتج -->
 <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden p-4">
   <div class="w-full max-w-md max-h-full overflow-y-auto bg-gray-900 text-white rounded-2xl shadow-2xl border border-gray-800 flex flex-col">
@@ -177,8 +183,16 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
     <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
 
     <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3 max-h-[60vh] overflow-y-auto" id="cart-footer">
+      <div class="space-y-2 pb-2 border-b border-gray-800">
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="ful-delivery" onclick="setFulfillment('delivery')">🚚 <span data-i18n="fulDelivery"></span></button>
+          <button type="button" id="ful-pickup" onclick="setFulfillment('pickup')">🏠 <span data-i18n="fulPickup"></span></button>
+        </div>
+        <div id="ful-note" class="space-y-1"></div>
+      </div>
       <div class="space-y-2.5 pb-2 border-b border-gray-800">
         <input type="text" id="customer-name" data-i18n-ph="phName" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none"/>
+        <input type="tel" id="customer-phone" inputmode="tel" data-i18n-ph="phPhone" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none"/>
         <input type="text" id="street-address" data-i18n-ph="phStreet" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none"/>
         <div class="grid grid-cols-3 gap-2">
           <input type="text" id="city" data-i18n-ph="phCity" value="Greensboro" class="p-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs text-center focus:border-amber-400 focus:outline-none"/>
@@ -200,6 +214,13 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
       <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
         <i class="fa-brands fa-whatsapp text-lg"></i><span data-i18n="sendWA"></span>
       </button>
+      <div class="text-center text-[11px] text-gray-400 space-y-1">
+        <p data-i18n="contactAsk"></p>
+        <p class="flex items-center justify-center gap-4 font-bold">
+          <a class="js-wa text-green-400 hover:text-green-300"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="contactWa"></span></a>
+          <a class="js-tel text-amber-400 hover:text-amber-300"><i class="fa-solid fa-phone"></i> <span class="js-phone-text" dir="ltr"></span></a>
+        </p>
+      </div>
     </div>
   </div>
 </div>
@@ -217,7 +238,7 @@ var T = {
   halalNote: { ar: "جميع اللحوم المستخدمة حلال 100%", en: "All meats used are 100% halal" },
   timeNote: { ar: "يرجى إتمام الطلب قبل 24 ساعة", en: "Please order at least 24 hours ahead" },
   breadNote: { ar: "الخبز والصمون يُخبز طازجاً في نفس يوم التسليم", en: "Bread and samoon are baked fresh on delivery day" },
-  freeDelivery: { ar: "التوصيل مجاني", en: "Free delivery" },
+  freeDelivery: { ar: "توصيل مجاني للطلبات من $70 ضمن Greensboro وضواحيها", en: "Free delivery on orders $70+ within Greensboro & nearby areas" },
   catAll: { ar: "الكل", en: "All" },
   catMain: { ar: "الأطباق الرئيسية", en: "Main Dishes" },
   catGrills: { ar: "المشويات", en: "Grills" },
@@ -255,8 +276,8 @@ var T = {
   phCity: { ar: "المدينة", en: "City" },
   phState: { ar: "الولاية", en: "State" },
   phAddrNotes: { ar: "ملاحظات العنوان (مثال: الشقة خلف المبنى، Gate Code...)", en: "Address notes (e.g. apartment behind building, gate code...)" },
-  dateLabel: { ar: "تاريخ الاستلام:", en: "Delivery date:" },
-  timeLabel: { ar: "وقت الاستلام:", en: "Delivery time:" },
+  dateLabel: { ar: "تاريخ الاستلام:", en: "Delivery / pick-up date:" },
+  timeLabel: { ar: "وقت الاستلام:", en: "Delivery / pick-up time:" },
   sendWA: { ar: "إرسال الطلب عبر الواتساب", en: "Send order via WhatsApp" },
   emptyTray: { ar: "الصينية فارغة حالياً", en: "Your tray is empty" },
   noResults: { ar: "عذراً، لم يتم العثور على أطباق تطابق بحثك", en: "Sorry, no dishes match your search" },
@@ -272,6 +293,16 @@ var T = {
   alertNameAddr: { ar: "الرجاء إدخال الاسم والعنوان", en: "Please enter your name and address" },
   alertDateTime: { ar: "الرجاء اختيار تاريخ ووقت الاستلام", en: "Please choose a delivery date and time" },
   alert24: { ar: "يرجى إتمام الطلب قبل 24 ساعة على الأقل من موعد الاستلام", en: "Orders must be placed at least 24 hours before delivery time" },
+  fulDelivery: { ar: "توصيل إلى عنواني", en: "Deliver to my address" },
+  fulPickup: { ar: "أستلمه بنفسي", en: "I'll pick it up" },
+  fRule: { ar: "التوصيل مجاني للطلبات من ${min} فأكثر ضمن مدينة Greensboro وضواحيها", en: "Free delivery on orders of ${min}+ within Greensboro & nearby areas" },
+  fNoteFree: { ar: "✓ طلبك يشمل التوصيل المجاني ضمن Greensboro وضواحيها", en: "✓ Your order qualifies for free delivery within Greensboro & nearby areas" },
+  fHint: { ar: "أضف ${n} إلى طلبك ليصبح التوصيل مجانياً (للطلبات من ${min} ضمن Greensboro وضواحيها)", en: "Add ${n} to your order for free delivery (orders of ${min}+ within Greensboro & nearby areas)" },
+  fNoteFee: { ar: "رسوم التوصيل للطلبات الأقل من ${min} نتفق عليها معك في الواتساب", en: "Delivery fees for orders under ${min} are confirmed with you on WhatsApp" },
+  fNotePickup: { ar: "الاستلام من عندنا بدون رسوم توصيل. سنرسل لك عنوان الاستلام في الواتساب بعد تأكيد الطلب.", en: "Pick-up has no delivery fee. We'll send you the pick-up address on WhatsApp once the order is confirmed." },
+  phPhone: { ar: "رقم هاتفك للتواصل (اختياري)", en: "Your phone number (optional)" },
+  contactAsk: { ar: "عندك سؤال قبل الطلب؟", en: "Have a question before ordering?" },
+  contactWa: { ar: "راسلنا", en: "Message us" },
   toggleBtn: { ar: "English", en: "عربي" }
 };
 
@@ -302,12 +333,12 @@ var products = [
   { id: 43, name: "باذنجان مقلي", nameEn: "Fried Eggplant", category: "appetizers", price: 20, isEggplant: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "fried-eggplant.jpg", note: "20 قطعة بـ $20 (الحد الأدنى) • $1 لكل قطعة إضافية", noteEn: "20 pieces for $20 (minimum) • $1.00 per additional piece" },
   { id: 44, name: "بطاطا مقلية", nameEn: "French Fries", category: "appetizers", price: 20, isFries: true, minQty: 4, stepQty: 1, unitLabel: "نصف باوند", unitEn: "half lb", image: "french-fries.jpg", note: "$5 لكل نصف باوند • الحد الأدنى $20 (4 أنصاف = 2 باوند)", noteEn: "$5 per half pound • minimum $20 (4 halves = 2 lb)" },
   { id: 20, name: "لحم بعجين", nameEn: "Lahm Bi Ajeen (Meat Pies)", category: "pastries", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "lahm-bajin.jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
-  { id: 21, name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", category: "pastries", price: 3, unitEn: "piece", image: "cheese-mint-pie.jpg", note: "", noteEn: "" },
+  { id: 21, name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", category: "pastries", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "lahm-bajin.jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
   { id: 22, name: "فطائر الزعتر", nameEn: "Zaatar Pies", category: "pastries", price: 20, isCheeseBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "manakesh zaatar.jpg", note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية", noteEn: "20 pieces for $20 (minimum) • $1.00 per additional piece" },
-  { id: 23, name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", category: "pastries", price: 3.5, unitEn: "piece", image: "chicken-breast-pie.jpg", note: "", noteEn: "" },
+  { id: 23, name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", category: "pastries", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "lahm-bajin.jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
   { id: 25, name: "الصمون العراقي", nameEn: "Iraqi Samoon", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة (20 قطعة)", unitEn: "bundles (20 pieces)", note: "20$ / ربطتين (الحد الأدنى) (كل ربطة 10 قطع)", noteEn: "$20 / 2 bundles (minimum) (10 pieces per bundle)" },
   { id: 26, name: "خبز عراقي (تنور)", nameEn: "Iraqi Tannour Bread", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 4, unitLabel: "ربطة (5 أرغفة)", unitEn: "bundles (5 loaves each)", note: "20$ / 4 ربطات (الحد الأدنى) (كل ربطة 5 أرغفة)", noteEn: "$20 / 4 bundles (minimum) (5 loaves per bundle)" },
-  { id: 27, name: "خبز عروك ", nameEn: "Orook Bread (Minced)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", unitEn: "bundles", note: "20$ / ربطتين (الحد الأدنى)", noteEn: "$20 / 2 bundles (minimum)" },
+  { id: 27, name: "خبز عروك (مثروم)", nameEn: "Orook Bread (Minced)", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 2, unitLabel: "ربطة", unitEn: "bundles", note: "20$ / ربطتين (الحد الأدنى)", noteEn: "$20 / 2 bundles (minimum)" },
   { id: 28, name: "خبز بربري", nameEn: "Barbari Bread", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 4, unitLabel: "قطعة", unitEn: "pieces", note: "16$ / 4 قطع (الحد الأدنى)", noteEn: "$16 / 4 pieces (minimum)" },
   { id: 29, name: "لفة خميرة", nameEn: "Khameera Rolls", category: "pastries", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 20, unitLabel: "قطعة", unitEn: "pieces", note: "10$ / 20 قطعة (الحد الأدنى)", noteEn: "$10 / 20 pieces (minimum)" },
   { id: 31, name: "الكليچة", nameEn: "Kleicha", category: "pastries", price: 25, unitPrice: 25, minQty: 1, stepQty: 1, unitLabel: "باوند", unitEn: "lb", image: "kleacha.png", note: "25$ / 1 باوند (الحد الأدنى) • الزيادة بالباوند", noteEn: "$25 / 1 lb (minimum) • additional by the pound" },
@@ -337,6 +368,7 @@ function smoothChangeHeroBackground() {
 setInterval(smoothChangeHeroBackground, 4500);
 
 /* ---------- الحالة ---------- */
+var CONTACT_PHONE = "13366867948";   // رقم الواتساب والاتصال (بصيغة دولية بلا + ولا مسافات)
 var cart = [], currentCategory = 'all', currentActiveProduct = null, currentModalQty = 1;
 var dolmaSelectedSize = 'small', extraBreadQty = 0, extraSamoonQty = 0;
 
@@ -448,9 +480,9 @@ var trays = {
     unit: { ar: 'قطعة', en: 'piece', arMany: 'قطعة', enMany: 'pieces' },
     items: [
       { key: 'lahm', name: "لحم بعجين", nameEn: "Lahm Bi Ajeen (Meat Pies)", price: 1.75, image: "lahm-bajin.jpg" },
-      { key: 'cheeseMint', name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", price: 3, image: "lahm-bajin.jpg" },
+      { key: 'cheeseMint', name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", price: 1.75, image: "lahm-bajin.jpg" },
       { key: 'zaatar', name: "فطائر الزعتر", nameEn: "Zaatar Pies", price: 1, image: "manakesh zaatar.jpg" },
-      { key: 'chickenPie', name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", price: 3.5, image: "lahm-bajin.jpg" },
+      { key: 'chickenPie', name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", price: 1.75, image: "lahm-bajin.jpg" },
       { key: 'khameera', name: "لفة خميرة", nameEn: "Khameera Rolls", price: 0.5, image: "laffat khameera.jpg" }
     ]
   }
@@ -555,30 +587,19 @@ function addTrayToCart() {
   var k = currentTray, tray = trays[k], t = trayTotals(k);
   if (t.count === 0) { alert(tr('buildEmpty')); return; }
   if (t.sum < TRAY_MIN_PRICE) { alert(tr('buildMinAlert').replace('{n}', TRAY_MIN_PRICE)); return; }
-  var ar = [], en = [], imgs = [], lines = [];
-  for (var i = 0; i < tray.items.length; i++) {
-    var it = tray.items[i], q = trayQty[k][it.key];
-    if (q > 0) {
-      var u = it.unit || tray.unit;
-      imgs.push(it.image);
-      lines.push(q + ' ' + u.ar + ' ' + it.name + ' — $' + (q * it.price).toFixed(2));
-      ar.push(q + ' ' + u.ar + ' ' + it.name);
-      en.push(q + ' ' + it.nameEn + ' ' + (q > 1 ? (u.enMany || u.en) : u.en));
-    }
-  }
-  cart.push({
+  var tq = {};
+  for (var key in trayQty[k]) tq[key] = trayQty[k][key];
+  var item = {
     product: { id: 'tray-' + k, name: tray.cart.ar, nameEn: tray.cart.en },
-    qty: t.count,
+    trayKey: k,
+    trayQty: tq,
     size: '',
     extraBread: tray.extras ? trayExtras[k].bread : 0,
     extraSamoon: tray.extras ? trayExtras[k].samoon : 0,
-    totalPrice: t.total,
-    detailsAr: ar.join('، '),
-    detailsEn: en.join(', '),
-    images: imgs,
-    linesAr: lines,
     customNote: (byId('tray-note').value || '').trim()
-  });
+  };
+  recalcItem(item);
+  cart.push(item);
   updateCartBadge();
   resetTray(k);
   renderTrays();
@@ -712,22 +733,46 @@ function updateModalPriceUI() {
   byId('modal-price').innerText = '$' + (r.price + extraBreadQty + extraSamoonQty).toFixed(2);
 }
 
+/* إعادة حساب أي عنصر في الصينية (السعر والتفاصيل والصور) بعد التعديل */
+function recalcItem(item) {
+  if (item.trayKey) {
+    var tray = trays[item.trayKey], ar = [], en = [], imgs = [], lines = [], count = 0, sum = 0;
+    for (var i = 0; i < tray.items.length; i++) {
+      var it = tray.items[i], q = item.trayQty[it.key] || 0;
+      if (q > 0) {
+        var u = it.unit || tray.unit;
+        imgs.push(it.image);
+        lines.push(q + ' ' + u.ar + ' ' + it.name + ' — $' + (q * it.price).toFixed(2));
+        ar.push(q + ' ' + u.ar + ' ' + it.name);
+        en.push(q + ' ' + it.nameEn + ' ' + (q > 1 ? (u.enMany || u.en) : u.en));
+        count += q; sum += q * it.price;
+      }
+    }
+    item.qty = count; item.sum = sum;
+    item.totalPrice = sum + (tray.extras ? item.extraBread + item.extraSamoon : 0);
+    item.detailsAr = ar.join('، '); item.detailsEn = en.join(', ');
+    item.images = imgs; item.linesAr = lines;
+  } else {
+    var a = calcItem(item.product, item.qty, item.size, 'ar');
+    var e = calcItem(item.product, item.qty, item.size, 'en');
+    item.detailsAr = a.label; item.detailsEn = e.label;
+    item.totalPrice = a.price + item.extraBread + item.extraSamoon;
+  }
+}
+
 function confirmAddToCart() {
   if (!currentActiveProduct) return;
-  var ar = calcItem(currentActiveProduct, currentModalQty, dolmaSelectedSize, 'ar');
-  var en = calcItem(currentActiveProduct, currentModalQty, dolmaSelectedSize, 'en');
-  cart.push({
+  var item = {
     product: currentActiveProduct,
     images: [currentActiveProduct.image],
     qty: currentModalQty,
     size: dolmaSelectedSize,
     extraBread: extraBreadQty,
     extraSamoon: extraSamoonQty,
-    totalPrice: ar.price + extraBreadQty + extraSamoonQty,
-    detailsAr: ar.label,
-    detailsEn: en.label,
     customNote: byId('item-custom-note').value.trim()
-  });
+  };
+  recalcItem(item);
+  cart.push(item);
   updateCartBadge();
   closeProductModal();
 }
@@ -758,34 +803,145 @@ function cartThumb(item) {
     '<span class="absolute inset-0 flex items-center justify-center text-2xl">🍲</span>' + inner + '</div>';
 }
 
+/* ---------- تعديل الكميات داخل الصينية ---------- */
+function stepper(valText, minusCall, plusCall, disMinus) {
+  return '<div class="flex items-center gap-2 bg-gray-900 px-2 py-1 rounded-lg border border-gray-700">' +
+    '<button onclick="' + minusCall + '" class="w-6 h-6 rounded flex items-center justify-center font-bold text-xs ' + (disMinus ? 'bg-gray-800/40 text-gray-600' : 'bg-gray-800 hover:bg-gray-700 text-white') + '">-</button>' +
+    '<span class="text-xs font-bold text-amber-400 min-w-[3.5rem] text-center">' + valText + '</span>' +
+    '<button onclick="' + plusCall + '" class="w-6 h-6 bg-gray-800 hover:bg-gray-700 text-white rounded flex items-center justify-center font-bold text-xs">+</button></div>';
+}
+
+function cartRow(label, controlHtml) {
+  return '<div class="flex items-center justify-between gap-2"><span class="text-xs text-gray-300">' + label + '</span>' + controlHtml + '</div>';
+}
+
+function cartChangeQty(i, dir) {
+  var it = cart[i]; if (!it) return;
+  var p = it.product, step = p.stepQty || 1, min = p.minQty || 1;
+  var q = it.qty + dir * step;
+  if (q < min) q = min;
+  it.qty = q;
+  recalcItem(it); renderCartItems();
+}
+
+function cartSetSize(i, size) {
+  var it = cart[i]; if (!it) return;
+  it.size = size;
+  recalcItem(it); renderCartItems();
+}
+
+function cartChangeExtra(i, type, dir) {
+  var it = cart[i]; if (!it) return;
+  it[type] = Math.max(0, it[type] + dir);
+  recalcItem(it); renderCartItems();
+}
+
+function cartChangeTrayQty(i, key, dir) {
+  var it = cart[i]; if (!it) return;
+  it.trayQty[key] = Math.max(0, (it.trayQty[key] || 0) + dir);
+  var any = false;
+  for (var k in it.trayQty) if (it.trayQty[k] > 0) any = true;
+  if (!any) { removeFromCart(i); return; }
+  recalcItem(it); renderCartItems();
+}
+
 function renderCartItems() {
   var container = byId('cart-items');
   if (!container) return;
   if (cart.length === 0) {
     container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">' + tr('emptyTray') + '</div>';
+    renderFulfillment();
     return;
   }
   var html = '', grandTotal = 0;
   for (var i = 0; i < cart.length; i++) {
-    var item = cart[i];
+    var item = cart[i], p = item.product, controls = '', hasExtras = false;
     grandTotal += item.totalPrice;
-    var extras = [];
-    if (item.extraBread > 0) extras.push(item.extraBread + ' ' + tr('extraBreadItem'));
-    if (item.extraSamoon > 0) extras.push(item.extraSamoon + ' ' + tr('extraSamoonItem'));
+
+    if (item.trayKey) {
+      var tray = trays[item.trayKey];
+      for (var j = 0; j < tray.items.length; j++) {
+        var it = tray.items[j], q = item.trayQty[it.key] || 0;
+        if (q > 0) {
+          controls += cartRow((lang === 'en' ? it.nameEn : it.name) + ' <span class="text-gray-500">$' + (q * it.price).toFixed(2) + '</span>',
+            stepper(q, 'cartChangeTrayQty(' + i + ',\'' + it.key + '\',-1)', 'cartChangeTrayQty(' + i + ',\'' + it.key + '\',1)', false));
+        }
+      }
+      if (item.sum < TRAY_MIN_PRICE) controls += '<p class="text-xs text-red-400 font-bold">' + tr('buildMinHint').replace('{n}', TRAY_MIN_PRICE) + '</p>';
+      hasExtras = tray.extras;
+    } else if (p.isDolmaBased) {
+      var sizes = ['small', 'medium', 'large'], keys = ['sizeSmall', 'sizeMedium', 'sizeLarge'];
+      controls += '<div class="grid grid-cols-3 gap-1.5">';
+      for (var s = 0; s < 3; s++) {
+        controls += '<button onclick="cartSetSize(' + i + ',\'' + sizes[s] + '\')" class="py-1.5 px-1 rounded-lg border text-[11px] font-bold ' +
+          (item.size === sizes[s] ? 'bg-amber-500 text-gray-950 border-amber-400' : 'bg-gray-900 text-gray-300 border-gray-700') + '">' + tr(keys[s]) + '</button>';
+      }
+      controls += '</div>';
+      hasExtras = (p.category === 'main' || p.category === 'grills');
+    } else {
+      controls += cartRow(tr('qtyLabel'), stepper(calcItem(p, item.qty, item.size, lang).label,
+        'cartChangeQty(' + i + ',-1)', 'cartChangeQty(' + i + ',1)', item.qty <= (p.minQty || 1)));
+      hasExtras = (p.category === 'main' || p.category === 'grills');
+    }
+
+    if (hasExtras) {
+      controls += cartRow(tr('extraBreadLabel'), stepper(item.extraBread, 'cartChangeExtra(' + i + ',\'extraBread\',-1)', 'cartChangeExtra(' + i + ',\'extraBread\',1)', item.extraBread <= 0)) +
+        cartRow(tr('extraSamoonLabel'), stepper(item.extraSamoon, 'cartChangeExtra(' + i + ',\'extraSamoon\',-1)', 'cartChangeExtra(' + i + ',\'extraSamoon\',1)', item.extraSamoon <= 0));
+    }
+
     html += '<div class="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 relative">' +
       '<button onclick="removeFromCart(' + i + ')" class="absolute top-3 end-3 text-red-400 hover:text-red-300 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>' +
       '<div class="flex gap-3 items-start">' + cartThumb(item) + '<div class="flex-1 min-w-0 space-y-2 pe-7">' +
-      '<h4 class="font-extrabold text-amber-400 text-sm">' + pName(item.product) + '</h4>' +
-      '<p class="text-xs text-gray-300">' + tr('detailsLabel') + ' <span class="font-bold text-white">' + (lang === 'en' ? item.detailsEn : item.detailsAr) + '</span></p>' +
-      (extras.length ? '<p class="text-xs text-emerald-400 font-semibold">' + tr('extrasLabel') + ' ' + extras.join(' ، ') + '</p>' : '') +
+      '<h4 class="font-extrabold text-amber-400 text-sm">' + pName(p) + '</h4>' +
       (item.customNote ? '<p class="text-xs text-amber-300 font-semibold bg-amber-500/10 p-2 rounded border border-amber-500/30">' + tr('custNote') + ' "' + item.customNote + '"</p>' : '') +
       '</div></div>' +
+      '<div class="space-y-2 pt-2 border-t border-gray-800">' + controls + '</div>' +
       '<div class="pt-2 border-t border-gray-800 text-left font-black text-amber-400 text-sm">$' + item.totalPrice.toFixed(2) + '</div></div>';
   }
   html += '<div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/30 text-center space-y-1">' +
     '<span class="text-xs text-amber-300 font-bold block">' + tr('grandTotal') + ' </span>' +
     '<span class="text-2xl font-black text-amber-400">$' + grandTotal.toFixed(2) + '</span></div>';
   container.innerHTML = html;
+  renderFulfillment();
+}
+
+/* ---------- طريقة الاستلام: توصيل أو استلام بنفسه ---------- */
+var FREE_DELIVERY_MIN = 70;    // الطلب من هذا المبلغ فأكثر: التوصيل مجاني ضمن Greensboro وضواحيها
+var fulfillment = 'delivery';  // 'delivery' أو 'pickup'
+
+function cartSubtotal() { var s = 0; for (var i = 0; i < cart.length; i++) s += cart[i].totalPrice; return s; }
+
+function setFulfillment(mode) { fulfillment = mode; renderFulfillment(); }
+
+function renderFulfillment() {
+  var bd = byId('ful-delivery'), bp = byId('ful-pickup'), note = byId('ful-note');
+  if (!bd || !bp || !note) return;
+  var act = 'py-2 px-2 rounded-lg border text-xs font-bold bg-amber-500 text-gray-950 border-amber-400';
+  var off = 'py-2 px-2 rounded-lg border text-xs font-bold bg-gray-900 text-gray-300 border-gray-700 hover:border-amber-500';
+  var pick = (fulfillment === 'pickup');
+  bd.className = pick ? off : act;
+  bp.className = pick ? act : off;
+
+  // حقول العنوان تختفي عند الاستلام بنفسه
+  var fields = [byId('street-address'), byId('address-notes'), byId('city') ? byId('city').parentElement : null];
+  for (var i = 0; i < fields.length; i++) {
+    if (!fields[i]) continue;
+    if (pick) fields[i].classList.add('hidden'); else fields[i].classList.remove('hidden');
+  }
+
+  var sub = cartSubtotal(), html = '';
+  var rule = tr('fRule').replace('{min}', FREE_DELIVERY_MIN);
+  if (pick) {
+    html = '<p class="text-xs text-emerald-400 font-bold">' + tr('fNotePickup') + '</p>';
+  } else if (cart.length > 0 && sub >= FREE_DELIVERY_MIN) {
+    html = '<p class="text-xs text-emerald-400 font-bold">' + tr('fNoteFree') + '</p>';
+  } else if (cart.length > 0) {
+    html = '<p class="text-xs text-amber-300 font-bold">💡 ' + tr('fHint').replace('{n}', (FREE_DELIVERY_MIN - sub).toFixed(2)).replace('{min}', FREE_DELIVERY_MIN) + '</p>' +
+      '<p class="text-[11px] text-gray-400">' + tr('fNoteFee').replace('{min}', FREE_DELIVERY_MIN) + '</p>';
+  } else {
+    html = '<p class="text-[11px] text-gray-400">' + rule + '</p>';
+  }
+  note.innerHTML = html;
 }
 
 /* ---------- إرسال الطلب عبر الواتساب (الرسالة بالعربية دائماً) ---------- */
@@ -812,8 +968,11 @@ function buildOrderMessage(c) {
 
   msg += "👤 *بيانات الزبون*\n";
   msg += "الاسم: " + c.name + "\n";
-  msg += "العنوان: " + c.street + "، " + c.city + "، " + c.state + " " + c.zip + "\n";
-  if (c.notes) msg += "ملاحظات العنوان: " + c.notes + "\n";
+  if (c.phone) msg += "الهاتف: " + c.phone + "\n";
+  if (!c.pickup) {
+    msg += "العنوان: " + c.street + "، " + c.city + "، " + c.state + " " + c.zip + "\n";
+    if (c.notes) msg += "ملاحظات العنوان: " + c.notes + "\n";
+  }
   msg += SEP;
 
   msg += "⏰ *موعد الاستلام*\n";
@@ -838,6 +997,8 @@ function buildOrderMessage(c) {
     msg += "   💵 السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
   }
   msg += SEP;
+  if (c.pickup) msg += "🏠 *الاستلام:* من عندنا (بدون توصيل)\n";
+  else msg += "🚚 *التوصيل:* " + (grandTotal >= FREE_DELIVERY_MIN ? "مجاني ✅ (ضمن Greensboro وضواحيها)" : "تُحدد الرسوم معك") + "\n";
   msg += "💰 *المجموع الكلي: $" + grandTotal.toFixed(2) + "*";
   return msg;
 }
@@ -851,6 +1012,7 @@ function sendWhatsAppOrder() {
   var val = function (id) { var el = byId(id); return el ? el.value.trim() : ''; };
 
   var customerName = val('customer-name');
+  var customerPhone = val('customer-phone');
   var street = val('street-address');
   var city = val('city');
   var state = val('state');
@@ -859,7 +1021,8 @@ function sendWhatsAppOrder() {
   var deliveryDate = val('delivery-date');
   var deliveryTime = val('delivery-time');
 
-  if (!customerName || !street) {
+  var pickup = (fulfillment === 'pickup');
+  if (!customerName || (!pickup && !street)) {
     alert(tr('alertNameAddr'));
     return;
   }
@@ -875,13 +1038,19 @@ function sendWhatsAppOrder() {
     return;
   }
 
+  for (var ci = 0; ci < cart.length; ci++) {
+    if (cart[ci].trayKey && cart[ci].sum < TRAY_MIN_PRICE) {
+      alert(pName(cart[ci].product) + ': ' + tr('buildMinAlert').replace('{n}', TRAY_MIN_PRICE));
+      return;
+    }
+  }
+
   var message = buildOrderMessage({
     name: customerName, street: street, city: city, state: state, zip: zip,
-    notes: addressNotes, date: deliveryDate, time: deliveryTime
+    notes: addressNotes, date: deliveryDate, time: deliveryTime, pickup: pickup, phone: customerPhone
   });
 
-  var phone = "13366867948";
-  window.location.href = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+  window.location.href = "https://wa.me/" + CONTACT_PHONE + "?text=" + encodeURIComponent(message);
 }
 
 /* ---------- تبديل اللغة ---------- */
@@ -902,8 +1071,20 @@ function applyLang() {
   document.title = lang === 'ar' ? 'أكلاتنا - طبخ بيتي عراقي في جرينزبورو' : 'Aklatna - Iraqi Home Cooking in Greensboro';
 
   renderProducts();
+  renderFulfillment();
   if (!byId('cart-modal').classList.contains('hidden')) renderCartItems();
   if (!byId('product-modal').classList.contains('hidden')) { fillModalText(); updateModalPriceUI(); }
+}
+
+function initContact() {
+  var wa = "https://wa.me/" + CONTACT_PHONE + "?text=" + encodeURIComponent("مرحباً أكلاتنا، عندي استفسار قبل الطلب");
+  var tel = "tel:+" + CONTACT_PHONE;
+  var d = CONTACT_PHONE.replace(/^1/, '');
+  var shown = "(" + d.slice(0, 3) + ") " + d.slice(3, 6) + "-" + d.slice(6);
+  var i, a = document.querySelectorAll('.js-wa'), t = document.querySelectorAll('.js-tel'), x = document.querySelectorAll('.js-phone-text');
+  for (i = 0; i < a.length; i++) a[i].href = wa;
+  for (i = 0; i < t.length; i++) t[i].href = tel;
+  for (i = 0; i < x.length; i++) x[i].textContent = shown;
 }
 
 function toggleLang() {
@@ -913,6 +1094,7 @@ function toggleLang() {
 }
 
 applyLang();
+initContact();
 
 /* تعطيل اليوم والأيام السابقة في التقويم */
 (function () {
