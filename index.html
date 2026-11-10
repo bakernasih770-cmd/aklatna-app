@@ -9,21 +9,25 @@
 <meta property="og:site_name" content="أكلاتنا | Aklatna">
 <meta property="og:title" content="أكلاتنا - طبخ عراقي بيتي | Aklatna">
 <meta property="og:description" content="اطلب أطباقك العراقية الطازجة الآن. توصيل مجاني للطلبات من $70 في Greensboro وضواحيها.">
-<meta property="og:image" content="https://aklatna-app.pages.dev/share.jpg">
+<meta property="og:image" content="https://aklatna-app.pages.dev/share.jpg?v=2">
+<meta property="og:image:secure_url" content="https://aklatna-app.pages.dev/share.jpg?v=2">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="أكلاتنا - Aklatna">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://aklatna-app.pages.dev/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0f19">
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png?v=3">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=3">
+<link rel="manifest" href="manifest.webmanifest?v=3">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="أكلاتنا">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap">
 <style>
-body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
+body{font-family:'Noto Sans','Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
 .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 2.5s ease-in-out,transform 8s ease-out;opacity:0;z-index:1;transform:scale(1)}
 .hero-bg.active{opacity:1;transform:scale(1.05)}
 </style>
@@ -43,7 +47,10 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
     </div>
     <div class="text-center flex-1 px-2">
       <p class="text-xs md:text-base text-amber-400 font-bold leading-tight" data-i18n="tagline"></p>
-      <button id="lang-btn" onclick="toggleLang()" class="mt-1.5 px-3 py-1 rounded-full bg-gray-800 border border-amber-500/50 text-amber-400 text-[11px] font-bold hover:bg-gray-700 transition-all"></button>
+      <div class="mt-1.5 flex items-center justify-center gap-2">
+        <button id="lang-btn" onclick="toggleLang()" class="px-3 py-1 rounded-full bg-gray-800 border border-amber-500/50 text-amber-400 text-[11px] font-bold hover:bg-gray-700 transition-all"></button>
+        <button id="share-btn" onclick="shareSite()" aria-label="Share" class="w-8 h-8 rounded-full bg-gray-800 border border-amber-500/50 text-amber-400 hover:bg-gray-700 transition-all flex items-center justify-center"><i class="fa-solid fa-share text-sm"></i></button>
+      </div>
     </div>
     <div class="flex items-center flex-shrink-0">
       <button onclick="openCart()" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold flex flex-col items-center justify-center shadow-lg transition-all relative border-2 border-amber-300">
@@ -97,6 +104,8 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
 </main>
+
+<div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] bg-gray-800 text-amber-300 text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-amber-500/40 hidden"></div>
 
 <!-- أزرار التواصل قبل الطلب -->
 <div id="contact-fab" class="fixed bottom-4 left-4 z-40 flex flex-col gap-2">
@@ -172,17 +181,18 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
 
 <!-- Modal الصينية -->
 <div id="cart-modal" class="fixed inset-0 z-50 flex justify-end bg-black/80 hidden">
-  <div class="w-full max-w-lg bg-gray-900 text-white h-full flex flex-col shadow-2xl overflow-hidden">
-    <div class="p-4 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
+  <div class="w-full max-w-lg bg-gray-900 text-white flex flex-col shadow-2xl overflow-hidden" style="height:100vh;height:100dvh">
+    <div class="flex-shrink-0 p-3 bg-gray-950 border-b border-gray-800 flex justify-between items-center">
       <h2 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-utensils mx-2"></i><span data-i18n="trayTitle"></span></h2>
       <button onclick="closeCart()" class="text-amber-400 hover:text-amber-300 text-xs font-bold bg-black/80 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow">
         <i class="fa-solid fa-arrow-right back-arrow"></i><span data-i18n="back"></span>
       </button>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items"></div>
+    <div class="flex-1 overflow-y-auto overscroll-contain" id="cart-scroll">
+    <div class="p-3 space-y-3" id="cart-items"></div>
 
-    <div class="p-4 bg-gray-950 border-t border-gray-800 space-y-3 max-h-[60vh] overflow-y-auto" id="cart-footer">
+    <div class="p-3 bg-gray-950 border-t border-gray-800 space-y-3" id="cart-footer">
       <div class="space-y-2 pb-2 border-b border-gray-800">
         <div class="grid grid-cols-2 gap-2">
           <button type="button" id="ful-delivery" onclick="setFulfillment('delivery')">🚚 <span data-i18n="fulDelivery"></span></button>
@@ -211,9 +221,6 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
           </div>
         </div>
       </div>
-      <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
-        <i class="fa-brands fa-whatsapp text-lg"></i><span data-i18n="sendWA"></span>
-      </button>
       <div class="text-center text-[11px] text-gray-400 space-y-1">
         <p data-i18n="contactAsk"></p>
         <p class="flex items-center justify-center gap-4 font-bold">
@@ -221,6 +228,16 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
           <a class="js-tel text-amber-400 hover:text-amber-300"><i class="fa-solid fa-phone"></i> <span class="js-phone-text" dir="ltr"></span></a>
         </p>
       </div>
+    </div>
+    </div>
+    <div class="flex-shrink-0 bg-gray-950 border-t border-gray-700 p-3 flex items-center gap-3">
+      <div class="leading-tight">
+        <span class="text-[11px] text-amber-300 font-bold block" data-i18n="grandTotal"></span>
+        <span id="cart-bar-total" class="text-xl font-black text-amber-400">$0.00</span>
+      </div>
+      <button onclick="sendWhatsAppOrder()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+        <i class="fa-brands fa-whatsapp text-lg"></i><span data-i18n="sendWA"></span>
+      </button>
     </div>
   </div>
 </div>
@@ -304,6 +321,10 @@ var T = {
   phPhone: { ar: "رقم هاتفك للتواصل (اختياري)", en: "Your phone number (optional)" },
   contactAsk: { ar: "عندك سؤال قبل الطلب؟", en: "Have a question before ordering?" },
   contactWa: { ar: "راسلنا", en: "Message us" },
+  shareTitle: { ar: "أكلاتنا - طبخ عراقي بيتي", en: "Aklatna - Iraqi Home Cooking" },
+  shareText: { ar: "أكلاتنا: طبخ عراقي بيتي طازج في Greensboro وضواحيها. اطلب الآن:", en: "Aklatna: fresh Iraqi home cooking in Greensboro & nearby areas. Order now:" },
+  shareCopied: { ar: "تم نسخ الرابط ✓", en: "Link copied ✓" },
+  shareCopyPrompt: { ar: "انسخ الرابط:", en: "Copy the link:" },
   toggleBtn: { ar: "English", en: "عربي" }
 };
 
@@ -804,7 +825,7 @@ function cartThumb(item) {
     for (var i = 0; i < imgs.length; i++) inner += cell(imgs[i]);
     inner += '</div>';
   }
-  return '<div class="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-gray-900">' +
+  return '<div class="relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-gray-900">' +
     '<span class="absolute inset-0 flex items-center justify-center text-2xl">🍲</span>' + inner + '</div>';
 }
 
@@ -855,6 +876,7 @@ function renderCartItems() {
   if (!container) return;
   if (cart.length === 0) {
     container.innerHTML = '<div class="text-center text-gray-400 py-10 font-bold">' + tr('emptyTray') + '</div>';
+    var bt0 = byId('cart-bar-total'); if (bt0) bt0.innerText = '$0.00';
     renderFulfillment();
     return;
   }
@@ -894,7 +916,7 @@ function renderCartItems() {
         cartRow(tr('extraSamoonLabel'), stepper(item.extraSamoon, 'cartChangeExtra(' + i + ',\'extraSamoon\',-1)', 'cartChangeExtra(' + i + ',\'extraSamoon\',1)', item.extraSamoon <= 0));
     }
 
-    html += '<div class="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 relative">' +
+    html += '<div class="bg-gray-950 p-3 rounded-xl border border-gray-800 space-y-2 relative">' +
       '<button onclick="removeFromCart(' + i + ')" class="absolute top-3 end-3 text-red-400 hover:text-red-300 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>' +
       '<div class="flex gap-3 items-start">' + cartThumb(item) + '<div class="flex-1 min-w-0 space-y-2 pe-7">' +
       '<h4 class="font-extrabold text-amber-400 text-sm">' + pName(p) + '</h4>' +
@@ -903,10 +925,8 @@ function renderCartItems() {
       '<div class="space-y-2 pt-2 border-t border-gray-800">' + controls + '</div>' +
       '<div class="pt-2 border-t border-gray-800 text-left font-black text-amber-400 text-sm">$' + item.totalPrice.toFixed(2) + '</div></div>';
   }
-  html += '<div class="bg-amber-500/10 p-4 rounded-xl border border-amber-500/30 text-center space-y-1">' +
-    '<span class="text-xs text-amber-300 font-bold block">' + tr('grandTotal') + ' </span>' +
-    '<span class="text-2xl font-black text-amber-400">$' + grandTotal.toFixed(2) + '</span></div>';
   container.innerHTML = html;
+  var bt = byId('cart-bar-total'); if (bt) bt.innerText = '$' + grandTotal.toFixed(2);
   renderFulfillment();
 }
 
@@ -1090,6 +1110,25 @@ function initContact() {
   for (i = 0; i < a.length; i++) a[i].href = wa;
   for (i = 0; i < t.length; i++) t[i].href = tel;
   for (i = 0; i < x.length; i++) x[i].textContent = shown;
+}
+
+function showToast(msg) {
+  var t = byId('toast'); if (!t) return;
+  t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(showToast.tm);
+  showToast.tm = setTimeout(function () { t.classList.add('hidden'); }, 2500);
+}
+
+function shareSite() {
+  var url = location.origin + location.pathname;
+  if (navigator.share) {
+    navigator.share({ title: tr('shareTitle'), text: tr('shareText'), url: url }).catch(function () {});
+    return;
+  }
+  var manual = function () { window.prompt(tr('shareCopyPrompt'), url); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function () { showToast(tr('shareCopied')); }, manual);
+  } else manual();
 }
 
 function toggleLang() {
