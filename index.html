@@ -1036,9 +1036,9 @@ function sendWhatsAppOrder() {
     alert(tr('alertDateTime'));
     return;
   }
-  var pickup = new Date(deliveryDate + 'T' + deliveryTime);
+  var pickupAt = new Date(deliveryDate + 'T' + deliveryTime);
   var earliest = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  if (isNaN(pickup.getTime()) || pickup < earliest) {
+  if (isNaN(pickupAt.getTime()) || pickupAt < earliest) {
     alert(tr('alert24'));
     return;
   }
