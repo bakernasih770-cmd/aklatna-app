@@ -269,7 +269,7 @@ var T = {
   buildTitle: { ar: "شكّل صينيتك بنفسك", en: "Build your own tray" },
   buildSub: { ar: "اختر نوع الصينية، ثم العدد الذي تريده من كل صنف بدون حد أدنى لكل صنف", en: "Choose a tray type, then any amount of each item with no minimum per item" },
   buildMinHint: { ar: "الحد الأدنى لسعر الصينية ${n}", en: "Tray minimum: ${n}" },
-  buildMinAlert: { ar: "الحد الأدنى لسعر الصينية هو ${n} (لا يشمل الخبز والصمون الإضافي)", en: "The tray minimum is ${n} (extra bread and samoon not included)" },
+  buildMinAlert: { ar: "الحد الأدنى لسعر الصينية هو ${n} (لا يشمل الخبز والصمون)", en: "The tray minimum is ${n} (bread and samoon not included)" },
   buildMinAlertPlain: { ar: "الحد الأدنى لسعر الصينية هو ${n}", en: "The tray minimum is ${n}" },
   buildEmpty: { ar: "اختر صنفاً واحداً على الأقل", en: "Please choose at least one item" },
   buildAdded: { ar: "تمت الإضافة إلى الصينية ✓", en: "Added to tray ✓" },
@@ -282,9 +282,9 @@ var T = {
   sizeMedium: { ar: "قدر وسط ($80)", en: "Medium pot ($80)" },
   sizeLarge: { ar: "قدر كبير ($100)", en: "Large pot ($100)" },
   qtyLabel: { ar: "الكمية المطلوبة:", en: "Quantity:" },
-  extrasTitle: { ar: "إضافات اختيارية مع الطبق:", en: "Optional extras with your dish:" },
-  extraBreadLabel: { ar: "رغيف خبز إضافي ($1.00)", en: "Extra loaf of bread ($1.00)" },
-  extraSamoonLabel: { ar: "قطعة صمون إضافية ($1.00)", en: "Extra samoon piece ($1.00)" },
+  extrasTitle: { ar: "اختر الخبز والصمون مع طبقك (اختياري):", en: "Choose bread and samoon with your dish (optional):" },
+  extraBreadLabel: { ar: "رغيف خبز ($1.00)", en: "Loaf of bread ($1.00)" },
+  extraSamoonLabel: { ar: "قطعة صمون ($1.00)", en: "Samoon piece ($1.00)" },
   itemNoteLabel: { ar: "ملاحظات على الطبق (اختياري):", en: "Notes on this dish (optional):" },
   itemNotePh: { ar: "اكتب أي ملاحظة...", en: "Write any note..." },
   addToTray: { ar: "أضف إلى الصينية", en: "Add to tray" },
@@ -302,10 +302,10 @@ var T = {
   from: { ar: "يبدأ من", en: "From" },
   tapDetails: { ar: "اضغط للعرض والتفاصيل 🔍", en: "Tap for details 🔍" },
   detailsLabel: { ar: "الكمية/التفاصيل:", en: "Details:" },
-  extrasLabel: { ar: "إضافات:", en: "Extras:" },
+  extrasLabel: { ar: "الخبز والصمون:", en: "Bread & samoon:" },
   custNote: { ar: "ملاحظة الزبون:", en: "Customer note:" },
-  extraBreadItem: { ar: "خبز إضافي", en: "extra bread" },
-  extraSamoonItem: { ar: "صمون إضافي", en: "extra samoon" },
+  extraBreadItem: { ar: "رغيف خبز", en: "bread loaves" },
+  extraSamoonItem: { ar: "قطعة صمون", en: "samoon pieces" },
   grandTotal: { ar: "المجموع الكلي", en: "Total" },
   alertEmpty: { ar: "الرجاء إضافة أطباق إلى الصينية أولاً", en: "Please add dishes to your tray first" },
   alertNameAddr: { ar: "الرجاء إدخال الاسم والعنوان", en: "Please enter your name and address" },
@@ -339,17 +339,17 @@ function tr(key) { return T[key][lang]; }
 /* ================= المنتجات / Products ================= */
 var products = [
   { id: 1, name: "الدولمة العراقية", nameEn: "Iraqi Dolma", category: "main", price: 60, isDolmaBased: true, minQty: 1, stepQty: 1, unitLabel: "قدر دولمة", unitEn: "pot of dolma", image: "dolma.jpg", note: "دولمة عراقية أصيلة طازجة", noteEn: "Fresh, authentic Iraqi dolma" },
-  { id: 2, name: "الباچة", nameEn: "Pacha (Sheep's Head & Trotters)", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", unitEn: "cooked pacha meal", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة مع (3 أرغفة خبز) (تكفي لشخصين)", noteEn: "Sheep's head with 4 trotters, cooked, with 3 loaves of bread (serves 2)" },
-  { id: 3, name: "القوزي العراقي", nameEn: "Iraqi Qoozi", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", unitEn: "lb of meat", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش و (5 أرغفة خبز) (الحد الأدنى 3 باوندات)", noteEn: "Lamb with almonds, vermicelli and raisins, with 5 loaves of bread (minimum 3 lb)" },
-  { id: 4, name: "دجاجة مع طبق رز اصفر", nameEn: "Chicken with Yellow Rice", category: "main", price: 20, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "chicken with yellow rise.jpg", note: "طبق دجاج مشوي مع الرز الاصفر مع رغيفي خبز وطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Grilled chicken plate with yellow rice, 2 loaves of bread and pickles (serves about 1 to 2 people)" },
-  { id: 5, name: "دجاجة مع طبق رز احمر", nameEn: "Chicken with Red Rice", category: "main", price: 20, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "chicken with red rise.jpg", note: "طبق دجاج مشوي مع الرز الاحمر مع رغيفي خبز وطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Grilled chicken plate with red rice, 2 loaves of bread and pickles (serves about 1 to 2 people)" },
-  { id: 7, name: "البرياني بالدجاج", nameEn: "Chicken Biryani", category: "main", price: 28, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "byriani chicken.png", note: "طبق دجاج مع الرز والبزاليا والشعرية والجزر مع رغيفي خبز وطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Chicken plate with rice, peas, vermicelli and carrots, 2 loaves of bread and pickles (serves about 1 to 2 people)" },
-  { id: 8, name: "البرياني باللحم", nameEn: "Meat Biryani", category: "main", price: 38, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "byriani meat.png", note: "طبق باوند لحم مع الرز والبزاليا والجزر مع رغيفي خبز وطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Plate with one pound of meat, rice, peas and carrots, 2 loaves of bread and pickles (serves about 1 to 2 people)" },
-  { id: 10, name: "كباب شوي", nameEn: "Grilled Kebab", category: "grills", price: 30, image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي و4 ارغفة خبز ", noteEn: "10 kebab skewers with grilled tomato and onion and 4 loaves of bread" },
-  { id: 11, name: "تكة لحم", nameEn: "Meat Tikka", category: "grills", price: 28, isMeatTikkaBased: true, minQty: 4, stepQty: 1, unitLabel: "سيخ لحم", unitEn: "meat skewers", image: "meat tecca.jpg", note: "4 أسياخ بـ $28 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)", noteEn: "4 skewers for $28 (minimum) with 2 loaves of bread + grilled tomato, onion and pickles (serves 1)" },
-  { id: 12, name: "تكة دجاج", nameEn: "Chicken Tikka", category: "grills", price: 20, isChickenTikkaBased: true, minQty: 4, stepQty: 1, unitLabel: "سيخ دجاج", unitEn: "chicken skewers", image: "chicken tecca.jpg", note: "4 أسياخ بـ $20 (الحد الأدنى) مع رغيفين خبز + طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)", noteEn: "4 skewers for $20 (minimum) with 2 loaves of bread + grilled tomato, onion and pickles (serves 1)" },
-  { id: 13, name: "السمك المشوي Tilapia", nameEn: "Grilled Tilapia", category: "fish", price: 28, minQty: 1, stepQty: 1, unitLabel: "سمكة", unitEn: "fish", image: "masgouf.jpg", note: "سمكة مشوية نوع Tilapia مع الليمون والطماطة والبصل والزيتون ورغيفي خبز (تكفي لشخصين)", noteEn: "Grilled tilapia with lemon, tomato, onion, olives and 2 loaves of bread (serves 2)" },
-  { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي) Butterfish", nameEn: "Fried Butterfish (Zubaidi) with Red Rice", category: "fish", price: 32, isFishBased: true, minQty: 3, stepQty: 1, unitLabel: "سمكة", unitEn: "fish", image: "fried-fish.jpg", note: "سمك زبيدي (Butterfish) مقلي مع الرز الاحمر والسلطة ورغيفي خبز • 3 سمكات بـ $32 (الحد الأدنى) • $9 لكل سمكة إضافية", noteEn: "Fried butterfish (Zubaidi) with red rice, salad and 2 loaves of bread • 3 fish for $32 (minimum) • $9 per additional fish" },
+  { id: 2, name: "الباچة", nameEn: "Pacha (Sheep's Head & Trotters)", category: "main", price: 70, isPachaBased: true, minQty: 1, stepQty: 1, unitLabel: "وجبة باچة مطبوخة", unitEn: "cooked pacha meal", image: "pacha.jpg", note: "رأس خروف مع 4 أرجل (كراع) مطبوخة (تكفي لشخصين)", noteEn: "Sheep's head with 4 trotters, cooked (serves 2)" },
+  { id: 3, name: "القوزي العراقي", nameEn: "Iraqi Qoozi", category: "main", price: 70, isPoundBased: true, minQty: 3, stepQty: 1, unitLabel: "باوند لحم", unitEn: "lb of meat", image: "qoozi.jpg", note: "لحم خروف مع اللوز والشعرية والكشمش (الحد الأدنى 3 باوندات)", noteEn: "Lamb with almonds, vermicelli and raisins (minimum 3 lb)" },
+  { id: 4, name: "دجاجة مع طبق رز اصفر", nameEn: "Chicken with Yellow Rice", category: "main", price: 20, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "chicken with yellow rise.jpg", note: "طبق دجاج مشوي مع الرز الاصفر مع الطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Grilled chicken plate with yellow rice and pickles (serves about 1 to 2 people)" },
+  { id: 5, name: "دجاجة مع طبق رز احمر", nameEn: "Chicken with Red Rice", category: "main", price: 20, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "chicken with red rise.jpg", note: "طبق دجاج مشوي مع الرز الاحمر مع الطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Grilled chicken plate with red rice and pickles (serves about 1 to 2 people)" },
+  { id: 7, name: "البرياني بالدجاج", nameEn: "Chicken Biryani", category: "main", price: 28, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "byriani chicken.png", note: "طبق دجاج مع الرز والبزاليا والشعرية والجزر مع الطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Chicken plate with rice, peas, vermicelli, carrots and pickles (serves about 1 to 2 people)" },
+  { id: 8, name: "البرياني باللحم", nameEn: "Meat Biryani", category: "main", price: 38, minQty: 1, stepQty: 1, unitLabel: "طبق", unitEn: "plate", image: "byriani meat.png", note: "طبق باوند لحم مع الرز والبزاليا والجزر مع الطرشي (تكفي لشخص واحد إلى شخصين تقريباً)", noteEn: "Plate with one pound of meat, rice, peas, carrots and pickles (serves about 1 to 2 people)" },
+  { id: 10, name: "كباب شوي", nameEn: "Grilled Kebab", category: "grills", price: 30, isKebabBased: true, minQty: 10, stepQty: 1, unitLabel: "شيش", unitEn: "skewers", image: "kebab.jpg", note: "10 شيش كباب مع الطماطة والبصل المشوي • $30 (الحد الأدنى) • $3 لكل شيش إضافي", noteEn: "10 kebab skewers with grilled tomato and onion • $30 (minimum) • $3 per additional skewer" },
+  { id: 11, name: "تكة لحم", nameEn: "Meat Tikka", category: "grills", price: 28, isMeatTikkaBased: true, minQty: 4, stepQty: 1, unitLabel: "سيخ لحم", unitEn: "meat skewers", image: "meat tecca.jpg", note: "4 أسياخ بـ $28 (الحد الأدنى) مع طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)", noteEn: "4 skewers for $28 (minimum) with grilled tomato, onion and pickles (serves 1)" },
+  { id: 12, name: "تكة دجاج", nameEn: "Chicken Tikka", category: "grills", price: 20, isChickenTikkaBased: true, minQty: 4, stepQty: 1, unitLabel: "سيخ دجاج", unitEn: "chicken skewers", image: "chicken tecca.jpg", note: "4 أسياخ بـ $20 (الحد الأدنى) مع طماطة وبصل مشوي وطرشي (تكفي لشخص واحد)", noteEn: "4 skewers for $20 (minimum) with grilled tomato, onion and pickles (serves 1)" },
+  { id: 13, name: "السمك المشوي Tilapia", nameEn: "Grilled Tilapia", category: "fish", price: 28, minQty: 1, stepQty: 1, unitLabel: "سمكة", unitEn: "fish", image: "masgouf.jpg", note: "سمكة مشوية نوع Tilapia مع الليمون والطماطة والبصل والزيتون (تكفي لشخصين)", noteEn: "Grilled tilapia with lemon, tomato, onion and olives (serves 2)" },
+  { id: 14, name: "السمك المقلي مع الرز الاحمر (السمك الزبيدي) Butterfish", nameEn: "Fried Butterfish (Zubaidi) with Red Rice", category: "fish", price: 32, isFishBased: true, minQty: 3, stepQty: 1, unitLabel: "سمكة", unitEn: "fish", image: "fried-fish.jpg", note: "سمك زبيدي (Butterfish) مقلي مع الرز الاحمر والسلطة • 3 سمكات بـ $32 (الحد الأدنى) • $9 لكل سمكة إضافية", noteEn: "Fried butterfish (Zubaidi) with red rice and salad • 3 fish for $32 (minimum) • $9 per additional fish" },
   { id: 15, name: "كبة حلب", nameEn: "Kibbeh Halab", category: "appetizers", price: 30, isBulkAppetizer: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "kibbeh-halab.jpg", note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية", noteEn: "20 pieces for $30 (minimum) • $1.50 per additional piece" },
   { id: 16, name: "كبة الجريش", nameEn: "Kibbeh Jareesh", category: "appetizers", price: 30, isBulkAppetizer: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "cuba gereash.jpg", note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية", noteEn: "20 pieces for $30 (minimum) • $1.50 per additional piece" },
   { id: 17, name: "بتيتة چاب", nameEn: "Batata Chap (Potato Chop)", category: "appetizers", price: 30, isBulkAppetizer: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "kibbeh-jareesh.jpg", note: "20 قطعة بـ $30 (الحد الأدنى) • $1.5 لكل قطعة إضافية", noteEn: "20 pieces for $30 (minimum) • $1.50 per additional piece" },
@@ -362,12 +362,12 @@ var products = [
   { id: 21, name: "فطائر الجبن بالنعناع", nameEn: "Cheese & Mint Pies", category: "pastries", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "cheese-mint-pie.jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
   { id: 22, name: "فطائر الزعتر", nameEn: "Zaatar Pies", category: "pastries", price: 20, isCheeseBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "manakesh zaatar.jpg", note: "20 قطعة بـ $20 (الحد الأدنى) • $1.00 لكل قطعة إضافية", noteEn: "20 pieces for $20 (minimum) • $1.00 per additional piece" },
   { id: 23, name: "فطائر صدر الدجاج", nameEn: "Chicken Breast Pies", category: "pastries", price: 35, isMeatBourak: true, minQty: 20, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", image: "chicken-breast-pie.jpg", note: "20 قطعة بـ $35 (الحد الأدنى) • $1.75 لكل قطعة إضافية", noteEn: "20 pieces for $35 (minimum) • $1.75 per additional piece" },
-  { id: 25, name: "الصمون العراقي", nameEn: "Iraqi Samoon", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 1, unitLabel: "ربطة", unitEn: "bundles", note: "20$ / ربطتين (الحد الأدنى) • $10 لكل ربطة إضافية (كل ربطة 10 قطع)", noteEn: "$20 / 2 bundles (minimum) • $10 per additional bundle (10 pieces per bundle)" },
-  { id: 26, name: "خبز عراقي (تنور)", nameEn: "Iraqi Tannour Bread", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 1, unitLabel: "ربطة", unitEn: "bundles", note: "20$ / 4 ربطات (الحد الأدنى) • $5 لكل ربطة إضافية (كل ربطة 5 أرغفة)", noteEn: "$20 / 4 bundles (minimum) • $5 per additional bundle (5 loaves per bundle)" },
-  { id: 27, name: "خبز عروك", nameEn: "Orook Bread", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 1, unitLabel: "ربطة", unitEn: "bundles", note: "20$ / ربطتين (الحد الأدنى) • $10 لكل ربطة إضافية", noteEn: "$20 / 2 bundles (minimum) • $10 per additional bundle" },
-  { id: 28, name: "خبز بربري", nameEn: "Barbari Bread", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", note: "16$ / 4 قطع (الحد الأدنى) • $4 لكل قطعة إضافية", noteEn: "$16 / 4 pieces (minimum) • $4 per additional piece" },
-  { id: 29, name: "لفة خميرة", nameEn: "Khameera Rolls", category: "pastries", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 10, unitLabel: "قطعة", unitEn: "pieces", note: "10$ / 20 قطعة (الحد الأدنى) • $5 لكل 10 قطع إضافية", noteEn: "$10 / 20 pieces (minimum) • $5 per additional 10 pieces" },
-  { id: 31, name: "الكليچة", nameEn: "Kleicha", category: "pastries", price: 25, unitPrice: 25, minQty: 1, stepQty: 1, unitLabel: "باوند", unitEn: "lb", image: "kleacha.png", note: "25$ / 1 باوند (الحد الأدنى) • الزيادة بالباوند", noteEn: "$25 / 1 lb (minimum) • additional by the pound" },
+  { id: 25, name: "الصمون العراقي", nameEn: "Iraqi Samoon", category: "bakery", price: 20, image: "samoon.jpg", unitPrice: 10, minQty: 2, stepQty: 1, unitLabel: "ربطة", unitEn: "bundles", note: "$20 / ربطتين (الحد الأدنى) • $10 لكل ربطة إضافية (كل ربطة 10 قطع)", noteEn: "$20 / 2 bundles (minimum) • $10 per additional bundle (10 pieces per bundle)" },
+  { id: 26, name: "خبز عراقي (تنور)", nameEn: "Iraqi Tannour Bread", category: "bakery", price: 20, image: "khubz-tannour.jpg", unitPrice: 5, minQty: 4, stepQty: 1, unitLabel: "ربطة", unitEn: "bundles", note: "$20 / 4 ربطات (الحد الأدنى) • $5 لكل ربطة إضافية (كل ربطة 5 أرغفة)", noteEn: "$20 / 4 bundles (minimum) • $5 per additional bundle (5 loaves per bundle)" },
+  { id: 27, name: "خبز عروك", nameEn: "Orook Bread", category: "bakery", price: 20, image: "orook.jpg", unitPrice: 10, minQty: 2, stepQty: 1, unitLabel: "ربطة", unitEn: "bundles", note: "$20 / ربطتين (الحد الأدنى) • $10 لكل ربطة إضافية", noteEn: "$20 / 2 bundles (minimum) • $10 per additional bundle" },
+  { id: 28, name: "خبز بربري", nameEn: "Barbari Bread", category: "bakery", price: 16, image: "uzbek-bread.jpg", unitPrice: 4, minQty: 4, stepQty: 1, unitLabel: "قطعة", unitEn: "pieces", note: "$16 / 4 قطع (الحد الأدنى) • $4 لكل قطعة إضافية", noteEn: "$16 / 4 pieces (minimum) • $4 per additional piece" },
+  { id: 29, name: "لفة خميرة", nameEn: "Khameera Rolls", category: "pastries", price: 10, image: "laffat khameera.jpg", unitPrice: 0.5, minQty: 20, stepQty: 10, unitLabel: "قطعة", unitEn: "pieces", note: "$10 / 20 قطعة (الحد الأدنى) • $5 لكل 10 قطع إضافية", noteEn: "$10 / 20 pieces (minimum) • $5 per additional 10 pieces" },
+  { id: 31, name: "الكليچة", nameEn: "Kleicha", category: "pastries", price: 25, unitPrice: 25, minQty: 1, stepQty: 1, unitLabel: "باوند", unitEn: "lb", image: "kleacha.png", note: "$25 / 1 باوند (الحد الأدنى) • الزيادة بالباوند", noteEn: "$25 / 1 lb (minimum) • additional by the pound" },
   { id: 32, name: "ساندويچ فلافل", nameEn: "Falafel Sandwich", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", unitEn: "sandwiches", image: "falafel-plate.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية", noteEn: "5 sandwiches for $35 (minimum) • $7 per additional sandwich" },
   { id: 33, name: "ساندويچ تكة دجاج", nameEn: "Chicken Tikka Sandwich", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", unitEn: "sandwiches", image: "chicken tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية", noteEn: "5 sandwiches for $35 (minimum) • $7 per additional sandwich" },
   { id: 34, name: "ساندويچ تكة لحم", nameEn: "Meat Tikka Sandwich", category: "sandwiches", price: 35, isSandwich: true, minQty: 5, stepQty: 1, unitLabel: "ساندويچ", unitEn: "sandwiches", image: "meat tecca sandwiches.jpg", note: "5 سندويتشات بـ $35 (الحد الأدنى) • $7 لكل قطعة إضافية", noteEn: "5 sandwiches for $35 (minimum) • $7 per additional sandwich" },
@@ -415,6 +415,7 @@ function imgTag(file, alt) {
 var tiers = {
   isMeatTikkaBased: [28, 4, 7],
   isChickenTikkaBased: [20, 4, 5],
+  isKebabBased: [30, 10, 3],
   isBulkAppetizer: [30, 20, 1.5],
   isMeatBourak: [35, 20, 1.75],
   isCheeseBourak: [20, 20, 1],
@@ -426,13 +427,13 @@ var tiers = {
   isFishBased: [32, 3, 9]
 };
 var dolmaData = {
-  small: { price: 60, label: { ar: 'قدر صغير', en: 'Small pot' }, text: { ar: '👥 تكفي قدر صغير (4 أشخاص) • معها (4 أرغفة خبز)', en: '👥 Small pot serves 4 people • comes with 4 loaves of bread' } },
-  medium: { price: 80, label: { ar: 'قدر وسط', en: 'Medium pot' }, text: { ar: '👥 تكفي قدر وسط (6 أشخاص) • معها (6 أرغفة خبز)', en: '👥 Medium pot serves 6 people • comes with 6 loaves of bread' } },
-  large: { price: 100, label: { ar: 'قدر كبير', en: 'Large pot' }, text: { ar: '👥 تكفي قدر كبير (8 أشخاص) • معها (8 أرغفة خبز)', en: '👥 Large pot serves 8 people • comes with 8 loaves of bread' } }
+  small: { price: 60, label: { ar: 'قدر صغير', en: 'Small pot' }, text: { ar: '👥 تكفي قدر صغير (4 أشخاص)', en: '👥 Small pot serves 4 people' } },
+  medium: { price: 80, label: { ar: 'قدر وسط', en: 'Medium pot' }, text: { ar: '👥 تكفي قدر وسط (6 أشخاص)', en: '👥 Medium pot serves 6 people' } },
+  large: { price: 100, label: { ar: 'قدر كبير', en: 'Large pot' }, text: { ar: '👥 تكفي قدر كبير (8 أشخاص)', en: '👥 Large pot serves 8 people' } }
 };
 var tikkaInfo = {
-  ar: "👥 الوجبة تكفي شخصاً واحداً • تأتي مع رغيفين خبز + طماطة وبصل مشوي وطرشي",
-  en: "👥 Serves one person • comes with 2 loaves of bread + grilled tomato, onion and pickles"
+  ar: "👥 الوجبة تكفي شخصاً واحداً • تأتي مع طماطة وبصل مشوي وطرشي",
+  en: "👥 Serves one person • comes with grilled tomato, onion and pickles"
 };
 
 // L = 'ar' أو 'en'
@@ -458,16 +459,16 @@ function calcItem(p, qty, size, L) {
     r.price = qty === 3 ? 70 : qty === 4 ? 93 : qty === 5 ? 116 : 70 + (qty - 3) * 23;
     var ex = qty - 3, a = 3 + ex * 2, b = 5 + ex * 2;
     r.info = (L === 'en')
-      ? "👥 Serves about " + a + " to " + b + " people • comes with " + b + " loaves of bread"
-      : "👥 تكفي تقريباً (" + a + " إلى " + b + " شخصاً) • معها (" + b + " رغيف خبز)";
+      ? "👥 Serves about " + a + " to " + b + " people"
+      : "👥 تكفي تقريباً (" + a + " إلى " + b + " شخصاً)";
     return r;
   }
   if (p.isPachaBased) {
     r.price = 70 + (qty - 1) * 30;
-    var ppl = qty * 2, br = 3 + (qty - 1) * 2;
+    var ppl = qty * 2;
     r.info = (L === 'en')
-      ? "👥 Serves about " + ppl + " people • comes with " + br + " loaves of bread"
-      : "👥 تكفي تقريباً (" + ppl + " أشخاص) • معها (" + br + " رغيف خبز)";
+      ? "👥 Serves about " + ppl + " people"
+      : "👥 تكفي تقريباً (" + ppl + " أشخاص)";
     return r;
   }
   r.price = qty * (p.unitPrice ? p.unitPrice : p.price);
@@ -481,7 +482,7 @@ var trays = {
     label: 'trayNameGrills', minPrice: 50, cart: { ar: "صينية مشاوي", en: "Grill Platter" }, extras: true,
     unit: { ar: 'سيخ', en: 'skewer', arMany: 'أسياخ', enMany: 'skewers' },
     items: [
-      { key: 'kebab', name: "كباب شوي", nameEn: "Grilled Kebab", price: 3, image: "kebab.jpg" },
+      { key: 'kebab', name: "كباب شوي", nameEn: "Grilled Kebab", price: 3, image: "kebab.jpg", unit: { ar: 'شيش', en: 'skewer', enMany: 'skewers' } },
       { key: 'meat', name: "تكة لحم", nameEn: "Meat Tikka", price: 7, image: "meat tecca.jpg" },
       { key: 'chicken', name: "تكة دجاج", nameEn: "Chicken Tikka", price: 5, image: "chicken tecca.jpg" }
     ]
@@ -716,12 +717,14 @@ function openProductModal(id) {
     byId('normal-qty-wrapper').classList.remove('hidden');
   }
 
-  if (p.category === 'main' || p.category === 'grills') byId('extra-bread-section').classList.remove('hidden');
+  if (breadAllowed(p)) byId('extra-bread-section').classList.remove('hidden');
   else byId('extra-bread-section').classList.add('hidden');
 
   updateModalPriceUI();
   byId('product-modal').classList.remove('hidden');
 }
+
+function breadAllowed(p) { return p.category === 'main' || p.category === 'grills' || p.category === 'fish'; }
 
 function closeProductModal() { byId('product-modal').classList.add('hidden'); }
 
@@ -908,11 +911,11 @@ function renderCartItems() {
           (item.size === sizes[s] ? 'bg-amber-500 text-gray-950 border-amber-400' : 'bg-gray-900 text-gray-300 border-gray-700') + '">' + tr(keys[s]) + '</button>';
       }
       controls += '</div>';
-      hasExtras = (p.category === 'main' || p.category === 'grills');
+      hasExtras = (breadAllowed(p));
     } else {
       controls += cartRow(tr('qtyLabel'), stepper(calcItem(p, item.qty, item.size, lang).label,
         'cartChangeQty(' + i + ',-1)', 'cartChangeQty(' + i + ',1)', item.qty <= (p.minQty || 1)));
-      hasExtras = (p.category === 'main' || p.category === 'grills');
+      hasExtras = (breadAllowed(p));
     }
 
     if (hasExtras) {
@@ -1020,8 +1023,8 @@ function buildOrderMessage(c) {
     } else {
       msg += "   • الكمية: " + item.detailsAr + "\n";
     }
-    if (item.extraBread > 0) msg += "   • " + item.extraBread + " خبز إضافي\n";
-    if (item.extraSamoon > 0) msg += "   • " + item.extraSamoon + " صمون إضافي\n";
+    if (item.extraBread > 0) msg += "   • " + item.extraBread + " رغيف خبز\n";
+    if (item.extraSamoon > 0) msg += "   • " + item.extraSamoon + " قطعة صمون\n";
     if (item.customNote) msg += "   📌 ملاحظة: " + item.customNote + "\n";
     msg += "   💵 السعر: $" + item.totalPrice.toFixed(2) + "\n\n";
   }
@@ -1132,8 +1135,17 @@ function showToast(msg) {
   showToast.tm = setTimeout(function () { t.classList.add('hidden'); }, 2500);
 }
 
-function shareSite() {
-  var url = location.origin + location.pathname;
+var shareFile = null;
+function prepareShareFile() {
+  try {
+    if (!window.fetch || !window.File || !navigator.canShare) return;
+    fetch(imgFolder + 'logo-square.jpg').then(function (r) { if (!r.ok) throw 0; return r.blob(); }).then(function (b) {
+      shareFile = new File([b], 'aklatna.jpg', { type: b.type || 'image/jpeg' });
+    }).catch(function () {});
+  } catch (e) {}
+}
+
+function shareLinkOnly(url) {
   if (navigator.share) {
     navigator.share({ title: tr('shareTitle'), text: tr('shareText'), url: url }).catch(function () {});
     return;
@@ -1144,6 +1156,19 @@ function shareSite() {
   } else manual();
 }
 
+/* المشاركة: صورة الشعار + رسالة فيها الرابط (وإن لم يدعم الجهاز مشاركة الصور تُشارَك الرابط فقط) */
+function shareSite() {
+  var url = location.origin + location.pathname;
+  if (shareFile && navigator.share && navigator.canShare && navigator.canShare({ files: [shareFile] })) {
+    navigator.share({ files: [shareFile], title: tr('shareTitle'), text: tr('shareText') + '\n' + url }).catch(function (e) {
+      if (e && e.name === 'AbortError') return;      // ألغى المستخدم المشاركة
+      shareLinkOnly(url);
+    });
+    return;
+  }
+  shareLinkOnly(url);
+}
+
 function toggleLang() {
   lang = (lang === 'ar') ? 'en' : 'ar';
   try { localStorage.setItem('aklatna_lang', lang); } catch (e) {}
@@ -1152,6 +1177,7 @@ function toggleLang() {
 
 applyLang();
 initContact();
+prepareShareFile();
 
 /* تعطيل اليوم والأيام السابقة في التقويم */
 (function () {
