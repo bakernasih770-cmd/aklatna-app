@@ -63,7 +63,8 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
   <div id="bg-layer-2" class="hero-bg" style="background-image:url('gallery-2.jpg');"></div>
   <div class="relative z-10 max-w-4xl mx-auto pb-6">
     <h2 class="text-6xl md:text-9xl font-black text-amber-400 mb-1 tracking-wider drop-shadow-[0_6px_6px_rgba(0,0,0,0.95)]" data-i18n="heroTitle"></h2>
-    <p class="text-xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]" data-i18n="heroSub"></p>
+    <p class="text-xl md:text-3xl font-extrabold text-white mb-2 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]" data-i18n="heroSub"></p>
+    <p class="text-xl md:text-3xl font-extrabold text-white mb-8 drop-shadow-[0_3px_3px_rgba(0,0,0,0.95)]" data-i18n="cookName"></p>
     <input type="text" id="search-input" data-i18n-ph="search" oninput="renderProducts()" class="w-full max-w-lg bg-gray-950/90 border border-amber-500/60 rounded-xl py-3 px-5 text-white text-sm focus:outline-none focus:border-amber-400 shadow-2xl"/>
   </div>
 </section>
@@ -325,6 +326,7 @@ var T = {
   shareText: { ar: "أكلاتنا: طبخ عراقي بيتي طازج في Greensboro وضواحيها. اطلب الآن:", en: "Aklatna: fresh Iraqi home cooking in Greensboro & nearby areas. Order now:" },
   shareCopied: { ar: "تم نسخ الرابط ✓", en: "Link copied ✓" },
   shareCopyPrompt: { ar: "انسخ الرابط:", en: "Copy the link:" },
+  cookName: { ar: "من مطبخ أم بكر", en: "From Umm Bakr's Kitchen" },
   cContact: { ar: "تواصل معنا", en: "Contact us" },
   cWhatsApp: { ar: "راسلنا على الواتساب", en: "Message on WhatsApp" },
   cCall: { ar: "اتصل بنا", en: "Call us" },
@@ -394,7 +396,7 @@ function smoothChangeHeroBackground() {
 setInterval(smoothChangeHeroBackground, 4500);
 
 /* ---------- الحالة ---------- */
-var CONTACT_PHONE = "13366867948";   // رقم الواتساب والاتصال (بصيغة دولية بلا + ولا مسافات)
+var CONTACT_PHONE = "13369448034";   // رقم الواتساب والاتصال (بصيغة دولية بلا + ولا مسافات)
 var cart = [], currentCategory = 'all', currentActiveProduct = null, currentModalQty = 1;
 var dolmaSelectedSize = 'small', extraBreadQty = 0, extraSamoonQty = 0;
 
