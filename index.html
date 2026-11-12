@@ -279,6 +279,9 @@ var T = {
   catFish: { ar: "الأسماك", en: "Fish" },
   catApp: { ar: "النواشف", en: "Nawashef (Dry Appetizers)" },
   catPastries: { ar: "المعجنات", en: "Pastries" },
+  noteSingle: { ar: "💡 للطلب بالمفرد (بالعدد الذي تريده من كل صنف) اذهب إلى {tray}", en: "💡 To order items individually (any amount of each item), go to the {tray}" },
+  backTo: { ar: "العودة إلى {cat}", en: "Back to {cat}" },
+  goTray: { ar: "اذهب إلى {tray}", en: "Go to the {tray}" },
   catSingle: { ar: "وجبات فردية", en: "Individual Meals" },
   catTrays: { ar: "شكّل صينيتك", en: "Build Your Tray" },
   trayNameGrills: { ar: "صينية المشاوي", en: "Grill Platter" },
@@ -593,7 +596,12 @@ function renderTrays() {
   var btnCls = 'w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm';
   var unitOne = (lang === 'en') ? tray.unit.en : tray.unit.ar;
 
-  var html = '<div class="col-span-full space-y-6">' +
+  var backHtml = '';
+  if (trayCameFrom && singleTrayFor[trayCameFrom] === currentTray) {
+    backHtml = '<div><button type="button" onclick="backFromTray()" class="inline-flex items-center gap-2 bg-gray-800 hover:bg-gray-700 border border-amber-500/50 text-amber-400 text-xs font-bold px-3 py-2 rounded-xl shadow">' +
+      '<i class="fa-solid ' + (lang === 'ar' ? 'fa-arrow-right' : 'fa-arrow-left') + '"></i>' + tr('backTo').replace('{cat}', tr(catLabelKey[trayCameFrom])) + '</button></div>';
+  }
+  var html = '<div class="col-span-full space-y-6">' + backHtml +
     '<div class="text-center"><h3 class="text-lg font-extrabold text-amber-400">' + tr('buildTitle') + '</h3>' +
     '<p class="text-xs text-gray-400 mt-1">' + tr('buildSub') + '</p></div>' +
     '<div class="grid grid-cols-3 gap-2 max-w-xl mx-auto">';
@@ -667,6 +675,39 @@ function startPrice(p) {
   return p.price ? '$' + p.price.toFixed(2) : '';
 }
 
+/* ملاحظة "الطلب بالمفرد" في تبويبات المشاويات والنواشف والمعجنات */
+var singleTrayFor = { grills: 'grills', appetizers: 'nawashef', pastries: 'pastries' };
+
+function singleTrayNote() {
+  var k = singleTrayFor[currentCategory];
+  if (!k) return '';
+  var name = tr(trays[k].label);
+  return '<div class="col-span-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center space-y-2">' +
+    '<p class="text-xs md:text-sm text-amber-300 font-bold">' + tr('noteSingle').replace('{tray}', name) + '</p>' +
+    '<button type="button" onclick="goToTray(\'' + k + '\')" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold text-xs px-4 py-2 rounded-lg shadow">' + tr('goTray').replace('{tray}', name) + ' <i class="fa-solid ' + (lang === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right') + ' mx-1"></i></button></div>';
+}
+
+var trayCameFrom = null;
+var catLabelKey = { grills: 'catGrills', appetizers: 'catApp', pastries: 'catPastries' };
+
+function backFromTray() {
+  var cat = trayCameFrom; trayCameFrom = null;
+  if (!cat) return;
+  var btn = document.querySelector('.cat-btn[onclick*="\'' + cat + '\'"]');
+  filterCategory(cat, btn);
+  var box = byId('categories-container');
+  if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function goToTray(k) {
+  trayCameFrom = currentCategory;
+  currentTray = k;
+  var btn = document.querySelector('.cat-btn[data-i18n="catTrays"]');
+  filterCategory('trays', btn);
+  var box = byId('categories-container');
+  if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function renderProducts() {
   var grid = byId('products-grid');
   if (!grid) return;
@@ -690,10 +731,11 @@ function renderProducts() {
     }
   }
   if (!found) html = '<div class="col-span-full text-center text-gray-400 py-16 text-sm font-bold">' + tr('noResults') + '</div>';
-  grid.innerHTML = html;
+  grid.innerHTML = singleTrayNote() + html;
 }
 
 function filterCategory(cat, btn) {
+  if (cat !== 'trays') trayCameFrom = null;
   currentCategory = cat;
   var buttons = document.querySelectorAll('.cat-btn');
   for (var i = 0; i < buttons.length; i++) buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
