@@ -111,10 +111,23 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
 <div id="contact-fab" class="fixed bottom-4 left-4 z-40">
   <div id="contact-menu" class="hidden mb-2 w-60 bg-gray-900 border border-amber-500/40 rounded-2xl shadow-2xl overflow-hidden">
     <a class="js-wa flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-100 hover:bg-gray-800 border-b border-gray-800"><i class="fa-brands fa-whatsapp text-green-400 text-lg w-6 text-center"></i><span data-i18n="cWhatsApp"></span></a>
-    <a class="js-tel flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-100 hover:bg-gray-800 border-b border-gray-800"><i class="fa-solid fa-phone text-amber-400 text-base w-6 text-center"></i><span><span data-i18n="cCall"></span> <span class="js-phone-text text-gray-400 text-xs" dir="ltr"></span></span></a>
-    <button type="button" id="share-btn" onclick="shareSite(); toggleContact()" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-100 hover:bg-gray-800 text-start"><i class="fa-solid fa-share text-gray-300 text-base w-6 text-center"></i><span data-i18n="cShare"></span></button>
+    <a class="js-tel flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-100 hover:bg-gray-800"><i class="fa-solid fa-phone text-amber-400 text-base w-6 text-center"></i><span><span data-i18n="cCall"></span> <span class="js-phone-text text-gray-400 text-xs" dir="ltr"></span></span></a>
   </div>
-  <button type="button" id="contact-toggle" onclick="toggleContact()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold text-sm shadow-lg flex items-center gap-2 border border-amber-300"><i class="fa-regular fa-comment-dots"></i><span data-i18n="cContact"></span></button>
+  <div class="flex items-center gap-2">
+    <button type="button" id="share-btn" onclick="shareSite()" aria-label="Share" class="px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-amber-400 font-extrabold text-sm shadow-lg flex items-center gap-2 border border-amber-500/60"><i class="fa-solid fa-share"></i><span data-i18n="shareBtn"></span></button>
+    <button type="button" id="contact-toggle" onclick="toggleContact()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold text-sm shadow-lg flex items-center gap-2 border border-amber-300"><i class="fa-regular fa-comment-dots"></i><span data-i18n="cContact"></span></button>
+  </div>
+</div>
+
+<!-- نافذة المشاركة (تظهر عندما لا يدعم الجهاز قائمة المشاركة الأصلية) -->
+<div id="share-panel" class="hidden fixed inset-0 z-[70] flex items-end md:items-center justify-center bg-black/70 p-4" onclick="if(event.target===this)closeSharePanel()">
+  <div class="w-full max-w-sm bg-gray-900 border border-amber-500/40 rounded-2xl shadow-2xl p-4 space-y-3">
+    <div class="flex items-center justify-between">
+      <h3 class="text-sm font-extrabold text-amber-400" data-i18n="sharePanelTitle"></h3>
+      <button type="button" onclick="closeSharePanel()" class="text-gray-400 hover:text-white text-lg leading-none px-2" aria-label="Close">&times;</button>
+    </div>
+    <div id="share-panel-grid" class="grid grid-cols-3 gap-2"></div>
+  </div>
 </div>
 
 <!-- Modal عرض المنتج -->
@@ -334,7 +347,11 @@ var T = {
   cContact: { ar: "تواصل معنا", en: "Contact us" },
   cWhatsApp: { ar: "راسلنا على الواتساب", en: "Message on WhatsApp" },
   cCall: { ar: "اتصل بنا", en: "Call us" },
-  cShare: { ar: "شارك الموقع", en: "Share this site" },
+  shareBtn: { ar: "شارك", en: "Share" },
+  sharePanelTitle: { ar: "شارك أكلاتنا عبر", en: "Share Aklatna via" },
+  shareEmail: { ar: "بريد", en: "Email" },
+  shareSms: { ar: "رسالة", en: "SMS" },
+  shareCopy: { ar: "نسخ الرابط", en: "Copy link" },
   toggleBtn: { ar: "English", en: "عربي" }
 };
 
@@ -1146,15 +1163,41 @@ function prepareShareFile() {
   } catch (e) {}
 }
 
+function closeSharePanel() { var pn = byId('share-panel'); if (pn) pn.classList.add('hidden'); }
+
+function openSharePanel(url) {
+  var text = tr('shareText'), full = text + '\n' + url, enc = encodeURIComponent;
+  var apps = [
+    { icon: 'fa-brands fa-whatsapp', color: 'text-green-400', label: 'WhatsApp', href: 'https://wa.me/?text=' + enc(full) },
+    { icon: 'fa-brands fa-telegram', color: 'text-sky-400', label: 'Telegram', href: 'https://t.me/share/url?url=' + enc(url) + '&text=' + enc(text) },
+    { icon: 'fa-brands fa-facebook', color: 'text-blue-400', label: 'Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + enc(url) },
+    { icon: 'fa-brands fa-twitter', color: 'text-sky-300', label: 'X / Twitter', href: 'https://twitter.com/intent/tweet?text=' + enc(text) + '&url=' + enc(url) },
+    { icon: 'fa-solid fa-envelope', color: 'text-amber-300', label: tr('shareEmail'), href: 'mailto:?subject=' + enc(tr('shareTitle')) + '&body=' + enc(full) },
+    { icon: 'fa-solid fa-message', color: 'text-emerald-300', label: tr('shareSms'), href: 'sms:?&body=' + enc(full) }
+  ];
+  var html = '';
+  for (var i = 0; i < apps.length; i++) {
+    html += '<a href="' + apps[i].href + '" target="_blank" rel="noopener" class="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700"><i class="' + apps[i].icon + ' ' + apps[i].color + ' text-2xl"></i><span class="text-[11px] font-bold text-gray-200">' + apps[i].label + '</span></a>';
+  }
+  html += '<button type="button" id="share-copy-btn" class="col-span-3 flex items-center justify-center gap-2 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 border border-amber-500/50 text-amber-400 text-xs font-bold"><i class="fa-solid fa-link"></i><span>' + tr('shareCopy') + '</span></button>';
+  byId('share-panel-grid').innerHTML = html;
+  byId('share-copy-btn').onclick = function () {
+    var done = function () { showToast(tr('shareCopied')); closeSharePanel(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { window.prompt(tr('shareCopyPrompt'), url); });
+    else window.prompt(tr('shareCopyPrompt'), url);
+  };
+  byId('share-panel').classList.remove('hidden');
+}
+
 function shareLinkOnly(url) {
   if (navigator.share) {
-    navigator.share({ title: tr('shareTitle'), text: tr('shareText'), url: url }).catch(function () {});
+    navigator.share({ title: tr('shareTitle'), text: tr('shareText'), url: url }).catch(function (e) {
+      if (e && e.name === 'AbortError') return;
+      openSharePanel(url);
+    });
     return;
   }
-  var manual = function () { window.prompt(tr('shareCopyPrompt'), url); };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(function () { showToast(tr('shareCopied')); }, manual);
-  } else manual();
+  openSharePanel(url);
 }
 
 /* المشاركة: صورة الشعار + رسالة فيها الرابط (وإن لم يدعم الجهاز مشاركة الصور تُشارَك الرابط فقط) */
