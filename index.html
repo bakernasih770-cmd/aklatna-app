@@ -105,7 +105,7 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
 </main>
 
-<div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] bg-gray-800 text-amber-300 text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-amber-500/40 hidden"></div>
+<div id="toast" class="fixed bottom-36 left-1/2 -translate-x-1/2 z-[60] bg-gray-800 text-amber-300 text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-amber-500/40 hidden"></div>
 
 <!-- أزرار التواصل قبل الطلب -->
 <div id="contact-fab" class="fixed bottom-4 left-4 z-40">
@@ -247,14 +247,17 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
       </div>
     </div>
     </div>
-    <div class="flex-shrink-0 bg-gray-950 border-t border-gray-700 p-3 flex items-center gap-3">
-      <div class="leading-tight">
-        <span class="text-[11px] text-amber-300 font-bold block" data-i18n="grandTotal"></span>
-        <span id="cart-bar-total" class="text-xl font-black text-amber-400">$0.00</span>
+    <div class="flex-shrink-0 bg-gray-950 border-t border-gray-700 p-3 space-y-1.5">
+      <div class="flex items-center gap-3">
+        <div class="leading-tight">
+          <span class="text-[11px] text-amber-300 font-bold block" data-i18n="grandTotal"></span>
+          <span id="cart-bar-total" class="text-xl font-black text-amber-400">$0.00</span>
+        </div>
+        <button onclick="sendWhatsAppOrder()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-brands fa-whatsapp text-lg"></i><span data-i18n="sendWA"></span>
+        </button>
       </div>
-      <button onclick="sendWhatsAppOrder()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
-        <i class="fa-brands fa-whatsapp text-lg"></i><span data-i18n="sendWA"></span>
-      </button>
+      <p class="text-[11px] text-gray-400 text-center leading-snug"><span data-i18n="sendHint"></span> <button type="button" onclick="copyOrder()" class="text-amber-400 font-bold underline" data-i18n="copyOrder"></button></p>
     </div>
   </div>
 </div>
@@ -355,6 +358,16 @@ var T = {
   shareEmail: { ar: "بريد", en: "Email" },
   shareSms: { ar: "رسالة", en: "SMS" },
   shareCopy: { ar: "نسخ الرابط", en: "Copy link" },
+  noteSingleMeals: { ar: "💡 الوجبات الفردية: للاستلام الذاتي أقل طلب ${pick}، وللتوصيل أقل طلب ${del} (اطلب أكثر من وجبة). والتوصيل مجاني من ${free}.", en: "💡 Individual meals: pick-up orders start from ${pick}; delivery from ${del} (order more than one meal). Delivery is free from ${free}." },
+  minModeDelivery: { ar: "للتوصيل", en: "for delivery" },
+  minModePickup: { ar: "للاستلام الذاتي", en: "for pick-up" },
+  minRule: { ar: "أقل طلب {mode}: ${min}", en: "Orders {mode} start from ${min}" },
+  minShort: { ar: "أضف ${n} ليصل طلبك إلى ${min} (أقل طلب {mode})", en: "Add ${n} to reach ${min} (required {mode})" },
+  minAlert: { ar: "أقل طلب {mode} هو ${min}، ومجموع طلبك الآن ${now}. أضف ${n} أو غيّر طريقة الاستلام.", en: "Orders {mode} start from ${min}; your total is ${now}. Add ${n} or change the delivery option." },
+  sendHint: { ar: "سيفتح الواتساب برسالة جاهزة، اضغط «إرسال» لإتمام الطلب.", en: "WhatsApp will open with your order ready. Tap “Send” to complete it." },
+  copyOrder: { ar: "نسخ الطلب", en: "Copy order" },
+  orderCopied: { ar: "تم نسخ الطلب ✓ الصقه في محادثة الواتساب", en: "Order copied ✓ paste it in the WhatsApp chat" },
+  alertName: { ar: "الرجاء إدخال الاسم", en: "Please enter your name" },
   toggleBtn: { ar: "English", en: "عربي" }
 };
 
@@ -434,7 +447,7 @@ function imgFail(el) {
   el.parentElement.innerHTML = '<div class="w-full h-full flex flex-col items-center justify-center bg-gray-950 text-amber-400 font-bold p-3 text-center text-xs"><span>❌</span><span class="text-gray-300 text-[10px] mt-1">' + (el.getAttribute('data-file') || '') + '</span></div>';
 }
 function imgTag(file, alt) {
-  return '<img src="' + encodeURI(imgFolder + file) + '" data-file="' + file + '" alt="' + alt + '" class="w-full h-full object-cover" onerror="imgFail(this)">';
+  return '<img src="' + encodeURI(imgFolder + file) + '" data-file="' + file + '" alt="' + alt + '" loading="lazy" decoding="async" class="w-full h-full object-cover" onerror="imgFail(this)">';
 }
 
 /* ---------- التسعير: دالة واحدة تستخدمها النافذة والسلة ---------- */
@@ -657,6 +670,7 @@ function addTrayToCart() {
   };
   recalcItem(item);
   cart.push(item);
+  saveCart();
   updateCartBadge();
   resetTray(k);
   renderTrays();
@@ -678,7 +692,14 @@ function startPrice(p) {
 /* ملاحظة "الطلب بالمفرد" في تبويبات المشاويات والنواشف والمعجنات */
 var singleTrayFor = { grills: 'grills', appetizers: 'nawashef', pastries: 'pastries' };
 
+function singleMealsNote() {
+  if (!(MIN_PICKUP_ORDER > 0) && !(MIN_DELIVERY_ORDER > 0)) return '';
+  return '<div class="col-span-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">' +
+    '<p class="text-xs md:text-sm text-amber-300 font-bold">' + tr('noteSingleMeals').replace('{pick}', MIN_PICKUP_ORDER).replace('{del}', MIN_DELIVERY_ORDER).replace('{free}', FREE_DELIVERY_MIN) + '</p></div>';
+}
+
 function singleTrayNote() {
+  if (currentCategory === 'single') return singleMealsNote();
   var k = singleTrayFor[currentCategory];
   if (!k) return '';
   var name = tr(trays[k].label);
@@ -866,6 +887,7 @@ function confirmAddToCart() {
   };
   recalcItem(item);
   cart.push(item);
+  saveCart();
   updateCartBadge();
   closeProductModal();
 }
@@ -879,7 +901,7 @@ function updateCartBadge() {
 
 function openCart() { renderCartItems(); byId('cart-modal').classList.remove('hidden'); }
 function closeCart() { byId('cart-modal').classList.add('hidden'); }
-function removeFromCart(index) { cart.splice(index, 1); updateCartBadge(); renderCartItems(); }
+function removeFromCart(index) { cart.splice(index, 1); saveCart(); updateCartBadge(); renderCartItems(); }
 
 function cartThumb(item) {
   var imgs = (item.images && item.images.length) ? item.images : ((item.product && item.product.image) ? [item.product.image] : []);
@@ -914,19 +936,19 @@ function cartChangeQty(i, dir) {
   var q = it.qty + dir * step;
   if (q < min) q = min;
   it.qty = q;
-  recalcItem(it); renderCartItems();
+  recalcItem(it); saveCart(); renderCartItems();
 }
 
 function cartSetSize(i, size) {
   var it = cart[i]; if (!it) return;
   it.size = size;
-  recalcItem(it); renderCartItems();
+  recalcItem(it); saveCart(); renderCartItems();
 }
 
 function cartChangeExtra(i, type, dir) {
   var it = cart[i]; if (!it) return;
   it[type] = Math.max(0, it[type] + dir);
-  recalcItem(it); renderCartItems();
+  recalcItem(it); saveCart(); renderCartItems();
 }
 
 function cartChangeTrayQty(i, key, dir) {
@@ -935,7 +957,7 @@ function cartChangeTrayQty(i, key, dir) {
   var any = false;
   for (var k in it.trayQty) if (it.trayQty[k] > 0) any = true;
   if (!any) { removeFromCart(i); return; }
-  recalcItem(it); renderCartItems();
+  recalcItem(it); saveCart(); renderCartItems();
 }
 
 function renderCartItems() {
@@ -1000,10 +1022,23 @@ function renderCartItems() {
 /* ---------- طريقة الاستلام: توصيل أو استلام بنفسه ---------- */
 var FREE_DELIVERY_MIN = 70;    // الطلب من هذا المبلغ فأكثر: التوصيل مجاني ضمن Greensboro وضواحيها
 var fulfillment = 'delivery';  // 'delivery' أو 'pickup'
+var MIN_DELIVERY_ORDER = 35;   // أقل مجموع طلب للتوصيل بالدولار (اجعله 0 لإلغائه)
+var MIN_PICKUP_ORDER = 15;     // أقل مجموع طلب للاستلام الذاتي بالدولار (اجعله 0 لإلغائه)
 
 function cartSubtotal() { var s = 0; for (var i = 0; i < cart.length; i++) s += cart[i].totalPrice; return s; }
 
-function setFulfillment(mode) { fulfillment = mode; renderFulfillment(); }
+function minNoteHtml(pick, sub) {
+  var min = pick ? MIN_PICKUP_ORDER : MIN_DELIVERY_ORDER;
+  if (!(min > 0)) return '';
+  var mode = tr(pick ? 'minModePickup' : 'minModeDelivery');
+  if (cart.length > 0 && sub < min) {
+    return '<p class="text-xs text-red-400 font-bold">⚠️ ' + tr('minShort').replace('{n}', (min - sub).toFixed(2)).replace('{min}', min).replace('{mode}', mode) + '</p>';
+  }
+  if (cart.length === 0) return '<p class="text-[11px] text-gray-400">' + tr('minRule').replace('{min}', min).replace('{mode}', mode) + '</p>';
+  return '';
+}
+
+function setFulfillment(mode) { fulfillment = mode; saveCustomer(); renderFulfillment(); }
 
 function renderFulfillment() {
   var bd = byId('ful-delivery'), bp = byId('ful-pickup'), note = byId('ful-note');
@@ -1033,7 +1068,7 @@ function renderFulfillment() {
   } else {
     html = '<p class="text-[11px] text-gray-400">' + rule + '</p>';
   }
-  note.innerHTML = html;
+  note.innerHTML = minNoteHtml(pick, sub) + html;
 }
 
 /* ---------- إرسال الطلب عبر الواتساب (الرسالة بالعربية دائماً) ---------- */
@@ -1095,10 +1130,17 @@ function buildOrderMessage(c) {
   return msg;
 }
 
-function sendWhatsAppOrder() {
+/* يتحقق من البيانات ويبني نص الطلب (أو يرجع null بعد تنبيه الزبون) */
+function prepareOrder() {
   if (cart.length === 0) {
     alert(tr('alertEmpty'));
-    return;
+    return null;
+  }
+
+  var minOrder = (fulfillment === 'pickup') ? MIN_PICKUP_ORDER : MIN_DELIVERY_ORDER, subNow = cartSubtotal();
+  if (minOrder > 0 && subNow < minOrder) {
+    alert(tr('minAlert').replace('{mode}', tr(fulfillment === 'pickup' ? 'minModePickup' : 'minModeDelivery')).replace('{min}', minOrder).replace('{now}', subNow.toFixed(2)).replace('{n}', (minOrder - subNow).toFixed(2)));
+    return null;
   }
 
   var val = function (id) { var el = byId(id); return el ? el.value.trim() : ''; };
@@ -1115,34 +1157,117 @@ function sendWhatsAppOrder() {
 
   var pickup = (fulfillment === 'pickup');
   if (!customerName || (!pickup && !street)) {
-    alert(tr('alertNameAddr'));
-    return;
+    alert(tr(pickup ? 'alertName' : 'alertNameAddr'));
+    return null;
   }
 
   if (!deliveryDate || !deliveryTime) {
     alert(tr('alertDateTime'));
-    return;
+    return null;
   }
   var pickupAt = new Date(deliveryDate + 'T' + deliveryTime);
   var earliest = new Date(Date.now() + 24 * 60 * 60 * 1000);
   if (isNaN(pickupAt.getTime()) || pickupAt < earliest) {
     alert(tr('alert24'));
-    return;
+    return null;
   }
 
   for (var ci = 0; ci < cart.length; ci++) {
     if (cart[ci].trayKey && cart[ci].sum < trays[cart[ci].trayKey].minPrice) {
       alert(pName(cart[ci].product) + ': ' + minAlertText(cart[ci].trayKey));
-      return;
+      return null;
     }
   }
 
-  var message = buildOrderMessage({
+  return buildOrderMessage({
     name: customerName, street: street, city: city, state: state, zip: zip,
     notes: addressNotes, date: deliveryDate, time: deliveryTime, pickup: pickup, phone: customerPhone
   });
+}
 
+function sendWhatsAppOrder() {
+  var message = prepareOrder();
+  if (!message) return;
+  saveCustomer();
+  writeState({ sentAt: Date.now() });
   window.location.href = "https://wa.me/" + CONTACT_PHONE + "?text=" + encodeURIComponent(message);
+}
+
+/* نسخ الطلب (احتياط إن لم يفتح الواتساب) */
+function copyOrder() {
+  var message = prepareOrder();
+  if (!message) return;
+  saveCustomer();
+  var manual = function () { window.prompt(tr('shareCopyPrompt'), message); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(message).then(function () { showToast(tr('orderCopied')); }, manual);
+  } else manual();
+}
+
+/* ---------- حفظ الصينية وبيانات الزبون على جهازه فقط (localStorage) ---------- */
+var STATE_KEY = 'aklatna_state_v1';
+var CART_KEEP_MS = 2 * 24 * 60 * 60 * 1000;      // تُحفظ الصينية يومين
+var SENT_GRACE_MS = 10 * 60 * 1000;               // بعد الإرسال: تُمسح الصينية بعد 10 دقائق
+var CUSTOMER_FIELDS = ['customer-name', 'customer-phone', 'street-address', 'city', 'state', 'zip-code', 'address-notes'];
+var stateTimer = null;
+
+function readState() { try { return JSON.parse(localStorage.getItem(STATE_KEY)) || {}; } catch (e) { return {}; } }
+function writeState(patch) {
+  try { var st = readState(); for (var k in patch) st[k] = patch[k]; localStorage.setItem(STATE_KEY, JSON.stringify(st)); } catch (e) {}
+}
+
+function saveCart() {
+  var items = [];
+  for (var i = 0; i < cart.length; i++) {
+    var it = cart[i];
+    if (it.trayKey) items.push({ t: it.trayKey, q: it.trayQty, b: it.extraBread, s: it.extraSamoon, n: it.customNote });
+    else items.push({ p: it.product.id, q: it.qty, z: it.size, b: it.extraBread, s: it.extraSamoon, n: it.customNote });
+  }
+  writeState({ cart: items, cartAt: Date.now() });
+}
+
+function saveCustomer() {
+  var c = {};
+  for (var i = 0; i < CUSTOMER_FIELDS.length; i++) { var el = byId(CUSTOMER_FIELDS[i]); if (el) c[CUSTOMER_FIELDS[i]] = el.value; }
+  writeState({ cust: c, ful: fulfillment });
+}
+
+function bindCustomerSave() {
+  var later = function () { clearTimeout(stateTimer); stateTimer = setTimeout(saveCustomer, 400); };
+  for (var i = 0; i < CUSTOMER_FIELDS.length; i++) { var el = byId(CUSTOMER_FIELDS[i]); if (el) el.addEventListener('input', later); }
+}
+
+function loadState() {
+  var st = readState(), now = Date.now(), i;
+  if (st.cust) {
+    for (i = 0; i < CUSTOMER_FIELDS.length; i++) {
+      var el = byId(CUSTOMER_FIELDS[i]), v = st.cust[CUSTOMER_FIELDS[i]];
+      if (el && typeof v === 'string' && v.length > 0) el.value = v;
+    }
+  }
+  if (st.ful === 'pickup' || st.ful === 'delivery') fulfillment = st.ful;
+
+  if (!st.cart || !st.cart.length || !st.cartAt || now - st.cartAt > CART_KEEP_MS) return;
+  if (st.sentAt && st.sentAt >= st.cartAt && now - st.sentAt > SENT_GRACE_MS) return;   // الطلب أُرسل سابقاً
+
+  for (i = 0; i < st.cart.length; i++) {
+    var r = st.cart[i], item = null;
+    if (r.t) {
+      var tray = trays[r.t]; if (!tray) continue;
+      var tq = {};
+      for (var j = 0; j < tray.items.length; j++) tq[tray.items[j].key] = Math.max(0, +(r.q && r.q[tray.items[j].key]) || 0);
+      item = { product: { id: 'tray-' + r.t, name: tray.cart.ar, nameEn: tray.cart.en }, trayKey: r.t, trayQty: tq, size: '',
+               extraBread: Math.max(0, +r.b || 0), extraSamoon: Math.max(0, +r.s || 0), customNote: String(r.n || '') };
+    } else {
+      var p = findProduct(r.p); if (!p) continue;                      // صنف حُذف من القائمة
+      item = { product: p, images: [p.image], qty: Math.max(p.minQty || 1, +r.q || 1), size: (r.z === 'medium' || r.z === 'large') ? r.z : 'small',
+               extraBread: Math.max(0, +r.b || 0), extraSamoon: Math.max(0, +r.s || 0), customNote: String(r.n || '') };
+    }
+    recalcItem(item);                                                   // الأسعار تُحسب من جديد بالأسعار الحالية
+    if (item.trayKey && item.qty === 0) continue;
+    cart.push(item);
+  }
+  updateCartBadge();
 }
 
 /* ---------- تبديل اللغة ---------- */
@@ -1261,9 +1386,11 @@ function toggleLang() {
   applyLang();
 }
 
+loadState();
 applyLang();
 initContact();
 prepareShareFile();
+bindCustomerSave();
 
 /* تعطيل اليوم والأيام السابقة في التقويم */
 (function () {
