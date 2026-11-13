@@ -31,9 +31,6 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
 .hero-bg.active{opacity:1;transform:scale(1.05)}
 /* Safari على الآيفون يفصل حروف العربية إذا وُجدت مسافة بين الحروف، فنلغيها في العربية */
 html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
-.menu-section{scroll-margin-top:var(--scroll-offset,150px)}
-#categories-container{scrollbar-width:none}
-#categories-container::-webkit-scrollbar{display:none}
 </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -62,6 +59,14 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
     </div>
   </div>
 </header>
+
+<!-- شريط تحميل التطبيق (يظهر حتى يغلقه الزبون أو يثبّت التطبيق) -->
+<div id="install-bar" class="hidden bg-amber-500 text-gray-950 px-3 py-2 flex items-center justify-center gap-2.5 text-xs md:text-sm font-bold">
+  <i class="fa-solid fa-mobile-screen-button"></i>
+  <span data-i18n="installBar"></span>
+  <button type="button" onclick="installFromBar()" class="bg-gray-950 text-amber-400 px-3 py-1 rounded-lg font-extrabold flex-shrink-0" data-i18n="installGet"></button>
+  <button type="button" onclick="dismissInstallBar()" class="text-gray-900 text-xl leading-none px-1 flex-shrink-0" aria-label="Close">&times;</button>
+</div>
 
 <section id="hero-section" class="relative py-20 px-4 border-b border-gray-800 text-center overflow-hidden bg-gray-950 min-h-[420px] flex flex-col justify-end">
   <div id="bg-layer-1" class="hero-bg active" style="background-image:url('gallery-1.jpg');"></div>
@@ -92,22 +97,20 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
   </div>
 </div>
 
-<nav id="cat-nav" class="sticky z-20 bg-gray-950/95 backdrop-blur border-b border-gray-800 shadow" style="top:var(--hdr,80px)">
-  <div id="categories-container" class="max-w-7xl mx-auto px-3 py-2 flex gap-2 overflow-x-auto whitespace-nowrap lg:justify-center">
-    <button onclick="goToSection('single')" data-sec="single" data-i18n="catSingle" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('main')" data-sec="main" data-i18n="catMain" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('grills')" data-sec="grills" data-i18n="catGrills" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('fish')" data-sec="fish" data-i18n="catFish" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('appetizers')" data-sec="appetizers" data-i18n="catApp" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('pastries')" data-sec="pastries" data-i18n="catPastries" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('bakery')" data-sec="bakery" data-i18n="catBakery" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('sandwiches')" data-sec="sandwiches" data-i18n="catSand" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
-    <button onclick="goToSection('trays')" data-sec="trays" data-i18n="catTrays" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+<main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+  <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
+    <button onclick="filterCategory('all', this)" data-i18n="catAll" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950"></button>
+    <button onclick="filterCategory('trays', this)" data-i18n="catTrays" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('single', this)" data-i18n="catSingle" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('main', this)" data-i18n="catMain" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('grills', this)" data-i18n="catGrills" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('fish', this)" data-i18n="catFish" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('appetizers', this)" data-i18n="catApp" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('pastries', this)" data-i18n="catPastries" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('bakery', this)" data-i18n="catBakery" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+    <button onclick="filterCategory('sandwiches', this)" data-i18n="catSand" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
   </div>
-</nav>
-
-<main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
-  <div class="space-y-10" id="products-grid"></div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
 </main>
 
 <div id="toast" class="fixed bottom-36 left-1/2 -translate-x-1/2 z-[60] bg-gray-800 text-amber-300 text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-amber-500/40 hidden"></div>
@@ -117,6 +120,7 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
   <div id="contact-menu" class="hidden mb-2 w-60 bg-gray-900 border border-amber-500/40 rounded-2xl shadow-2xl overflow-hidden">
     <a class="js-wa flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-100 hover:bg-gray-800 border-b border-gray-800"><i class="fa-brands fa-whatsapp text-green-400 text-lg w-6 text-center"></i><span data-i18n="cWhatsApp"></span></a>
     <a class="js-tel flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-100 hover:bg-gray-800"><i class="fa-solid fa-phone text-amber-400 text-base w-6 text-center"></i><span><span data-i18n="cCall"></span> <span class="js-phone-text text-gray-400 text-xs" dir="ltr"></span></span></a>
+    <button type="button" id="install-row" onclick="openInstall()" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-100 hover:bg-gray-800 border-t border-gray-800 text-start"><i class="fa-solid fa-mobile-screen-button text-amber-300 text-base w-6 text-center"></i><span data-i18n="installBtn"></span></button>
   </div>
   <div class="flex items-center gap-2">
     <button type="button" id="share-btn" onclick="shareSite()" aria-label="Share" class="px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-amber-400 font-extrabold text-sm shadow-lg flex items-center gap-2 border border-amber-500/60"><i class="fa-solid fa-share"></i><span data-i18n="shareBtn"></span></button>
@@ -132,6 +136,29 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
       <button type="button" onclick="closeSharePanel()" class="text-gray-400 hover:text-white text-lg leading-none px-2" aria-label="Close">&times;</button>
     </div>
     <div id="share-panel-grid" class="grid grid-cols-3 gap-2"></div>
+  </div>
+</div>
+
+<!-- نافذة تحميل الموقع على الجهاز -->
+<div id="install-panel" class="hidden fixed inset-0 z-[70] flex items-end md:items-center justify-center bg-black/70 p-4" onclick="if(event.target===this)closeInstall()">
+  <div class="w-full max-w-sm bg-gray-900 border border-amber-500/40 rounded-2xl shadow-2xl p-4 space-y-3 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between">
+      <h3 class="text-sm font-extrabold text-amber-400" data-i18n="installTitle"></h3>
+      <button type="button" onclick="closeInstall()" class="text-gray-400 hover:text-white text-lg leading-none px-2" aria-label="Close">&times;</button>
+    </div>
+    <button type="button" id="install-now" onclick="doInstall()" class="hidden w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold py-3 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-download"></i><span data-i18n="installNow"></span></button>
+    <div id="install-ios" class="text-xs text-gray-200 bg-gray-950 border border-gray-800 rounded-xl p-3 space-y-2">
+      <p class="font-bold text-amber-300"><i class="fa-brands fa-apple"></i> iPhone / iPad</p>
+      <ol class="list-decimal ps-5 space-y-1.5">
+        <li data-i18n="iosStep1"></li><li data-i18n="iosStep2"></li><li data-i18n="iosStep3"></li><li data-i18n="iosStep4"></li>
+      </ol>
+    </div>
+    <div id="install-android" class="text-xs text-gray-200 bg-gray-950 border border-gray-800 rounded-xl p-3 space-y-2">
+      <p class="font-bold text-amber-300"><i class="fa-brands fa-android"></i> Android</p>
+      <ol class="list-decimal ps-5 space-y-1.5">
+        <li data-i18n="andStep1"></li><li data-i18n="andStep2"></li><li data-i18n="andStep3"></li><li data-i18n="andStep4"></li>
+      </ol>
+    </div>
   </div>
 </div>
 
@@ -375,6 +402,19 @@ var T = {
   minRule: { ar: "أقل طلب {mode}: ${min}", en: "Orders {mode} start from ${min}" },
   minShort: { ar: "أضف ${n} ليصل طلبك إلى ${min} (أقل طلب {mode})", en: "Add ${n} to reach ${min} (required {mode})" },
   minAlert: { ar: "أقل طلب {mode} هو ${min}، ومجموع طلبك الآن ${now}. أضف ${n} أو غيّر طريقة الاستلام.", en: "Orders {mode} start from ${min}; your total is ${now}. Add ${n} or change the delivery option." },
+  installBar: { ar: "حمّل أكلاتنا على جوالك كتطبيق", en: "Get Aklatna on your phone as an app" },
+  installGet: { ar: "تحميل", en: "Get" },
+  installBtn: { ar: "حمّل التطبيق على جوالك", en: "Install the app on your phone" },
+  installTitle: { ar: "حمّل أكلاتنا على جوالك", en: "Get Aklatna on your phone" },
+  installNow: { ar: "تثبيت الآن", en: "Install now" },
+  iosStep1: { ar: "افتح الموقع في متصفح Safari (إن فتحتَه من الواتساب فاضغط أيقونة البوصلة «فتح في Safari»).", en: "Open the site in Safari (if you opened it from WhatsApp, tap the compass icon “Open in Safari”)." },
+  iosStep2: { ar: "اضغط زر المشاركة ⬆︎ في أسفل الشاشة (أو النقاط الثلاث ⋯ ثم مشاركة).", en: "Tap the Share button ⬆︎ at the bottom (or the three dots ⋯ then Share)." },
+  iosStep3: { ar: "اختر «إضافة إلى الشاشة الرئيسية».", en: "Choose “Add to Home Screen”." },
+  iosStep4: { ar: "اضغط «إضافة»، فتظهر أيقونة أكلاتنا على شاشتك.", en: "Tap “Add” and the Aklatna icon appears on your screen." },
+  andStep1: { ar: "افتح الموقع في متصفح Chrome (إن فتحتَه من تطبيق آخر فاضغط ⋮ ثم «فتح في المتصفح»).", en: "Open the site in Chrome (if it opened inside another app, tap ⋮ then “Open in browser”)." },
+  andStep2: { ar: "اضغط القائمة ⋮ في أعلى الشاشة.", en: "Tap the menu ⋮ at the top." },
+  andStep3: { ar: "اختر «تثبيت التطبيق» (أو «إضافة إلى الشاشة الرئيسية»).", en: "Choose “Install app” (or “Add to Home screen”)." },
+  andStep4: { ar: "اضغط «تثبيت»، فتجد أيقونة أكلاتنا على شاشتك.", en: "Tap “Install” and find the Aklatna icon on your screen." },
   sendHint: { ar: "سيفتح الواتساب برسالة جاهزة، اضغط «إرسال» لإتمام الطلب.", en: "WhatsApp will open with your order ready. Tap “Send” to complete it." },
   copyOrder: { ar: "نسخ الطلب", en: "Copy order" },
   orderCopied: { ar: "تم نسخ الطلب ✓ الصقه في محادثة الواتساب", en: "Order copied ✓ paste it in the WhatsApp chat" },
@@ -612,7 +652,7 @@ function minAlertText(k) {
 function selectTray(k) { currentTray = k; renderTrays(); }
 
 function renderTrays() {
-  var grid = byId('trays-body');
+  var grid = byId('products-grid');
   if (!grid) return;
   var tray = trays[currentTray];
   var btnCls = 'w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm';
@@ -698,18 +738,8 @@ function startPrice(p) {
   return p.price ? '$' + p.price.toFixed(2) : '';
 }
 
-/* ---------- صفحة واحدة طويلة: كل الأقسام تحت بعضها، والأزرار العلوية تنقلك إلى القسم ---------- */
-var SECTIONS = [
-  { key: 'single', label: 'catSingle' }, { key: 'main', label: 'catMain' }, { key: 'grills', label: 'catGrills' },
-  { key: 'fish', label: 'catFish' }, { key: 'appetizers', label: 'catApp' }, { key: 'pastries', label: 'catPastries' },
-  { key: 'bakery', label: 'catBakery' }, { key: 'sandwiches', label: 'catSand' }, { key: 'trays', label: 'catTrays' }
-];
-var singleTrayFor = { grills: 'grills', appetizers: 'nawashef', pastries: 'pastries' };   // قسم → صينيته
-var trayHome = { grills: 'grills', nawashef: 'appetizers', pastries: 'pastries' };          // صينية → قسمها
-var trayCameFrom = null;
-var catLabelKey = { grills: 'catGrills', appetizers: 'catApp', pastries: 'catPastries' };
-var NAV_BASE = 'cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 ';
-var NAV_ON = NAV_BASE + 'bg-amber-500 text-gray-950', NAV_OFF = NAV_BASE + 'bg-gray-800 text-gray-400';
+/* ملاحظة "الطلب بالمفرد" في تبويبات المشاويات والنواشف والمعجنات */
+var singleTrayFor = { grills: 'grills', appetizers: 'nawashef', pastries: 'pastries' };
 
 function singleMealsNote(key) {
   if (!(MIN_PICKUP_ORDER > 0) && !(MIN_DELIVERY_ORDER > 0)) return '';
@@ -737,10 +767,10 @@ function sandwichTable() {
   return html + '</tbody></table></div></div>';
 }
 
-function sectionNote(key) {
-  if (key === 'single') return singleMealsNote('noteSingleMeals');
-  if (key === 'sandwiches') return sandwichTable();
-  var k = singleTrayFor[key];
+function singleTrayNote() {
+  if (currentCategory === 'single') return singleMealsNote('noteSingleMeals');
+  if (currentCategory === 'sandwiches') return sandwichTable();
+  var k = singleTrayFor[currentCategory];
   if (!k) return '';
   var name = tr(trays[k].label);
   return '<div class="col-span-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center space-y-2">' +
@@ -748,109 +778,61 @@ function sectionNote(key) {
     '<button type="button" onclick="goToTray(\'' + k + '\')" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold text-xs px-4 py-2 rounded-lg shadow">' + tr('goTray').replace('{tray}', name) + ' <i class="fa-solid ' + (lang === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right') + ' mx-1"></i></button></div>';
 }
 
-function scrollToSection(cat) {
-  var el = byId('sec-' + cat);
-  if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function goToSection(cat) {
-  var qi = byId('search-input');
-  if (qi && qi.value) { qi.value = ''; renderProducts(); }          // إنهاء البحث ليظهر القسم
-  if (cat !== 'trays' && trayCameFrom) { trayCameFrom = null; renderTrays(); }
-  scrollToSection(cat);
-}
+var trayCameFrom = null;
+var catLabelKey = { grills: 'catGrills', appetizers: 'catApp', pastries: 'catPastries' };
 
 function backFromTray() {
   var cat = trayCameFrom; trayCameFrom = null;
-  renderTrays();
-  if (cat) scrollToSection(cat);
+  if (!cat) return;
+  var btn = document.querySelector('.cat-btn[onclick*="\'' + cat + '\'"]');
+  filterCategory(cat, btn);
+  var box = byId('categories-container');
+  if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function goToTray(k) {
-  trayCameFrom = trayHome[k] || null;
+  trayCameFrom = currentCategory;
   currentTray = k;
-  renderTrays();
-  scrollToSection('trays');
-}
-
-function cardHtml(p) {
-  var note = pNote(p);
-  return '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
-    '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' + imgTag(p.image, pName(p)) +
-    '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">' + startPrice(p) + '</span></div>' +
-    '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
-    '<h3 class="font-extrabold text-base text-white mb-1">' + pName(p) + '</h3>' +
-    (note ? '<p class="text-[11px] text-amber-300/90 mb-2 font-bold">' + note + '</p>' : '') +
-    '<span class="text-xs text-amber-400 font-bold">' + tr('tapDetails') + '</span></div></div>';
+  var btn = document.querySelector('.cat-btn[data-i18n="catTrays"]');
+  filterCategory('trays', btn);
+  var box = byId('categories-container');
+  if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function renderProducts() {
   var grid = byId('products-grid');
   if (!grid) return;
+  if (currentCategory === 'trays') { renderTrays(); return; }
   var qi = byId('search-input');
   var query = (qi && qi.value) ? qi.value.toLowerCase().trim() : '';
-  var html = '', any = false, head = 'text-xl md:text-2xl font-extrabold text-amber-400 border-b border-amber-500/30 pb-2 mb-4';
-  for (var s = 0; s < SECTIONS.length; s++) {
-    var sec = SECTIONS[s];
-    if (sec.key === 'trays') {
-      if (query === '') html += '<section id="sec-trays" class="menu-section"><h2 class="' + head + '">' + tr(sec.label) + '</h2><div id="trays-body"></div></section>';
-      continue;
+  var html = '', found = false;
+  for (var i = 0; i < products.length; i++) {
+    var p = products[i];
+    var hay = (p.name + ' ' + p.nameEn).toLowerCase();
+    if ((currentCategory === 'all' || p.category === currentCategory || p.alsoIn === currentCategory) && (query === '' || hay.indexOf(query) !== -1)) {
+      found = true;
+      var note = pNote(p);
+      html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
+        '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' + imgTag(p.image, pName(p)) +
+        '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">' + startPrice(p) + '</span></div>' +
+        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
+        '<h3 class="font-extrabold text-base text-white mb-1">' + pName(p) + '</h3>' +
+        (note ? '<p class="text-[11px] text-amber-300/90 mb-2 font-bold">' + note + '</p>' : '') +
+        '<span class="text-xs text-amber-400 font-bold">' + tr('tapDetails') + '</span></div></div>';
     }
-    var cards = '';
-    for (var i = 0; i < products.length; i++) {
-      var p = products[i];
-      if ((p.category === sec.key || p.alsoIn === sec.key) && (query === '' || (p.name + ' ' + p.nameEn).toLowerCase().indexOf(query) !== -1)) cards += cardHtml(p);
-    }
-    if (!cards) continue;
-    any = true;
-    html += '<section id="sec-' + sec.key + '" class="menu-section"><h2 class="' + head + '">' + tr(sec.label) + '</h2>' +
-      '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">' + sectionNote(sec.key) + cards + '</div></section>';
   }
-  if (!any && query !== '') html = '<div class="text-center text-gray-400 py-16 text-sm font-bold">' + tr('noResults') + '</div>';
-  grid.innerHTML = html;
-  renderTrays();
-  updateLayoutVars();
-  updateActiveNav(true);
+  if (!found) html = '<div class="col-span-full text-center text-gray-400 py-16 text-sm font-bold">' + tr('noResults') + '</div>';
+  grid.innerHTML = singleTrayNote() + html;
 }
 
-/* ---------- الشريط العلوي الثابت: يتتبع القسم الذي تقرؤه ---------- */
-var lastActiveSec = null, navTick = false;
-
-function updateLayoutVars() {
-  var h = document.querySelector('header'), n = byId('cat-nav'), root = document.documentElement.style;
-  var hh = h ? h.offsetHeight : 80, nh = n ? n.offsetHeight : 48;
-  root.setProperty('--hdr', hh + 'px');
-  root.setProperty('--scroll-offset', (hh + nh + 12) + 'px');
+function filterCategory(cat, btn) {
+  if (cat !== 'trays') trayCameFrom = null;
+  currentCategory = cat;
+  var buttons = document.querySelectorAll('.cat-btn');
+  for (var i = 0; i < buttons.length; i++) buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
+  if (btn) btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
+  renderProducts();
 }
-
-function updateActiveNav(force) {
-  var off = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--scroll-offset'), 10) || 150, current = null, i;
-  for (i = 0; i < SECTIONS.length; i++) {
-    var el = byId('sec-' + SECTIONS[i].key);
-    if (el && el.getBoundingClientRect().top <= off + 8) current = SECTIONS[i].key;
-  }
-  if (!force && current === lastActiveSec) return;
-  lastActiveSec = current;
-  var buttons = document.querySelectorAll('.cat-btn'), nav = byId('categories-container'), act = null;
-  for (i = 0; i < buttons.length; i++) {
-    var on = buttons[i].getAttribute('data-sec') === current;
-    buttons[i].className = on ? NAV_ON : NAV_OFF;
-    if (on) act = buttons[i];
-  }
-  if (act && nav) {   // يُبقي الزر النشط في وسط الشريط
-    var cr = nav.getBoundingClientRect(), br = act.getBoundingClientRect();
-    nav.scrollLeft += (br.left + br.width / 2) - (cr.left + cr.width / 2);
-  }
-}
-
-function onScrollNav() {
-  if (navTick) return;
-  navTick = true;
-  requestAnimationFrame(function () { navTick = false; updateActiveNav(false); });
-}
-window.addEventListener('scroll', onScrollNav, { passive: true });
-window.addEventListener('resize', function () { updateLayoutVars(); onScrollNav(); });
-window.addEventListener('load', function () { updateLayoutVars(); updateActiveNav(true); });
 
 /* ---------- نافذة المنتج ---------- */
 function fillModalText() {
@@ -1392,6 +1374,59 @@ function initContact() {
   for (i = 0; i < x.length; i++) x[i].textContent = shown;
 }
 
+var deferredInstall = null;
+var INSTALL_DISMISS_KEY = 'aklatna_install_dismissed';
+window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredInstall = e; refreshInstallUI(); });
+window.addEventListener('appinstalled', function () { deferredInstall = null; refreshInstallUI(); closeInstall(); });
+
+function isStandalone() {
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+}
+
+function installDismissed() {
+  try { var t = +localStorage.getItem(INSTALL_DISMISS_KEY) || 0; return Date.now() - t < 14 * 24 * 60 * 60 * 1000; } catch (e) { return false; }
+}
+
+function dismissInstallBar() {
+  try { localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now())); } catch (e) {}
+  refreshInstallUI();
+}
+
+function refreshInstallUI() {
+  var row = byId('install-row'), now = byId('install-now'), bar = byId('install-bar');
+  if (row) row.classList.toggle('hidden', isStandalone());                       // لا حاجة للزر إن كان يعمل كتطبيق أصلاً
+  if (bar) bar.classList.toggle('hidden', isStandalone() || installDismissed());  // الشريط يختفي بعد إغلاقه (14 يوماً)
+  if (now) now.classList.toggle('hidden', !deferredInstall);                      // التثبيت المباشر حيث يسمح الجهاز (أندرويد/كروم)
+  var plat = installPlatform(), ios = byId('install-ios'), and = byId('install-android');
+  if (ios) ios.classList.toggle('hidden', plat === 'android');                    // الآيفون: خطوات سفاري فقط
+  if (and) and.classList.toggle('hidden', plat === 'ios' || (plat === 'android' && !!deferredInstall));
+}
+
+function installPlatform() {
+  var ua = navigator.userAgent || '';
+  if (/iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) return 'ios';
+  if (/Android/.test(ua)) return 'android';
+  return 'other';
+}
+
+function installFromBar() { if (deferredInstall) doInstall(); else openInstall(); }
+
+function openInstall() {
+  var m = byId('contact-menu'); if (m) m.classList.add('hidden');
+  refreshInstallUI();
+  byId('install-panel').classList.remove('hidden');
+}
+
+function closeInstall() { var pn = byId('install-panel'); if (pn) pn.classList.add('hidden'); }
+
+function doInstall() {
+  if (!deferredInstall) return;
+  var ev = deferredInstall; deferredInstall = null;
+  ev.prompt();
+  if (ev.userChoice && ev.userChoice.then) ev.userChoice.then(function () { refreshInstallUI(); closeInstall(); });
+  else { refreshInstallUI(); closeInstall(); }
+}
+
 function toggleContact() {
   var m = byId('contact-menu');
   if (m) m.classList.toggle('hidden');
@@ -1474,6 +1509,7 @@ function toggleLang() {
   applyLang();
 }
 
+refreshInstallUI();
 loadState();
 applyLang();
 initContact();
