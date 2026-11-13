@@ -359,6 +359,12 @@ var T = {
   shareSms: { ar: "رسالة", en: "SMS" },
   shareCopy: { ar: "نسخ الرابط", en: "Copy link" },
   noteSingleMeals: { ar: "💡 الوجبات الفردية: للاستلام الذاتي أقل طلب ${pick}، وللتوصيل أقل طلب ${del} (اطلب أكثر من وجبة). والتوصيل مجاني من ${free}.", en: "💡 Individual meals: pick-up orders start from ${pick}; delivery from ${del} (order more than one meal). Delivery is free from ${free}." },
+  sandTitle: { ar: "💡 كم ساندويچ يلزم لطلبك؟", en: "💡 How many sandwiches do you need?" },
+  sandColItem: { ar: "الصنف", en: "Item" },
+  sandColPrice: { ar: "السعر", en: "Price" },
+  sandColPick: { ar: "للاستلام (${n})", en: "Pick-up (${n})" },
+  sandColDel: { ar: "للتوصيل (${n})", en: "Delivery (${n})" },
+  sandColFree: { ar: "توصيل مجاني (${n})", en: "Free delivery (${n})" },
   minModeDelivery: { ar: "للتوصيل", en: "for delivery" },
   minModePickup: { ar: "للاستلام الذاتي", en: "for pick-up" },
   minRule: { ar: "أقل طلب {mode}: ${min}", en: "Orders {mode} start from ${min}" },
@@ -690,14 +696,35 @@ function startPrice(p) {
 /* ملاحظة "الطلب بالمفرد" في تبويبات المشاويات والنواشف والمعجنات */
 var singleTrayFor = { grills: 'grills', appetizers: 'nawashef', pastries: 'pastries' };
 
-function singleMealsNote() {
+function singleMealsNote(key) {
   if (!(MIN_PICKUP_ORDER > 0) && !(MIN_DELIVERY_ORDER > 0)) return '';
   return '<div class="col-span-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">' +
-    '<p class="text-xs md:text-sm text-amber-300 font-bold">' + tr('noteSingleMeals').replace('{pick}', MIN_PICKUP_ORDER).replace('{del}', MIN_DELIVERY_ORDER).replace('{free}', FREE_DELIVERY_MIN) + '</p></div>';
+    '<p class="text-xs md:text-sm text-amber-300 font-bold">' + tr(key).replace('{pick}', MIN_PICKUP_ORDER).replace('{del}', MIN_DELIVERY_ORDER).replace('{free}', FREE_DELIVERY_MIN) + '</p></div>';
+}
+
+function sandwichTable() {
+  var cols = [];
+  if (MIN_PICKUP_ORDER > 0) cols.push({ head: tr('sandColPick').replace('{n}', MIN_PICKUP_ORDER), need: MIN_PICKUP_ORDER });
+  if (MIN_DELIVERY_ORDER > 0) cols.push({ head: tr('sandColDel').replace('{n}', MIN_DELIVERY_ORDER), need: MIN_DELIVERY_ORDER });
+  cols.push({ head: tr('sandColFree').replace('{n}', FREE_DELIVERY_MIN), need: FREE_DELIVERY_MIN });
+  var th = 'px-1.5 py-1.5 font-bold text-amber-300', html = '<div class="col-span-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">' +
+    '<p class="text-xs md:text-sm text-amber-300 font-bold text-center mb-2">' + tr('sandTitle') + '</p>' +
+    '<div class="overflow-x-auto"><table class="w-full text-center text-[11px] md:text-xs"><thead><tr>' +
+    '<th class="' + th + ' text-start">' + tr('sandColItem') + '</th><th class="' + th + '">' + tr('sandColPrice') + '</th>';
+  for (var c = 0; c < cols.length; c++) html += '<th class="' + th + '">' + cols[c].head + '</th>';
+  html += '</tr></thead><tbody>';
+  for (var i = 0; i < products.length; i++) {
+    var p = products[i]; if (p.category !== 'sandwiches') continue;
+    html += '<tr class="border-t border-amber-500/20"><td class="px-1.5 py-1.5 text-start text-gray-100 font-semibold">' + pName(p) + '</td><td class="px-1.5 py-1.5 text-amber-300 font-bold">$' + fmtPrice(p.price) + '</td>';
+    for (var k = 0; k < cols.length; k++) html += '<td class="px-1.5 py-1.5 text-gray-100 font-extrabold">' + Math.ceil(cols[k].need / p.price) + '</td>';
+    html += '</tr>';
+  }
+  return html + '</tbody></table></div></div>';
 }
 
 function singleTrayNote() {
-  if (currentCategory === 'single') return singleMealsNote();
+  if (currentCategory === 'single') return singleMealsNote('noteSingleMeals');
+  if (currentCategory === 'sandwiches') return sandwichTable();
   var k = singleTrayFor[currentCategory];
   if (!k) return '';
   var name = tr(trays[k].label);
