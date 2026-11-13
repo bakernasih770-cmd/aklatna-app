@@ -31,6 +31,12 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
 .hero-bg.active{opacity:1;transform:scale(1.05)}
 /* Safari على الآيفون يفصل حروف العربية إذا وُجدت مسافة بين الحروف، فنلغيها في العربية */
 html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
+/* حقلا التاريخ والوقت: شكل واضح وسهم للاختيار على الآيفون */
+.pick-field{display:block;width:100%;min-width:0;min-height:44px;-webkit-appearance:none;appearance:none;color-scheme:dark;text-align:start}
+.pick-field.is-empty{color:transparent}
+.pick-field::-webkit-calendar-picker-indicator{opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+.pick-ph{position:absolute;inset-inline-start:.75rem;top:50%;transform:translateY(-50%);pointer-events:none;font-size:.75rem;color:#9ca3af}
+.pick-arrow{position:absolute;inset-inline-end:.75rem;top:50%;transform:translateY(-50%);pointer-events:none;color:#fbbf24;font-size:.8rem}
 </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -262,11 +268,19 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
         <div class="grid grid-cols-2 gap-2 pt-1">
           <div>
             <label class="text-[10px] text-gray-400 block mb-1" data-i18n="dateLabel"></label>
-            <input type="date" id="delivery-date" class="w-full p-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none"/>
+            <div class="relative">
+              <input type="date" id="delivery-date" class="pick-field is-empty ps-3 pe-9 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none"/>
+              <span id="date-ph" class="pick-ph" data-i18n="phPickDate"></span>
+              <i class="fa-solid fa-chevron-down pick-arrow"></i>
+            </div>
           </div>
           <div>
             <label class="text-[10px] text-gray-400 block mb-1" data-i18n="timeLabel"></label>
-            <input type="time" id="delivery-time" class="w-full p-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none"/>
+            <div class="relative">
+              <input type="time" id="delivery-time" class="pick-field is-empty ps-3 pe-9 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-xs focus:border-amber-400 focus:outline-none"/>
+              <span id="time-ph" class="pick-ph" data-i18n="phPickTime"></span>
+              <i class="fa-solid fa-chevron-down pick-arrow"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -415,6 +429,8 @@ var T = {
   andStep2: { ar: "اضغط القائمة ⋮ في أعلى الشاشة.", en: "Tap the menu ⋮ at the top." },
   andStep3: { ar: "اختر «تثبيت التطبيق» (أو «إضافة إلى الشاشة الرئيسية»).", en: "Choose “Install app” (or “Add to Home screen”)." },
   andStep4: { ar: "اضغط «تثبيت»، فتجد أيقونة أكلاتنا على شاشتك.", en: "Tap “Install” and find the Aklatna icon on your screen." },
+  phPickDate: { ar: "اختر التاريخ", en: "Choose date" },
+  phPickTime: { ar: "اختر الوقت", en: "Choose time" },
   sendHint: { ar: "سيفتح الواتساب برسالة جاهزة، اضغط «إرسال» لإتمام الطلب.", en: "WhatsApp will open with your order ready. Tap “Send” to complete it." },
   copyOrder: { ar: "نسخ الطلب", en: "Copy order" },
   orderCopied: { ar: "تم نسخ الطلب ✓ الصقه في محادثة الواتساب", en: "Order copied ✓ paste it in the WhatsApp chat" },
@@ -1427,6 +1443,25 @@ function doInstall() {
   else { refreshInstallUI(); closeInstall(); }
 }
 
+function syncPickFields() {
+  var pairs = [['delivery-date', 'date-ph'], ['delivery-time', 'time-ph']];
+  for (var i = 0; i < pairs.length; i++) {
+    var el = byId(pairs[i][0]), ph = byId(pairs[i][1]);
+    if (!el || !ph) continue;
+    el.classList.toggle('is-empty', !el.value);
+    ph.classList.toggle('hidden', !!el.value);
+  }
+}
+
+function bindPickFields() {
+  var ids = ['delivery-date', 'delivery-time'];
+  for (var i = 0; i < ids.length; i++) {
+    var el = byId(ids[i]);
+    if (el) { el.addEventListener('input', syncPickFields); el.addEventListener('change', syncPickFields); }
+  }
+  syncPickFields();
+}
+
 function toggleContact() {
   var m = byId('contact-menu');
   if (m) m.classList.toggle('hidden');
@@ -1515,6 +1550,7 @@ applyLang();
 initContact();
 prepareShareFile();
 bindCustomerSave();
+bindPickFields();
 
 /* تعطيل اليوم والأيام السابقة في التقويم */
 (function () {
