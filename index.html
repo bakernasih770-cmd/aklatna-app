@@ -31,6 +31,9 @@ body{font-family:'Cairo',sans-serif;background-color:#0b0f19;color:#f3f4f6}
 .hero-bg.active{opacity:1;transform:scale(1.05)}
 /* Safari على الآيفون يفصل حروف العربية إذا وُجدت مسافة بين الحروف، فنلغيها في العربية */
 html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
+.menu-section{scroll-margin-top:var(--scroll-offset,150px)}
+#categories-container{scrollbar-width:none}
+#categories-container::-webkit-scrollbar{display:none}
 </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -89,20 +92,22 @@ html[lang="ar"] [class*="tracking-"]{letter-spacing:0 !important}
   </div>
 </div>
 
-<main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-  <div class="flex gap-2 overflow-x-auto pb-4 mb-8 justify-center flex-wrap" id="categories-container">
-    <button onclick="filterCategory('all', this)" data-i18n="catAll" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950"></button>
-    <button onclick="filterCategory('trays', this)" data-i18n="catTrays" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('single', this)" data-i18n="catSingle" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('main', this)" data-i18n="catMain" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('grills', this)" data-i18n="catGrills" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('fish', this)" data-i18n="catFish" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('appetizers', this)" data-i18n="catApp" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('pastries', this)" data-i18n="catPastries" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('bakery', this)" data-i18n="catBakery" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
-    <button onclick="filterCategory('sandwiches', this)" data-i18n="catSand" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400"></button>
+<nav id="cat-nav" class="sticky z-20 bg-gray-950/95 backdrop-blur border-b border-gray-800 shadow" style="top:var(--hdr,80px)">
+  <div id="categories-container" class="max-w-7xl mx-auto px-3 py-2 flex gap-2 overflow-x-auto whitespace-nowrap lg:justify-center">
+    <button onclick="goToSection('single')" data-sec="single" data-i18n="catSingle" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('main')" data-sec="main" data-i18n="catMain" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('grills')" data-sec="grills" data-i18n="catGrills" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('fish')" data-sec="fish" data-i18n="catFish" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('appetizers')" data-sec="appetizers" data-i18n="catApp" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('pastries')" data-sec="pastries" data-i18n="catPastries" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('bakery')" data-sec="bakery" data-i18n="catBakery" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('sandwiches')" data-sec="sandwiches" data-i18n="catSand" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
+    <button onclick="goToSection('trays')" data-sec="trays" data-i18n="catTrays" class="cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-400"></button>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+  <div class="space-y-10" id="products-grid"></div>
 </main>
 
 <div id="toast" class="fixed bottom-36 left-1/2 -translate-x-1/2 z-[60] bg-gray-800 text-amber-300 text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-amber-500/40 hidden"></div>
@@ -607,7 +612,7 @@ function minAlertText(k) {
 function selectTray(k) { currentTray = k; renderTrays(); }
 
 function renderTrays() {
-  var grid = byId('products-grid');
+  var grid = byId('trays-body');
   if (!grid) return;
   var tray = trays[currentTray];
   var btnCls = 'w-7 h-7 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center font-bold text-sm';
@@ -693,8 +698,18 @@ function startPrice(p) {
   return p.price ? '$' + p.price.toFixed(2) : '';
 }
 
-/* ملاحظة "الطلب بالمفرد" في تبويبات المشاويات والنواشف والمعجنات */
-var singleTrayFor = { grills: 'grills', appetizers: 'nawashef', pastries: 'pastries' };
+/* ---------- صفحة واحدة طويلة: كل الأقسام تحت بعضها، والأزرار العلوية تنقلك إلى القسم ---------- */
+var SECTIONS = [
+  { key: 'single', label: 'catSingle' }, { key: 'main', label: 'catMain' }, { key: 'grills', label: 'catGrills' },
+  { key: 'fish', label: 'catFish' }, { key: 'appetizers', label: 'catApp' }, { key: 'pastries', label: 'catPastries' },
+  { key: 'bakery', label: 'catBakery' }, { key: 'sandwiches', label: 'catSand' }, { key: 'trays', label: 'catTrays' }
+];
+var singleTrayFor = { grills: 'grills', appetizers: 'nawashef', pastries: 'pastries' };   // قسم → صينيته
+var trayHome = { grills: 'grills', nawashef: 'appetizers', pastries: 'pastries' };          // صينية → قسمها
+var trayCameFrom = null;
+var catLabelKey = { grills: 'catGrills', appetizers: 'catApp', pastries: 'catPastries' };
+var NAV_BASE = 'cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap flex-shrink-0 ';
+var NAV_ON = NAV_BASE + 'bg-amber-500 text-gray-950', NAV_OFF = NAV_BASE + 'bg-gray-800 text-gray-400';
 
 function singleMealsNote(key) {
   if (!(MIN_PICKUP_ORDER > 0) && !(MIN_DELIVERY_ORDER > 0)) return '';
@@ -722,10 +737,10 @@ function sandwichTable() {
   return html + '</tbody></table></div></div>';
 }
 
-function singleTrayNote() {
-  if (currentCategory === 'single') return singleMealsNote('noteSingleMeals');
-  if (currentCategory === 'sandwiches') return sandwichTable();
-  var k = singleTrayFor[currentCategory];
+function sectionNote(key) {
+  if (key === 'single') return singleMealsNote('noteSingleMeals');
+  if (key === 'sandwiches') return sandwichTable();
+  var k = singleTrayFor[key];
   if (!k) return '';
   var name = tr(trays[k].label);
   return '<div class="col-span-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center space-y-2">' +
@@ -733,61 +748,109 @@ function singleTrayNote() {
     '<button type="button" onclick="goToTray(\'' + k + '\')" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold text-xs px-4 py-2 rounded-lg shadow">' + tr('goTray').replace('{tray}', name) + ' <i class="fa-solid ' + (lang === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right') + ' mx-1"></i></button></div>';
 }
 
-var trayCameFrom = null;
-var catLabelKey = { grills: 'catGrills', appetizers: 'catApp', pastries: 'catPastries' };
+function scrollToSection(cat) {
+  var el = byId('sec-' + cat);
+  if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function goToSection(cat) {
+  var qi = byId('search-input');
+  if (qi && qi.value) { qi.value = ''; renderProducts(); }          // إنهاء البحث ليظهر القسم
+  if (cat !== 'trays' && trayCameFrom) { trayCameFrom = null; renderTrays(); }
+  scrollToSection(cat);
+}
 
 function backFromTray() {
   var cat = trayCameFrom; trayCameFrom = null;
-  if (!cat) return;
-  var btn = document.querySelector('.cat-btn[onclick*="\'' + cat + '\'"]');
-  filterCategory(cat, btn);
-  var box = byId('categories-container');
-  if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  renderTrays();
+  if (cat) scrollToSection(cat);
 }
 
 function goToTray(k) {
-  trayCameFrom = currentCategory;
+  trayCameFrom = trayHome[k] || null;
   currentTray = k;
-  var btn = document.querySelector('.cat-btn[data-i18n="catTrays"]');
-  filterCategory('trays', btn);
-  var box = byId('categories-container');
-  if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  renderTrays();
+  scrollToSection('trays');
+}
+
+function cardHtml(p) {
+  var note = pNote(p);
+  return '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
+    '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' + imgTag(p.image, pName(p)) +
+    '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">' + startPrice(p) + '</span></div>' +
+    '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
+    '<h3 class="font-extrabold text-base text-white mb-1">' + pName(p) + '</h3>' +
+    (note ? '<p class="text-[11px] text-amber-300/90 mb-2 font-bold">' + note + '</p>' : '') +
+    '<span class="text-xs text-amber-400 font-bold">' + tr('tapDetails') + '</span></div></div>';
 }
 
 function renderProducts() {
   var grid = byId('products-grid');
   if (!grid) return;
-  if (currentCategory === 'trays') { renderTrays(); return; }
   var qi = byId('search-input');
   var query = (qi && qi.value) ? qi.value.toLowerCase().trim() : '';
-  var html = '', found = false;
-  for (var i = 0; i < products.length; i++) {
-    var p = products[i];
-    var hay = (p.name + ' ' + p.nameEn).toLowerCase();
-    if ((currentCategory === 'all' || p.category === currentCategory || p.alsoIn === currentCategory) && (query === '' || hay.indexOf(query) !== -1)) {
-      found = true;
-      var note = pNote(p);
-      html += '<div onclick="openProductModal(' + p.id + ')" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg flex flex-col cursor-pointer hover:border-amber-500/50 transition-all">' +
-        '<div class="relative h-60 bg-gray-950 flex items-center justify-center">' + imgTag(p.image, pName(p)) +
-        '<span class="absolute top-3 left-3 bg-black/75 px-3 py-1 rounded-full text-xs font-bold text-amber-400 z-10">' + startPrice(p) + '</span></div>' +
-        '<div class="p-4 flex-1 flex flex-col justify-between text-center bg-gray-900">' +
-        '<h3 class="font-extrabold text-base text-white mb-1">' + pName(p) + '</h3>' +
-        (note ? '<p class="text-[11px] text-amber-300/90 mb-2 font-bold">' + note + '</p>' : '') +
-        '<span class="text-xs text-amber-400 font-bold">' + tr('tapDetails') + '</span></div></div>';
+  var html = '', any = false, head = 'text-xl md:text-2xl font-extrabold text-amber-400 border-b border-amber-500/30 pb-2 mb-4';
+  for (var s = 0; s < SECTIONS.length; s++) {
+    var sec = SECTIONS[s];
+    if (sec.key === 'trays') {
+      if (query === '') html += '<section id="sec-trays" class="menu-section"><h2 class="' + head + '">' + tr(sec.label) + '</h2><div id="trays-body"></div></section>';
+      continue;
     }
+    var cards = '';
+    for (var i = 0; i < products.length; i++) {
+      var p = products[i];
+      if ((p.category === sec.key || p.alsoIn === sec.key) && (query === '' || (p.name + ' ' + p.nameEn).toLowerCase().indexOf(query) !== -1)) cards += cardHtml(p);
+    }
+    if (!cards) continue;
+    any = true;
+    html += '<section id="sec-' + sec.key + '" class="menu-section"><h2 class="' + head + '">' + tr(sec.label) + '</h2>' +
+      '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">' + sectionNote(sec.key) + cards + '</div></section>';
   }
-  if (!found) html = '<div class="col-span-full text-center text-gray-400 py-16 text-sm font-bold">' + tr('noResults') + '</div>';
-  grid.innerHTML = singleTrayNote() + html;
+  if (!any && query !== '') html = '<div class="text-center text-gray-400 py-16 text-sm font-bold">' + tr('noResults') + '</div>';
+  grid.innerHTML = html;
+  renderTrays();
+  updateLayoutVars();
+  updateActiveNav(true);
 }
 
-function filterCategory(cat, btn) {
-  if (cat !== 'trays') trayCameFrom = null;
-  currentCategory = cat;
-  var buttons = document.querySelectorAll('.cat-btn');
-  for (var i = 0; i < buttons.length; i++) buttons[i].className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-gray-800 text-gray-400";
-  if (btn) btn.className = "cat-btn px-4 py-2 rounded-xl font-semibold text-xs whitespace-nowrap bg-amber-500 text-gray-950";
-  renderProducts();
+/* ---------- الشريط العلوي الثابت: يتتبع القسم الذي تقرؤه ---------- */
+var lastActiveSec = null, navTick = false;
+
+function updateLayoutVars() {
+  var h = document.querySelector('header'), n = byId('cat-nav'), root = document.documentElement.style;
+  var hh = h ? h.offsetHeight : 80, nh = n ? n.offsetHeight : 48;
+  root.setProperty('--hdr', hh + 'px');
+  root.setProperty('--scroll-offset', (hh + nh + 12) + 'px');
 }
+
+function updateActiveNav(force) {
+  var off = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--scroll-offset'), 10) || 150, current = null, i;
+  for (i = 0; i < SECTIONS.length; i++) {
+    var el = byId('sec-' + SECTIONS[i].key);
+    if (el && el.getBoundingClientRect().top <= off + 8) current = SECTIONS[i].key;
+  }
+  if (!force && current === lastActiveSec) return;
+  lastActiveSec = current;
+  var buttons = document.querySelectorAll('.cat-btn'), nav = byId('categories-container'), act = null;
+  for (i = 0; i < buttons.length; i++) {
+    var on = buttons[i].getAttribute('data-sec') === current;
+    buttons[i].className = on ? NAV_ON : NAV_OFF;
+    if (on) act = buttons[i];
+  }
+  if (act && nav) {   // يُبقي الزر النشط في وسط الشريط
+    var cr = nav.getBoundingClientRect(), br = act.getBoundingClientRect();
+    nav.scrollLeft += (br.left + br.width / 2) - (cr.left + cr.width / 2);
+  }
+}
+
+function onScrollNav() {
+  if (navTick) return;
+  navTick = true;
+  requestAnimationFrame(function () { navTick = false; updateActiveNav(false); });
+}
+window.addEventListener('scroll', onScrollNav, { passive: true });
+window.addEventListener('resize', function () { updateLayoutVars(); onScrollNav(); });
+window.addEventListener('load', function () { updateLayoutVars(); updateActiveNav(true); });
 
 /* ---------- نافذة المنتج ---------- */
 function fillModalText() {
